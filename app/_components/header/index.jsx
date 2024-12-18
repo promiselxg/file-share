@@ -8,7 +8,7 @@ import ProfileAvatar from "../profile";
 const Header = () => {
   return (
     <>
-      <div className="h-[50px] flex w-full  bg-[--header-bg] items-center sticky top-0 z-50">
+      <div className="h-[50px] flex w-full  bg-[--header-bg] items-center z-50 py-3">
         <div className="container mx-[10px]">
           <div className="flex w-full justify-left items-center">
             <div className="w-[265px] flex items-center justify-between">

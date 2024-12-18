@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -6,14 +7,20 @@ import {
 } from "@/components/ui/popover";
 import Link from "next/link";
 import { FiCheck, FiChevronDown } from "react-icons/fi";
-import Icon from "../_components/icon/icon";
 import Folder from "../_components/folder";
-import Image from "next/image";
-import { LinkWithIcon } from "../_components/nav/sideBarNav";
-import { PiShareFatLight } from "react-icons/pi";
 import ThumbNail from "../_components/thumbnail";
 
+import { LinkWithIcon } from "../_components/nav/sideBarNav";
+import { IoImageOutline } from "react-icons/io5";
+import { MdVideoCameraBack } from "react-icons/md";
+import CustomModal from "../_components/modal";
+import NewFolder from "../_components/modal/_components/newFolder";
+import ImageUpload from "../_components/modal/_components/imageUpload";
+import { useDialog } from "@/context/Dialog.context";
+
 export default function Home() {
+  const { dialogs, openDialog, closeDialog } = useDialog();
+
   return (
     <>
       <div className="w-full flex">
@@ -89,12 +96,37 @@ export default function Home() {
                   </PopoverContent>
                 </Popover>
                 <div className="flex gap-3">
-                  <Button className="w-full rounded-[8px] bg-transparent border-[--gray] border text-[--gray] hover:bg-transparent hover:border-[--nav-selected] hover:text-[--sidebar-link-active-text] outline-none transition-all delay-75 duration-200">
+                  <Button
+                    className="w-full rounded-[8px] bg-transparent border-[--gray] border text-[--gray] hover:bg-transparent hover:border-[--nav-selected] hover:text-[--sidebar-link-active-text] outline-none transition-all delay-75 duration-200"
+                    onClick={() => openDialog("newFolder")}
+                  >
                     New folder
                   </Button>
-                  <Button className="w-full rounded-[8px] bg-[--primary-btn] border-none border text-[white] hover:bg-[--sidebar-link-active-text]  outline-none transition-all delay-75 duration-200 hover:text-[rgba(255,255,255,.8)]">
-                    New item
-                  </Button>
+
+                  <Popover>
+                    <PopoverTrigger className="w-full rounded-[8px] bg-[--primary-btn] border-none border text-[white] hover:bg-[--sidebar-link-active-text]  outline-none transition-all delay-75 duration-200 hover:text-[rgba(255,255,255,.8)] flex items-center px-5 text-wrap whitespace-nowrap text-sm">
+                      New item
+                    </PopoverTrigger>
+                    <PopoverContent className="flex w-[200px] bg-[--dialog-bg] shadow-md border-none mr-[30px]">
+                      <ul className="flex flex-col w-full">
+                        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg]  rounded-[5px] link-transition">
+                          <LinkWithIcon
+                            Icon={<MdVideoCameraBack size={20} />}
+                            name="Record video"
+                            color="text-[--popover-text-color]"
+                          />
+                        </li>
+                        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg]  rounded-[5px] link-transition">
+                          <LinkWithIcon
+                            Icon={<IoImageOutline size={20} />}
+                            name="Upload image"
+                            color="text-[--popover-text-color]"
+                            onClick={() => openDialog("uploadImage")}
+                          />
+                        </li>
+                      </ul>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
@@ -151,6 +183,25 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <CustomModal
+        heading="New folder"
+        isOpen={dialogs.newFolder}
+        openDialog={() => openDialog("newFolder")}
+        closeDialog={() => closeDialog("newFolder")}
+      >
+        <NewFolder />
+      </CustomModal>
+
+      <CustomModal
+        className="w-[100px]"
+        heading="Upload images"
+        isOpen={dialogs.uploadImage}
+        openDialog={() => openDialog("uploadImage")}
+        closeDialog={() => closeDialog("uploadImage")}
+      >
+        <ImageUpload />
+      </CustomModal>
     </>
   );
 }

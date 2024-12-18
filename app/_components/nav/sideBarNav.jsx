@@ -29,12 +29,22 @@ export const SideBarNav = ({ Icon, label, active, btn }) => {
   );
 };
 
-export const LinkWithIcon = ({ Icon, name, color, className }) => {
+export const LinkWithIcon = ({
+  Icon,
+  name,
+  color,
+  className,
+  url,
+  ...props
+}) => {
   return (
     <>
-      <div className={cn(`flex text-[--gray] w-full ${color}`, className)}>
+      <div
+        className={cn(`flex text-[--gray] w-full ${color}`, className)}
+        {...props}
+      >
         <Link
-          href="/shared_with_me"
+          href={url || ""}
           className={cn(
             `flex items-center gap-2 w-full rounded-[8px] p-2 link-transition border-none outline-none`,
             className

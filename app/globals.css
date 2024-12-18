@@ -66,6 +66,7 @@ html {
     --body-bg: #181818;
     --nav-selected: #1f2c3e;
     --primary-btn: #177ddc;
+    --primary-btn-hover: #095cb5;
     --btn-active: #1f2c3e;
     --folder-bg: #2a2a2a;
     --folder-icon-bg: #ff9e60;
@@ -152,6 +153,10 @@ html {
 .boxShadow {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
+.DialogBoxShadow {
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.48),
+    0 6px 16px 0 rgba(0, 0, 0, 0.32), 0 9px 28px 8px rgba(0, 0, 0, 0.2);
+}
 .item {
   border-radius: 8px;
 }
@@ -166,6 +171,14 @@ html {
   transition: all 0.3s ease-in-out;
 }
 .imgThubnail:hover .horizontalIcon {
+  opacity: 1;
+}
+.imageWrapper {
+}
+.imageBtn {
+  opacity: 0;
+}
+.imageWrapper:hover .imageBtn {
   opacity: 1;
 }
 @layer base {
