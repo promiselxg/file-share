@@ -5,12 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Link from "next/link";
-import {
-  FiCheck,
-  FiChevronDown,
-  FiMoreHorizontal,
-  FiVideo,
-} from "react-icons/fi";
+import { FiCheck, FiChevronDown } from "react-icons/fi";
 import Icon from "../_components/icon/icon";
 import Folder from "../_components/folder";
 import Image from "next/image";

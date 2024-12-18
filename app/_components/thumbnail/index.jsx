@@ -5,15 +5,21 @@ import {
 } from "@/components/ui/popover";
 import Image from "next/image";
 import React from "react";
-import { FiMoreHorizontal, FiVideo } from "react-icons/fi";
+import { RiExternalLinkLine } from "react-icons/ri";
+
+import { FiEdit3, FiMoreHorizontal, FiTrash2, FiVideo } from "react-icons/fi";
 import { LinkWithIcon } from "../nav/sideBarNav";
 import { PiShareFatLight } from "react-icons/pi";
+import { GrLink } from "react-icons/gr";
+
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { LuCopyCheck } from "react-icons/lu";
+import { BsArrowRightSquare, BsTrash3 } from "react-icons/bs";
 
 const ThumbNail = ({ title, date, img, time }) => {
   return (
@@ -46,10 +52,46 @@ const ThumbNail = ({ title, date, img, time }) => {
               </PopoverTrigger>
               <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px] absolute right-5 top-0 z-10">
                 <ul className="flex flex-col w-full">
-                  <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
+                  <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
                     <LinkWithIcon
-                      Icon={<PiShareFatLight size={20} />}
-                      name="Share"
+                      Icon={<FiEdit3 size={20} />}
+                      name="Rename"
+                      color="text-[--popover-text-color]"
+                    />
+                  </li>
+                  <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
+                    <LinkWithIcon
+                      Icon={<GrLink size={20} />}
+                      name="Copy sharable link"
+                      color="text-[--popover-text-color]"
+                    />
+                  </li>
+                  <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
+                    <LinkWithIcon
+                      Icon={<BsArrowRightSquare size={20} />}
+                      name="Move"
+                      color="text-[--popover-text-color]"
+                    />
+                  </li>
+                  <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
+                    <LinkWithIcon
+                      Icon={<LuCopyCheck size={20} />}
+                      name="Select multiple items"
+                      color="text-[--popover-text-color]"
+                    />
+                  </li>
+                  <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
+                    <LinkWithIcon
+                      Icon={<RiExternalLinkLine size={20} />}
+                      name="Open in new tab"
+                      color="text-[--popover-text-color]"
+                    />
+                  </li>
+                  <li className="flex w-full  hover:bg-[--bg-red]  rounded-[5px] link-transition">
+                    <LinkWithIcon
+                      color="text-[--bg-red] hover:text-white "
+                      Icon={<BsTrash3 size={20} />}
+                      name="Remove"
                     />
                   </li>
                 </ul>
@@ -57,7 +99,6 @@ const ThumbNail = ({ title, date, img, time }) => {
             </Popover>
           </div>
         </div>
-        {/* Thumbnail Title and Date */}
         <div className="py-2 text-[--gray]">
           <h1 className="text-white text-sm leading-tight">{title}</h1>
           <div className="flex items-center gap-2 mt-1">
@@ -66,13 +107,49 @@ const ThumbNail = ({ title, date, img, time }) => {
           </div>
         </div>
       </ContextMenuTrigger>
-
-      {/* Context Menu Content */}
-      <ContextMenuContent>
-        <ContextMenuItem>Profile</ContextMenuItem>
-        <ContextMenuItem>Billing</ContextMenuItem>
-        <ContextMenuItem>Team</ContextMenuItem>
-        <ContextMenuItem>Subscription</ContextMenuItem>
+      <ContextMenuContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px] flex-col text-[--sidebar-link-color] p-2">
+        <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
+          <LinkWithIcon
+            Icon={<FiEdit3 size={20} />}
+            name="Rename"
+            color="text-[--popover-text-color]"
+          />
+        </ContextMenuItem>
+        <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
+          <LinkWithIcon
+            Icon={<GrLink size={20} />}
+            name="Copy sharable link"
+            color="text-[--popover-text-color]"
+          />
+        </ContextMenuItem>
+        <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
+          <LinkWithIcon
+            Icon={<BsArrowRightSquare size={20} />}
+            name="Move"
+            color="text-[--popover-text-color]"
+          />
+        </ContextMenuItem>
+        <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
+          <LinkWithIcon
+            Icon={<LuCopyCheck size={20} />}
+            name="Select multiple items"
+            color="text-[--popover-text-color]"
+          />
+        </ContextMenuItem>
+        <ContextMenuItem className="flex w-full hover:bg-[--folder-bg] rounded-[5px] link-transition p-0">
+          <LinkWithIcon
+            Icon={<RiExternalLinkLine size={20} />}
+            name="Open in new tab"
+            color="text-[--popover-text-color]"
+          />
+        </ContextMenuItem>
+        <ContextMenuItem className="flex w-full hover:bg-[--folder-bg] link-transition p-0 outline-none border-none rounded-[5px]">
+          <LinkWithIcon
+            color="text-[--bg-red] hover:text-white "
+            Icon={<BsTrash3 size={20} />}
+            name="Remove"
+          />
+        </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );
