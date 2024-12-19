@@ -13,13 +13,11 @@ import ThumbNail from "../_components/thumbnail";
 import { LinkWithIcon } from "../_components/nav/sideBarNav";
 import { IoImageOutline } from "react-icons/io5";
 import { MdVideoCameraBack } from "react-icons/md";
-import CustomModal from "../_components/modal";
-import NewFolder from "../_components/modal/_components/newFolder";
-import ImageUpload from "../_components/modal/_components/imageUpload";
 import { useDialog } from "@/context/Dialog.context";
+import Modals from "../_components/modal/modal";
 
 export default function Home() {
-  const { dialogs, openDialog, closeDialog } = useDialog();
+  const { openDialog } = useDialog();
 
   return (
     <>
@@ -114,6 +112,7 @@ export default function Home() {
                             Icon={<MdVideoCameraBack size={20} />}
                             name="Record video"
                             color="text-[--popover-text-color]"
+                            onClick={() => openDialog("recordVideo")}
                           />
                         </li>
                         <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg]  rounded-[5px] link-transition">
@@ -183,25 +182,9 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <CustomModal
-        heading="New folder"
-        isOpen={dialogs.newFolder}
-        openDialog={() => openDialog("newFolder")}
-        closeDialog={() => closeDialog("newFolder")}
-      >
-        <NewFolder />
-      </CustomModal>
-
-      <CustomModal
-        className="w-[100px]"
-        heading="Upload images"
-        isOpen={dialogs.uploadImage}
-        openDialog={() => openDialog("uploadImage")}
-        closeDialog={() => closeDialog("uploadImage")}
-      >
-        <ImageUpload />
-      </CustomModal>
+      {/** MODALS */}
+      <Modals />
+      {/** MODALS */}
     </>
   );
 }

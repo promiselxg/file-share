@@ -1,8 +1,7 @@
 import { useImageContext } from "@/context/imageUpload.context";
 import React from "react";
 import { BiImageAdd } from "react-icons/bi";
-import { renderImages } from "../../image-upload/selectedImageDisplay";
-import { FiPlus } from "react-icons/fi";
+import { RenderImages } from "../../image-upload/selectedImageDisplay";
 import { Button } from "@/components/ui/button";
 
 const ImageUpload = () => {
@@ -12,7 +11,7 @@ const ImageUpload = () => {
     <>
       <div className="w-full flex mt-2">
         {selectedImages.length < 1 ? (
-          <div className="shared-folder-empty border border-dashed p-[60px] rounded-[8px] border-[--sidebar-link-color] w-full cursor-pointer">
+          <div className="shared-folder-empty border border-dashed p-[50px] rounded-[8px] border-[--sidebar-link-color] w-full cursor-pointer">
             <div className="flex flex-col  cursor-pointer justify-center">
               <label
                 htmlFor="files"
@@ -22,7 +21,7 @@ const ImageUpload = () => {
                   size={80}
                   className="cursor-pointer text-[--sidebar-link-color]"
                 />
-                <div className="my-2 flex flex-col justify-center items-center leading-tight">
+                <div className="my-2 flex flex-col justify-center items-center leading-tight text-center">
                   <p className="text-sm text-[--sidebar-link-color]">
                     Drag and Drop images here or{" "}
                     <span className="text-[--primary-btn] hover:text-[rgba(23,125,220,.8)] link-transition">
@@ -40,42 +39,21 @@ const ImageUpload = () => {
               name="files"
               id="files"
               accept="image/png, image/gif, image/jpeg"
-              onChange={handleImageChange}
+              onChange={(event) => handleImageChange(event, 8)}
               multiple
               className="hidden"
             />
           </div>
         ) : (
           <div className="flex flex-col w-full">
-            <div className="w-full grid md:grid-cols-3 grid-cols-3 gap-3">
-              {renderImages(selectedImages, "file", removeSelectedImage, files)}
-              <div className="h-[110px] shared-folder-empty border border-dashed p-2 rounded-[8px] border-[--sidebar-link-color] w-full cursor-pointer items-center flex justify-center">
-                <div className="flex flex-col  cursor-pointer justify-center items-center">
-                  <label
-                    htmlFor="files"
-                    className="w-full cursor-pointer flex justify-center flex-col items-center leading-tight"
-                  >
-                    <FiPlus
-                      size={35}
-                      className="cursor-pointer text-[--sidebar-link-color]"
-                    />
-                    <div className="flex flex-col justify-center items-center leading-tight">
-                      <p className="text-sm text-[--sidebar-link-color]">
-                        Add image
-                      </p>
-                    </div>
-                  </label>
-                </div>
-                <input
-                  type="file"
-                  name="files"
-                  id="files"
-                  accept="image/png, image/gif, image/jpeg"
-                  onChange={handleImageChange}
-                  multiple
-                  className="hidden"
-                />
-              </div>
+            <div className="w-full gap-3">
+              <RenderImages
+                source={selectedImages}
+                type="file"
+                onRemoveImage={removeSelectedImage}
+                files={files}
+                handleImageChange={handleImageChange}
+              />
             </div>
             <Button
               varient="ghost"

@@ -3,6 +3,8 @@ import Header from "./_components/header";
 import SideBar from "./_components/sidebar";
 import { DialogProvider } from "@/context/Dialog.context";
 import { ImageProvider } from "@/context/imageUpload.context";
+import { Toaster } from "@/components/ui/toaster";
+import { ScreenRecordProvider } from "@/context/screenRecord.context";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,21 +14,24 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <DialogProvider>
-        <ImageProvider>
-          <body className="flex bg-[--body-bg] w-full flex-col">
-            <div className="w-full flex">
-              <Header />
-            </div>
-            <div className="flex w-full gap-4">
-              <SideBar />
-              <div className="h-screen relative overflow-y-scroll w-full">
-                {children}
+      <ScreenRecordProvider>
+        <DialogProvider>
+          <ImageProvider>
+            <body className="flex bg-[--body-bg] w-full flex-col">
+              <div className="w-full flex">
+                <Header />
               </div>
-            </div>
-          </body>
-        </ImageProvider>
-      </DialogProvider>
+              <div className="flex w-full gap-4">
+                <SideBar />
+                <div className="h-screen relative overflow-y-scroll w-full">
+                  {children}
+                </div>
+              </div>
+              <Toaster />
+            </body>
+          </ImageProvider>
+        </DialogProvider>
+      </ScreenRecordProvider>
     </html>
   );
 }

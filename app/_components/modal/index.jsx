@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import React from "react";
 
 const CustomModal = ({
@@ -13,6 +14,7 @@ const CustomModal = ({
   isOpen,
   closeDialog,
   openDialog,
+  className,
 }) => {
   return (
     <Dialog
@@ -22,7 +24,10 @@ const CustomModal = ({
     >
       <DialogContent
         closeDialog={closeDialog}
-        className="bg-[--dialog-bg] shadow-md border-none DialogBoxShadow md:absolute  p-5"
+        className={cn(
+          `bg-[--dialog-bg] shadow-md border-none DialogBoxShadow md:absolute  p-5`,
+          className
+        )}
       >
         <DialogHeader>
           <DialogTitle className="text-[--sidebar-link-color] text-[24px] leading-[38px]">

@@ -18,7 +18,8 @@ export const ImageProvider = ({ children }) => {
   const [selectedImages, setSelectedImages] = useState([]);
 
   // Handle Image Change
-  const handleImageChange = (e) => {
+  const handleImageChange = (e, maxFiles) => {
+    console.log(e, maxFiles);
     if (!e?.target?.files) return;
 
     // Clear previous selections
@@ -28,6 +29,16 @@ export const ImageProvider = ({ children }) => {
     const filesArray = Array.from(e.target.files);
     const selectedFiles = [];
     const fileURLs = [];
+
+    if (filesArray.length > maxFiles) {
+      toast({
+        variant: "destructive",
+        title: "File Length Error",
+        description: `You can only upload up to ${maxFiles} files simultaneously.`,
+      });
+      e.target.value = "";
+      return;
+    }
 
     filesArray.forEach((file) => {
       if (file.size > MAX_FILE_SIZE) {
