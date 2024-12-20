@@ -7,7 +7,7 @@ import { BsBadgeHd } from "react-icons/bs";
 import { GoClock } from "react-icons/go";
 import { Button } from "@/components/ui/button";
 
-const ImageAndVideoScreenRecord = () => {
+const ImageAndVideoScreenRecord = ({ source }) => {
   return (
     <>
       <div className="w-full flex flex-col">
@@ -16,12 +16,14 @@ const ImageAndVideoScreenRecord = () => {
           heading="Record Mic Sound"
           type="switch"
           media="sound"
+          source={source}
         />
         <ControlWrapper
           Icon={<TbDeviceComputerCamera />}
           heading="Embed Camera"
-          type="switch"
+          type={source === "desktop" ? "switch" : undefined}
           media="camera"
+          source={source}
         />
         <ControlWrapper
           Icon={<BsBadgeHd />}

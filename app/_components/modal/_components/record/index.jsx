@@ -76,7 +76,7 @@ const RecordVideo = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="desktop" className="text-[--popover-text-color]">
-            <ImageAndVideoScreenRecord source="ImageAndVideoScreenRecord" />
+            <ImageAndVideoScreenRecord source="desktop" />
           </TabsContent>
           <TabsContent value="camera" className="text-[--popover-text-color]">
             <ImageAndVideoScreenRecord source="camera" />
