@@ -82,6 +82,7 @@ html {
     --bg-red: #a61d24;
     --popover-text-color: hsla(0, 0%, 100%, 0.65);
     --switch-bg: #313131;
+    --divider-color: #303030;
   }
   .sidebar-divider {
     background-color: var(--divider-border-color);

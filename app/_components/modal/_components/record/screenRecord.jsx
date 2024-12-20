@@ -6,8 +6,13 @@ import { TbDeviceComputerCamera } from "react-icons/tb";
 import { BsBadgeHd } from "react-icons/bs";
 import { GoClock } from "react-icons/go";
 import { Button } from "@/components/ui/button";
+import useDesktopScreenRecorder from "@/hooks/use-desktop-screen-recorder";
+import { cn } from "@/lib/utils";
 
 const ImageAndVideoScreenRecord = ({ source }) => {
+  const { isRecording, startRecording, stopRecording } =
+    useDesktopScreenRecorder();
+
   return (
     <>
       <div className="w-full flex flex-col">
@@ -36,8 +41,17 @@ const ImageAndVideoScreenRecord = ({ source }) => {
           type="text"
         />
         <div className="w-full my-2">
-          <Button className="w-full p-5 bg-[--primary-btn] hover:bg-[--primary-btn-hover]">
-            Start Recording
+          <Button
+            className={cn(
+              `w-full p-5 bg-[--primary-btn] hover:bg-[--primary-btn-hover] ${
+                isRecording && "bg-[red] text-white"
+              }`
+            )}
+            onClick={() => {
+              isRecording ? stopRecording() : startRecording();
+            }}
+          >
+            {isRecording ? "Stop Recording" : "Start Recording"}
           </Button>
         </div>
       </div>
