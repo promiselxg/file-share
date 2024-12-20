@@ -22,8 +22,6 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { GrLink } from "react-icons/gr";
-import { RiExternalLinkLine } from "react-icons/ri";
 
 const Folder = ({ name, star }) => {
   return (

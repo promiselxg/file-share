@@ -22,7 +22,7 @@ const ProfileAvatar = () => {
           <Avatar className="w-[30px] h-[30px] overflow-hidden cursor-pointer">
             <AvatarImage
               src="https://github.com/promiselxg.png"
-              alt="@shadcn"
+              alt="promiselxg"
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
@@ -33,7 +33,7 @@ const ProfileAvatar = () => {
               <Avatar className="w-[40px] h-[40px] overflow-hidden cursor-pointer">
                 <AvatarImage
                   src="https://github.com/promiselxg.png"
-                  alt="@shadcn"
+                  alt="promiselxg"
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>

@@ -81,10 +81,12 @@ const SideBar = () => {
         </div>
         <div className="p-2 absolute bottom-0 w-full">
           <div className="flex items-center justify-between w-full gap-2">
-            <Button className="w-full text-left flex justify-start bg-transparent  hover:bg-[--folder-bg]">
-              <FiTrash />
-              <span className="text-[14px]">Trash</span>
-            </Button>
+            <Link href="/trash" className="w-[70%] active rounded-[8px] ">
+              <Button className="w-full text-left flex justify-start bg-transparent  hover:bg-[--folder-bg] rounded-[8px] text-[--sidebar-link-active-text]">
+                <FiTrash />
+                <span className="text-[14px]">Trash</span>
+              </Button>
+            </Link>
             <Button className="text-left flex justify-start bg-transparent  hover:bg-[--folder-bg]">
               <FiLogOut />
             </Button>

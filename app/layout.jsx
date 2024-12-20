@@ -5,6 +5,7 @@ import { DialogProvider } from "@/context/Dialog.context";
 import { ImageProvider } from "@/context/imageUpload.context";
 import { Toaster } from "@/components/ui/toaster";
 import { ScreenRecordProvider } from "@/context/screenRecord.context";
+import { FolderCRUDProvider } from "@/context/folder.context";
 
 export const metadata = {
   title: "Create Next App",
@@ -16,20 +17,22 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <ScreenRecordProvider>
         <DialogProvider>
-          <ImageProvider>
-            <body className="flex bg-[--body-bg] w-full flex-col">
-              <div className="w-full flex">
-                <Header />
-              </div>
-              <div className="flex w-full gap-4">
-                <SideBar />
-                <div className="h-screen relative overflow-y-scroll w-full">
-                  {children}
+          <FolderCRUDProvider>
+            <ImageProvider>
+              <body className="flex bg-[--body-bg] w-full flex-col overflow-hidden">
+                <div className="w-full flex">
+                  <Header />
                 </div>
-              </div>
-              <Toaster />
-            </body>
-          </ImageProvider>
+                <div className="flex w-full gap-4">
+                  <SideBar />
+                  <div className="h-screen relative overflow-y-scroll w-full">
+                    {children}
+                  </div>
+                </div>
+                <Toaster />
+              </body>
+            </ImageProvider>
+          </FolderCRUDProvider>
         </DialogProvider>
       </ScreenRecordProvider>
     </html>

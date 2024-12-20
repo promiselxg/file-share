@@ -1,0 +1,25 @@
+.trash-folder {
+  position: relative;
+  overflow: hidden;
+}
+
+.trashFolderWithControls {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.trash-folder:hover .mainTrashFolder {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.trash-folder:hover .trashFolderWithControls {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+}
