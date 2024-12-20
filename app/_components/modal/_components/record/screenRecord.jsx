@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { FiMic } from "react-icons/fi";
 import ControlWrapper from "./control";
@@ -6,7 +7,7 @@ import { BsBadgeHd } from "react-icons/bs";
 import { GoClock } from "react-icons/go";
 import { Button } from "@/components/ui/button";
 
-const Desktop = () => {
+const ImageAndVideoScreenRecord = () => {
   return (
     <>
       <div className="w-full flex flex-col">
@@ -42,4 +43,4 @@ const Desktop = () => {
   );
 };
 
-export default Desktop;
+export default ImageAndVideoScreenRecord;

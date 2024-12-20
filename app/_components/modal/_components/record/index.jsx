@@ -1,27 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiCamera } from "react-icons/ci";
 import { CiDesktop } from "react-icons/ci";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Desktop from "./desktop";
-import CameraOnly from "./camera";
+
 import { cn } from "@/lib/utils";
 import { useScreenRecord } from "@/context/screenRecord.context";
+import ImageAndVideoScreenRecord from "./screenRecord";
 
 const RecordVideo = () => {
+  const [activeTab, setActiveTab] = useState("desktop");
   const {
     toggleCamera,
-    toggleSound,
-    handleToggleCamera,
-    handleToggleSound,
     videoRef,
-    error,
+    setToggleCamera,
+    turnOnCamera,
+    turnOffCamera,
   } = useScreenRecord();
+
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+    setToggleCamera(false);
+    turnOffCamera();
+
+    if (value === "camera") {
+      setToggleCamera(true);
+      turnOnCamera();
+    }
+  };
 
   return (
     <>
       <Tabs
-        defaultValue="desktop"
+        value={activeTab}
+        onValueChange={handleTabChange}
         className="flex w-full gap-5 transition-all delay-300 duration-300"
       >
         <div
@@ -64,10 +76,10 @@ const RecordVideo = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="desktop" className="text-[--popover-text-color]">
-            <Desktop />
+            <ImageAndVideoScreenRecord source="ImageAndVideoScreenRecord" />
           </TabsContent>
           <TabsContent value="camera" className="text-[--popover-text-color]">
-            <CameraOnly />
+            <ImageAndVideoScreenRecord source="camera" />
           </TabsContent>
         </div>
       </Tabs>
