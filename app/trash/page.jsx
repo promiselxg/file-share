@@ -101,7 +101,7 @@ const TrashPage = () => {
                 <p className="text-[14px] text-[--gray] leading-[14px]">
                   Images &amp; Videos
                 </p>
-                <div className="grid w-full grid-cols-4 gap-5 relative">
+                <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
                   <ImageVideoDelete data={imageVideoData} />
                 </div>
               </div>
