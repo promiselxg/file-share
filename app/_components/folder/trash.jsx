@@ -41,7 +41,7 @@ const TrashFolder = ({ data }) => {
                 <Icon className="text-[20px]" />
               ) : (
                 <Checkbox
-                  className="text-[25px] w-[20px] h-[20px] bg-[#000] transition-all delay-75 duration-100 z-10 data-[state=checked]:bg-[--primary-btn] data-[state=checked]:text-white"
+                  className="text-[25px] w-[20px] h-[20px] bg-[#000] transition-all delay-75 duration-100 z-10 data-[state=checked]:bg-[--primary-btn] data-[state=checked]:text-white border border-[--gray] hover:border-[whitesmoke] link-transition"
                   checked={isChecked}
                   onCheckedChange={(checked) =>
                     handleCheckboxChange(folder.id, checked)
@@ -54,12 +54,12 @@ const TrashFolder = ({ data }) => {
             </div>
             <div
               className={cn(
-                `trashFolderWithControls items-center gap-4 px-3 py-2 w-full absolute top-0 left-0 h-full hidden justify-between`
+                `trashFolderWithControls items-center gap-4 px-3 py-2 justify-between`
               )}
             >
               <div className="flex items-center gap-4">
                 <Checkbox
-                  className="text-[25px] w-[20px] h-[20px] bg-[#000] transition-all delay-75 duration-100 z-10 data-[state=checked]:bg-[--primary-btn] data-[state=checked]:text-white"
+                  className="text-[25px] w-[20px] h-[20px] bg-[#000] transition-all delay-75 duration-100 z-10 data-[state=checked]:bg-[--primary-btn] data-[state=checked]:text-white border border-[--gray] hover:border-[whitesmoke] link-transition"
                   checked={isChecked}
                   onCheckedChange={(checked) =>
                     handleCheckboxChange(folder.id, checked)

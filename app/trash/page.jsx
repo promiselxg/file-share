@@ -25,6 +25,23 @@ const folders = [
   { id: 9, name: "Folder 9" },
 ];
 
+const imageVideoData = [
+  {
+    id: "13sdresd",
+    title: "2.png",
+    date: "Dec 20, 2024",
+    type: "image",
+    img: "https://awesomescreenshot.s3.amazonaws.com/image/1940849/52106243-ad0b3d132d8be3c881814837f4cb9c8a_thumb_.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241221T042632Z&X-Amz-Expires=28800&X-Amz-SignedHeaders=host&X-Amz-Signature=266dc5c070d99bdd70af2e4608d88ba2f060f1abce6633e0ce733f8f33e35843",
+  },
+  {
+    id: "13sdrxeww",
+    title: "AwesomeScreenshot-12/19/2024,3:23:26PM",
+    date: "Dec 19, 2024",
+    time: "00:08",
+    type: "video",
+    img: "https://awevideo.s3.amazonaws.com/video-34822599-6583549f42deb6133c95544cee960b09_360x180.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241221T042633Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=bbe9f450f088ef14f5968c949c24597293e2658873578accf8ff9b5938e7b7cc",
+  },
+];
 const TrashPage = () => {
   const { resetCheckBox, checkedCount } = useFolderCRUD();
   return (
@@ -82,11 +99,7 @@ const TrashPage = () => {
                   Images &amp; Videos
                 </p>
                 <div className="grid w-full grid-cols-4 gap-5 relative">
-                  <ImageVideoDelete
-                    title="Glovo: you order, we deliver it!"
-                    date="Jan 21, 2024"
-                    time="00:24"
-                  />
+                  <ImageVideoDelete data={imageVideoData} />
                 </div>
               </div>
             </div>
