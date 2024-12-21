@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useFolderCRUD } from "@/context/folder.context";
+import { useDialog } from "@/context/Dialog.context";
 
 const TrashFolder = ({ data }) => {
   const { checkedStates, handleCheckboxChange } = useFolderCRUD();
-
+  const { openDialog } = useDialog();
   return (
     <>
       {data?.map((folder) => {
@@ -87,7 +88,16 @@ const TrashFolder = ({ data }) => {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <GoTrash className=" cursor-pointer" size={20} />
+                        <GoTrash
+                          className=" cursor-pointer"
+                          size={20}
+                          onClick={() =>
+                            openDialog(
+                              "alert",
+                              "Are you sure you want to permanently delete the selected item(s)?"
+                            )
+                          }
+                        />
                       </TooltipTrigger>
                       <TooltipContent className="bg-[--gray]">
                         Delete forever

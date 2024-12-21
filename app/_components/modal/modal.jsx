@@ -4,9 +4,11 @@ import NewFolder from "./_components/newFolder";
 import ImageUpload from "./_components/imageUpload";
 import { useDialog } from "@/context/Dialog.context";
 import RecordVideo from "./_components/record";
+import CustomAlertModal from "./alert-modal";
 
 const Modals = () => {
-  const { dialogs, openDialog, closeDialog } = useDialog();
+  const { dialogs, openDialog, closeDialog, alertDescription, alertTitle } =
+    useDialog();
   return (
     <>
       {/**CREATE NEW FOLDER */}
@@ -38,6 +40,15 @@ const Modals = () => {
       >
         <RecordVideo />
       </CustomModal>
+
+      <CustomAlertModal
+        className="md:w-[400px] bg-[--dialog-bg] border-[--dialog-bg] top-[20%]"
+        isOpen={dialogs.alert}
+        openDialog={() => openDialog("alert")}
+        closeDialog={() => closeDialog("alert")}
+        description={alertDescription}
+        title={alertTitle}
+      />
     </>
   );
 };

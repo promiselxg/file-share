@@ -7,9 +7,8 @@ import Image from "next/image";
 import React from "react";
 import { RiExternalLinkLine } from "react-icons/ri";
 
-import { FiEdit3, FiMoreHorizontal, FiTrash2, FiVideo } from "react-icons/fi";
+import { FiEdit3, FiMoreHorizontal, FiVideo } from "react-icons/fi";
 import { LinkWithIcon } from "../nav/sideBarNav";
-import { PiShareFatLight } from "react-icons/pi";
 import { GrLink } from "react-icons/gr";
 
 import {
@@ -20,8 +19,10 @@ import {
 } from "@/components/ui/context-menu";
 import { LuCopyCheck } from "react-icons/lu";
 import { BsArrowRightSquare, BsTrash3 } from "react-icons/bs";
+import { useDialog } from "@/context/Dialog.context";
 
 const ThumbNail = ({ title, date, img, time }) => {
+  const { openDialog } = useDialog();
   return (
     <ContextMenu className="flex flex-col">
       {/* Context Menu Trigger */}
@@ -92,6 +93,13 @@ const ThumbNail = ({ title, date, img, time }) => {
                       color="text-[--bg-red] hover:text-white "
                       Icon={<BsTrash3 size={20} />}
                       name="Remove"
+                      onClick={() =>
+                        openDialog(
+                          "alert",
+                          "Are you sure you want to remove this item?",
+                          " "
+                        )
+                      }
                     />
                   </li>
                 </ul>
@@ -148,6 +156,13 @@ const ThumbNail = ({ title, date, img, time }) => {
             color="text-[--bg-red] hover:text-white "
             Icon={<BsTrash3 size={20} />}
             name="Remove"
+            onClick={() =>
+              openDialog(
+                "alert",
+                "Are you sure you want to remove this item?",
+                ""
+              )
+            }
           />
         </ContextMenuItem>
       </ContextMenuContent>

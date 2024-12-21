@@ -13,7 +13,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Link from "next/link";
 import { LinkWithIcon } from "../nav/sideBarNav";
 import { Icon, StarIcon } from "../icon/icon";
 import {
@@ -22,8 +21,10 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { useDialog } from "@/context/Dialog.context";
 
 const Folder = ({ name, star }) => {
+  const { openDialog } = useDialog();
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -94,6 +95,13 @@ const Folder = ({ name, star }) => {
                       color="text-[--bg-red] hover:text-white "
                       Icon={<BsTrash3 size={20} />}
                       name="Remove"
+                      onClick={() =>
+                        openDialog(
+                          "alert",
+                          "All items in this folder will be moved to the Trash.",
+                          "Are you sure you want to remove this folder?"
+                        )
+                      }
                     />
                   </li>
                 </ul>
@@ -150,6 +158,13 @@ const Folder = ({ name, star }) => {
             color="text-[--bg-red] hover:text-white "
             Icon={<BsTrash3 size={20} />}
             name="Remove"
+            onClick={() =>
+              openDialog(
+                "alert",
+                "All items in this folder will be moved to the Trash.",
+                "Are you sure you want to remove this folder?"
+              )
+            }
           />
         </ContextMenuItem>
       </ContextMenuContent>

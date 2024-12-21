@@ -11,9 +11,11 @@ import {
 import { MdOutlineRestorePage } from "react-icons/md";
 import { GoTrash } from "react-icons/go";
 import { cn } from "@/lib/utils";
+import { useDialog } from "@/context/Dialog.context";
 
 const ImageVideoDelete = ({ data }) => {
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
+  const { openDialog } = useDialog();
   return (
     <>
       {data?.map((item) => {
@@ -90,7 +92,16 @@ const ImageVideoDelete = ({ data }) => {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <GoTrash className=" cursor-pointer" size={35} />
+                          <GoTrash
+                            className=" cursor-pointer"
+                            size={35}
+                            onClick={() =>
+                              openDialog(
+                                "alert",
+                                "Are you sure you want to permanently delete the selected item(s)?"
+                              )
+                            }
+                          />
                         </TooltipTrigger>
                         <TooltipContent className="bg-[--gray]">
                           Delete forever

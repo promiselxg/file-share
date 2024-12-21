@@ -12,6 +12,8 @@ import { useFolderCRUD } from "@/context/folder.context";
 import { Badge } from "@/components/ui/badge";
 import { MdOutlineRestorePage } from "react-icons/md";
 import { GoTrash } from "react-icons/go";
+import { useDialog } from "@/context/Dialog.context";
+import CustomAlertModal from "../_components/modal/alert-modal";
 
 const folders = [
   { id: 1, name: "Folder 1" },
@@ -44,6 +46,7 @@ const imageVideoData = [
 ];
 const TrashPage = () => {
   const { resetCheckBox, checkedCount } = useFolderCRUD();
+  const { openDialog } = useDialog();
   return (
     <>
       <div className="w-full flex relative flex-col">
@@ -106,7 +109,7 @@ const TrashPage = () => {
           </div>
         </div>
         {checkedCount > 0 && (
-          <div className="fixed bottom-0 bg-[--primary-btn] w-fit left-1/2 transform -translate-x-1/2 rounded-t-[8px] p-5">
+          <div className="fixed bottom-0 bg-[--primary-btn] w-fit left-1/2 transform -translate-x-1/2 rounded-t-[8px] p-5 z-50">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-white">Selected</span>
@@ -118,7 +121,15 @@ const TrashPage = () => {
                 <Button className="bg-white  rounded-[8px] text-[--primary-btn] hover:bg-white  hover:text-[--primary-btn]">
                   <MdOutlineRestorePage /> Restore
                 </Button>
-                <Button className="bg-white  rounded-[8px] text-[--primary-btn] hover:bg-white  hover:text-[--primary-btn]">
+                <Button
+                  className="bg-white  rounded-[8px] text-[--primary-btn] hover:bg-white  hover:text-[--primary-btn]"
+                  onClick={() =>
+                    openDialog(
+                      "alert",
+                      "Are you sure you want to permanently delete the selected item(s)?"
+                    )
+                  }
+                >
                   <GoTrash /> Delete
                 </Button>
               </div>
@@ -133,6 +144,7 @@ const TrashPage = () => {
           </div>
         )}
       </div>
+      <CustomAlertModal />
     </>
   );
 };

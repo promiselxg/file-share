@@ -6,9 +6,13 @@ const DialogContext = createContext();
 
 export const DialogProvider = ({ children }) => {
   const [dialogs, setDialogs] = useState({});
+  const [alertDescription, setAlertDescription] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
 
-  const openDialog = (dialogName) => {
+  const openDialog = (dialogName, desc, title) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
+    setAlertDescription(desc);
+    setAlertTitle(title);
   };
 
   const closeDialog = (dialogName) => {
@@ -16,7 +20,9 @@ export const DialogProvider = ({ children }) => {
   };
 
   return (
-    <DialogContext.Provider value={{ dialogs, openDialog, closeDialog }}>
+    <DialogContext.Provider
+      value={{ dialogs, alertDescription, alertTitle, openDialog, closeDialog }}
+    >
       {children}
     </DialogContext.Provider>
   );
