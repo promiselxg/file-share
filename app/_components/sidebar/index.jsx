@@ -4,10 +4,10 @@ import { FiLogOut, FiStar, FiTrash, FiUser, FiUsers } from "react-icons/fi";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import SharedFolder from "../sharedFolder/sharedFolder";
+import StarredFolder from "../starredFolder/starredFolder";
 
 const SideBar = () => {
-  const [sharedFolder, setSharedFolder] = useState(true);
+  const [starredFolder, setStarredFolder] = useState(true);
   return (
     <>
       <div className="text-white relative h-[calc(100vh-70px)] md:flex md:w-[280px] w-full flex-col">
@@ -57,8 +57,8 @@ const SideBar = () => {
                 </div>
               </div>
             </div>
-            {sharedFolder && <SharedFolder />}
-            {!sharedFolder && (
+            {starredFolder && <StarredFolder />}
+            {!starredFolder && (
               <div className="shared-folder-empty border border-dashed p-2 my-2 rounded-[8px] border-[--folder-border-color]">
                 <p className="text-[12px] text-[--gray]">
                   Drag and drop your favorite folders here

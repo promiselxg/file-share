@@ -6,6 +6,7 @@ import { ImageProvider } from "@/context/imageUpload.context";
 import { Toaster } from "@/components/ui/toaster";
 import { ScreenRecordProvider } from "@/context/screenRecord.context";
 import { FolderCRUDProvider } from "@/context/folder.context";
+import ViewSelectedDocument from "./_components/modal/_components/view-document";
 
 export const metadata = {
   title: "Create Next App",
@@ -19,7 +20,7 @@ export default function RootLayout({ children }) {
         <DialogProvider>
           <FolderCRUDProvider>
             <ImageProvider>
-              <body className="flex bg-[--body-bg] w-full flex-col overflow-hidden">
+              <body className="flex bg-[--body-bg] w-full flex-col overflow-hidden relative">
                 <div className="w-full flex">
                   <Header />
                 </div>
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
                     {children}
                   </div>
                 </div>
+                <ViewSelectedDocument />
                 <Toaster />
               </body>
             </ImageProvider>

@@ -47,7 +47,7 @@ const ImageVideoDelete = ({ data }) => {
                   className={cn(
                     `${
                       isChecked
-                        ? "h-[130px] object-contain"
+                        ? "h-[130px] object-cover"
                         : "h-[200px] object-cover"
                     } w-full  z-10 `
                   )}

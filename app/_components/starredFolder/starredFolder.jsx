@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { StarIcon } from "../icon/icon";
 
-const SharedFolder = () => {
+const StarredFolder = () => {
   return (
     <>
       <ScrollArea className="h-fit max-h-[200px] w-full">
@@ -32,4 +32,4 @@ const SharedFolder = () => {
   );
 };
 
-export default SharedFolder;
+export default StarredFolder;
