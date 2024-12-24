@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,6 +11,10 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { FiAtSign, FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
 import { CiFaceSmile } from "react-icons/ci";
+
+const VideoPLayer = dynamic(() => import("../../../player/video-player"), {
+  ssr: false,
+});
 
 const ViewSelectedDocument = () => {
   const [toggleComment, setToggleComment] = useState(false);
@@ -81,17 +86,39 @@ const ViewSelectedDocument = () => {
             <div className="w-full flex gap-3 ">
               <div className="w-[75%] ">
                 <div className="w-full flex rounded-[8px] h-[500px] overflow-hidden bg-[--header-bg] shadow-md">
-                  {selectedDocumentId && (
-                    <Image
-                      src={
-                        selectedDocumentId?.mediaInfo?.mediaUrl ??
-                        "https://awesomescreenshot.s3.amazonaws.com/image/5993044/52167833-b8179e1203d2da092d5ea268b7227f0b.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241221T221452Z&X-Amz-Expires=28800&X-Amz-SignedHeaders=host&X-Amz-Signature=2f58e59973851634b46de265fa980fb358c8cb1cd016ad42c6772c9791a0d59a"
-                      }
-                      width={500}
-                      height={200}
-                      alt={selectedDocumentId?.title || "selected title"}
-                      className="w-full object-contain h-[500px]"
-                    />
+                  {selectedDocumentId?.mediaInfo?.mediaType === "image" ? (
+                    <div className="w-full flex justify-center h-[500px] items-center">
+                      <Image
+                        src={
+                          selectedDocumentId?.mediaInfo?.mediaUrl ??
+                          "https://res.cloudinary.com/promiselxg/image/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.jpg"
+                        }
+                        width={700}
+                        height={500}
+                        alt={selectedDocumentId?.title || "selected title"}
+                        className="object-cover h-full w-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-full">
+                      <VideoPLayer
+                        url={
+                          selectedDocumentId?.mediaInfo?.videoUrl ??
+                          "https://res.cloudinary.com/promiselxg/video/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.mp4"
+                        }
+                        width="100%"
+                        height="100%"
+                        light={
+                          <Image
+                            src={selectedDocumentId?.mediaInfo?.mediaUrl}
+                            alt={selectedDocumentId?.title}
+                            width={700}
+                            height={500}
+                            className="object-cover h-full w-full"
+                          />
+                        }
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="w-full my-5 flex flex-col text-[--popover-text-color]">
@@ -112,12 +139,14 @@ const ViewSelectedDocument = () => {
                           )}
                         </AvatarFallback>
                       </Avatar>
-                      <h1 className="text-[18px] mt-1">Promise</h1>
+                      <h1 className="text-[18px] mt-1">
+                        {selectedDocumentId?.createdBy?.username}
+                      </h1>
                     </div>
                     <div className="text-sm flex gap-2">
-                      <span>10 views</span>
+                      <span>{selectedDocumentId?.view} views</span>
                       <span>.</span>
-                      <span>Dec 21, 2024 9:16 PM</span>
+                      <span>{selectedDocumentId?.createdAt}</span>
                     </div>
                   </div>
                 </div>

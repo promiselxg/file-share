@@ -158,23 +158,24 @@ export default function Home() {
                   title="Glovo: you order, we deliver it!"
                   date="Jan 21, 2024"
                   time="00:24"
+                  img="https://res.cloudinary.com/promiselxg/image/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.jpg"
                 />
                 <ThumbNail
                   title="Vite + React"
                   date="Jan 22, 2024"
                   time="01:05"
-                  img="https://awevideo.s3.amazonaws.com/video-20660451-062988d3917c276b4ffed4f35c16b0dd_960x540.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241218%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241218T053037Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=2ba9b5886bb0e0f759c7408218740066fe931d05676a45f1ec718e22baecaf6d"
+                  img="https://res.cloudinary.com/promiselxg/image/upload/v1733975096/fameRoyal/ulsqam8pshkwgjn4nvj9.jpg"
                 />
                 <ThumbNail
                   title="Transactions | frontend"
                   date="Jan 21, 2024"
                   time="00:08"
-                  img="https://awevideo.s3.amazonaws.com/video-19844464-fa3c35cd3dc7e46dace12bf447110ce5_960x540.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241218%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241218T053130Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=0bf56a79148acb972d6aefd3af9365bd6fa24e5bdb921a100392eb492c24a8ed"
+                  img="https://res.cloudinary.com/promiselxg/image/upload/v1733952578/fameRoyal/v9h1odrixdkhioryjzad.png"
                 />
                 <ThumbNail
                   title="localhost:3000"
                   date="Jan 21, 2024"
-                  img="https://awevideo.s3.amazonaws.com/video-10611774-57efe14ad3ae9407765838011ab4607a_960x540.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241218%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241218T053230Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=42f94d75ac6018dd7863f4a9b6af500b47de058b7d62e59a3c37bdde4f0887e1"
+                  img="https://res.cloudinary.com/promiselxg/image/upload/v1733778417/hrcImages/asria5ybzr4ip50nlzmp.png"
                   time="00:23"
                 />
               </div>
