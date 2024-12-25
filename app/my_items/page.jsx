@@ -15,6 +15,7 @@ import { IoImageOutline } from "react-icons/io5";
 import { MdVideoCameraBack } from "react-icons/md";
 import { useDialog } from "@/context/Dialog.context";
 import Modals from "../_components/modal/modal";
+import { imageVideo } from "../shared_with_me/data";
 
 export default function Home() {
   const { openDialog } = useDialog();
@@ -154,30 +155,7 @@ export default function Home() {
                 Images &amp; Videos
               </p>
               <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
-                <ThumbNail
-                  title="Glovo: you order, we deliver it!"
-                  date="Jan 21, 2024"
-                  time="00:24"
-                  img="https://res.cloudinary.com/promiselxg/image/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.jpg"
-                />
-                <ThumbNail
-                  title="Vite + React"
-                  date="Jan 22, 2024"
-                  time="01:05"
-                  img="https://res.cloudinary.com/promiselxg/image/upload/v1733975096/fameRoyal/ulsqam8pshkwgjn4nvj9.jpg"
-                />
-                <ThumbNail
-                  title="Transactions | frontend"
-                  date="Jan 21, 2024"
-                  time="00:08"
-                  img="https://res.cloudinary.com/promiselxg/image/upload/v1733952578/fameRoyal/v9h1odrixdkhioryjzad.png"
-                />
-                <ThumbNail
-                  title="localhost:3000"
-                  date="Jan 21, 2024"
-                  img="https://res.cloudinary.com/promiselxg/image/upload/v1733778417/hrcImages/asria5ybzr4ip50nlzmp.png"
-                  time="00:23"
-                />
+                <ThumbNail data={imageVideo} />
               </div>
             </div>
           </div>

@@ -1,28 +1,21 @@
 "use client";
 import dynamic from "next/dynamic";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
 import { useDialog } from "@/context/Dialog.context";
 import { cn } from "@/lib/utils";
 import { truncateText } from "@/utils/trucateText";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiAtSign, FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
-import { CiFaceSmile } from "react-icons/ci";
+import { FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
+import ManageDocument from "./manage-document";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CommentContainer from "./comment/comment-container";
 
 const VideoPLayer = dynamic(() => import("../../../player/video-player"), {
   ssr: false,
 });
 
 const ViewSelectedDocument = () => {
-  const [toggleComment, setToggleComment] = useState(false);
-
-  const handleToggleComment = () => {
-    setToggleComment(!toggleComment);
-  };
-
   const {
     selectedDocumentId,
     openSelectedDocumentWrapper,
@@ -33,6 +26,13 @@ const ViewSelectedDocument = () => {
     sharedData,
   } = useDialog();
 
+  const isOwner =
+    selectedDocumentId?.createdBy?.username.toLowerCase() === "promiselxg";
+
+  const [activeTab, setActiveTab] = useState(isOwner ? "manage" : "comment");
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+  };
   return (
     <>
       <div
@@ -75,19 +75,19 @@ const ViewSelectedDocument = () => {
             <FiX
               size={25}
               onClick={() => {
-                handleViewSelectedDocument(""), setToggleComment(false);
+                handleViewSelectedDocument("");
               }}
               className=" cursor-pointer"
             />
           </div>
         </div>
-        <div className="w-full flex p-3 h-full bg-[--body-bg]">
-          <div className="container mt-[10px] mx-auto mb-0 max-w-[1200px]">
+        <div className="w-full flex p-3 h-full bg-[--body-bg] overflow-scroll ">
+          <div className="container mt-[10px] mx-auto mb-0 max-w-[1400px]">
             <div className="w-full flex gap-3 ">
-              <div className="w-[75%] ">
-                <div className="w-full flex rounded-[8px] h-[500px] overflow-hidden bg-[--header-bg] shadow-md">
+              <div className="w-[80%] ">
+                <div className="w-full flex rounded-[8px] h-[550px]  bg-[--header-bg] shadow-md">
                   {selectedDocumentId?.mediaInfo?.mediaType === "image" ? (
-                    <div className="w-full flex justify-center h-[500px] items-center">
+                    <div className="w-full flex justify-center h-[550px] items-center p-[60px]">
                       <Image
                         src={
                           selectedDocumentId?.mediaInfo?.mediaUrl ??
@@ -110,8 +110,11 @@ const ViewSelectedDocument = () => {
                         height="100%"
                         light={
                           <Image
-                            src={selectedDocumentId?.mediaInfo?.mediaUrl}
-                            alt={selectedDocumentId?.title}
+                            src={
+                              selectedDocumentId?.mediaInfo?.mediaUrl ||
+                              `https://res.cloudinary.com/promiselxg/image/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.jpg`
+                            }
+                            alt={selectedDocumentId?.title || "video thumbnail"}
                             width={700}
                             height={500}
                             className="object-cover h-full w-full"
@@ -121,7 +124,7 @@ const ViewSelectedDocument = () => {
                     </div>
                   )}
                 </div>
-                <div className="w-full my-5 flex flex-col text-[--popover-text-color]">
+                <div className="w-full my-5 flex flex-col text-[--popover-text-color] h-[200px]">
                   <h1 className="text-[16px] text-[whitesmoke] font-[600]">
                     {selectedDocumentId?.title}
                   </h1>
@@ -151,83 +154,63 @@ const ViewSelectedDocument = () => {
                   </div>
                 </div>
               </div>
-              <ScrollArea className="w-[25%] bg-[--header-bg] rounded-[8px] shadow-md max-h-[550px] relative">
-                <div className="w-full flex p-4 flex-col ">
-                  <h1 className="text-[16px] text-[--popover-text-color]">
-                    0 comment
-                  </h1>
-                  <div
+              <div className="w-[20%] bg-[--header-bg] rounded-[8px] shadow-md h-fit relative">
+                <Tabs
+                  value={isOwner ? activeTab : "comment"}
+                  onValueChange={handleTabChange}
+                  className="flex w-full gap-5 transition-all delay-300 duration-300 flex-col px-5 py-2"
+                >
+                  <TabsList
                     className={cn(
                       `${
-                        toggleComment ? "h-[300px]" : "h-[400px]"
-                      } w-full flex items-center justify-center  flex-col`
+                        isOwner ? "justify-center" : "justify-start"
+                      } w-full h-fit bg-transparent flex  gap-5`
                     )}
                   >
-                    <Image
-                      src="https://resource.awesomescreenshot.com/static/images/785674380a8e0b290080.png"
-                      width={100}
-                      height={100}
-                      alt="comment"
-                    />
-                    <p className="text-[16px] text-[--popover-text-color] font-[600]">
-                      No comments yet.
-                    </p>
-                  </div>
-                  {!toggleComment && (
-                    <div className="w-full absolute bottom-5">
-                      <Button
-                        className="w-[90%] bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover]"
-                        onClick={handleToggleComment}
-                      >
-                        Leave a comment
-                      </Button>
-                    </div>
-                  )}
-                  {toggleComment && (
-                    <div className="w-full absolute bottom-5">
-                      <div className="w-[90%] rounded-[8px] h-[150px] border-2 border-[--primary-btn]">
-                        <Textarea
-                          className="w-full h-[105px] p-2 text-[--popover-text-color] outline-none resize-none border-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-none"
-                          placeholder="Use @ to mention team members"
-                        ></Textarea>
-                        <div className="w-full">
-                          <div className="flex items-center justify-between mx-1">
-                            <div className="flex items-center">
-                              <Button
-                                size="icon"
-                                className="bg-transparent hover:bg-[--sidebar-link-active-bg] rounded-[10px]"
-                              >
-                                <CiFaceSmile />
-                              </Button>
-                              <Button
-                                size="icon"
-                                className="bg-transparent hover:bg-[--sidebar-link-active-bg] rounded-[10px]"
-                              >
-                                <FiAtSign />
-                              </Button>
-                            </div>
-                            <div>
-                              <Button
-                                className="bg-transparent text-[--popover-text-color] hover:text-[--primary-btn-hover] link-transition hover:bg-transparent"
-                                size="sm"
-                                onClick={handleToggleComment}
-                              >
-                                Cancel
-                              </Button>
-                              <Button
-                                className="bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover]"
-                                size="sm"
-                              >
-                                Comment
-                              </Button>
+                    {isOwner && (
+                      <>
+                        <TabsTrigger
+                          value="manage"
+                          className="data-[state=active]:text-[--primary-btn]  text-[--popover-text-color] border-b-[2px] rounded-none data-[state=active]:border-[--primary-btn] border-transparent pb-2"
+                        >
+                          <div className="flex flex-col justify-center items-center leading-[1] cursor-pointer">
+                            <div className="flex flex-col justify-center items-center">
+                              <span className="text-[14px]">Manage</span>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
+                        </TabsTrigger>
+
+                        <TabsTrigger
+                          value="comment"
+                          className="data-[state=active]:text-[--primary-btn]  text-[--popover-text-color] border-b-[2px] rounded-none data-[state=active]:border-[--primary-btn] border-transparent pb-2"
+                        >
+                          <div className="flex flex-col justify-center items-center leading-[1] cursor-pointer">
+                            <div className="flex flex-col justify-center items-center">
+                              <span className="text-[14px]">Comments</span>
+                            </div>
+                          </div>
+                        </TabsTrigger>
+                      </>
+                    )}
+                  </TabsList>
+                  <TabsContent
+                    value="manage"
+                    className="text-[--popover-text-color]"
+                  >
+                    <ManageDocument />
+                  </TabsContent>
+                  <TabsContent
+                    value="comment"
+                    className="text-[--popover-text-color]"
+                  >
+                    <CommentContainer
+                      documentid={selectedDocumentId?.id}
+                      userid={selectedDocumentId?.createdBy?.userid}
+                      username={selectedDocumentId?.createdBy?.username}
+                    />
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
           </div>
         </div>
