@@ -3,6 +3,7 @@ import React from "react";
 import SharedFolder from "./_component/sharedFolder";
 import SharedImageVideo from "./_component/sharedImageVideo";
 import { folders, imageVideo } from "./data";
+import CustomAlertModal from "../_components/modal/alert-modal";
 
 const SharedWithMe = () => {
   return (
@@ -40,6 +41,9 @@ const SharedWithMe = () => {
           </div>
         </div>
       </div>
+      {/** MODALS */}
+      <CustomAlertModal />
+      {/** MODALS */}
     </>
   );
 };

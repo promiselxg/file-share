@@ -4,7 +4,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -20,13 +19,14 @@ const AlertModal = ({
   openDialog,
   className,
   title,
+  alertBtnText,
 }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => open && openDialog}>
       <AlertDialogContent className={cn(``, className)}>
         <AlertDialogHeader>
           <AlertDialogTitle />
-          <AlertDialogDescription>
+          <div>
             <div className="w-full flex  gap-2">
               <IoAlertCircleOutline
                 size={title ? 30 : 40}
@@ -51,7 +51,7 @@ const AlertModal = ({
                 </span>
               </div>
             </div>
-          </AlertDialogDescription>
+          </div>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
@@ -64,7 +64,9 @@ const AlertModal = ({
             onClick={() => alert("Ok to Proceed")}
             className="bg-transparent text-[--bg-red] border border-[--bg-red] rounded-[10px] px-5 py-2 hover:bg-transparent hover:border-[--bg-red-hover] hover:text-[--bg-red-hover] link-transition"
           >
-            {title ? "Move to Trash" : "Continue"}
+            {title
+              ? "Move to Trash"
+              : `${alertBtnText ? alertBtnText : "Continue"}`}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

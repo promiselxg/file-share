@@ -6,8 +6,11 @@ const DialogContext = createContext();
 
 export const DialogProvider = ({ children }) => {
   const [dialogs, setDialogs] = useState({});
+  const [toggleComment, setToggleComment] = useState(false);
+  const [replyTo, setReplyTo] = useState(null);
   const [alertDescription, setAlertDescription] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
+  const [alertBtnText, setAlertBtnText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sharedData, setSharedData] = useState([]);
   const [selectedDocumentId, setSelectedDocumentId] = useState(
@@ -17,10 +20,11 @@ export const DialogProvider = ({ children }) => {
   const [openSelectedDocumentWrapper, setOpenSelectedDocumentWrapper] =
     useState(false);
 
-  const openDialog = (dialogName, desc, title) => {
+  const openDialog = (dialogName, desc, title, btnText) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setAlertDescription(desc);
     setAlertTitle(title);
+    setAlertBtnText(btnText);
   };
 
   const closeDialog = (dialogName) => {
@@ -32,6 +36,13 @@ export const DialogProvider = ({ children }) => {
     setOpenSelectedDocumentWrapper(!openSelectedDocumentWrapper);
     setSelectedDocumentId(data);
     setCurrentIndex(sharedData.indexOf(data)); // reset current data index
+  };
+
+  const handleToggleComment = (user) => {
+    setToggleComment(!toggleComment);
+    if (user) {
+      setReplyTo(user);
+    }
   };
 
   //  previous item
@@ -57,13 +68,17 @@ export const DialogProvider = ({ children }) => {
         dialogs,
         alertDescription,
         alertTitle,
+        alertBtnText,
         selectedDocumentId,
         openSelectedDocumentWrapper,
         sharedData,
         currentIndex,
+        toggleComment,
+        replyTo,
         openDialog,
         closeDialog,
         handleViewSelectedDocument,
+        handleToggleComment,
         setSharedData,
         nextItem,
         prevItem,

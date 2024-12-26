@@ -7,28 +7,43 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { CiFaceSmile } from "react-icons/ci";
 import { FiAtSign } from "react-icons/fi";
+import Comment from "./comment";
+import { useDialog } from "@/context/Dialog.context";
 
 const CommentContainer = ({ documentid, userid, username }) => {
-  const [toggleComment, setToggleComment] = useState(false);
+  const { toggleComment, replyTo, handleToggleComment } = useDialog();
   const [comment, setComment] = useState([
     {
       id: "eb316d4fc5a53dc86db286b78aa75903",
+      itemid: "eb316d4fc5a53dc86db286b78aa7545",
       comment: "This is a comment",
+      date: "2022-02-22T12:00:00.000Z",
+      time: "12:00",
+      createdBy: {
+        userid: "random1234",
+        username: "promise",
+      },
+    },
+    {
+      id: "eb316d4fc5a53dc86db286b78aa903",
+      itemid: "eb316d4fc5a53dc86db286b7545",
+      comment: "@promise This is a comment",
+      date: "2024-02-22T12:00:00.000Z",
+      time: "12:00",
       createdBy: {
         userid: "random1334",
+        username: "promiselxg",
+        photoUrl: "https://github.com/promiselxg.png",
       },
     },
   ]);
 
-  const handleToggleComment = () => {
-    setToggleComment(!toggleComment);
-  };
   return (
     <>
       <div className="w-full flex mx-[-5px] flex-col">
         {username !== "promiselxg" && (
           <h1 className="text-[16px] text-[--popover-text-color] -mt-6">
-            0 comment
+            {comment?.length} comment
           </h1>
         )}
 
@@ -60,8 +75,8 @@ const CommentContainer = ({ documentid, userid, username }) => {
                 </p>
               </div>
             ) : (
-              <div className="w-full h-fit bg-teal-400">
-                <h1>comment goes here</h1>
+              <div className="w-full h-fit">
+                <Comment data={comment} />
               </div>
             )}
           </div>
@@ -82,6 +97,7 @@ const CommentContainer = ({ documentid, userid, username }) => {
               <Textarea
                 className="w-full h-[105px] p-2 text-[--popover-text-color] outline-none resize-none border-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-none"
                 placeholder="Use @ to mention team members"
+                defaultValue={`${replyTo ? `@${replyTo} ` : ""}`}
               ></Textarea>
               <div className="w-full">
                 <div className="flex items-center justify-between mx-1">

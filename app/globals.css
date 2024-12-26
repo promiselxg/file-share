@@ -184,6 +184,13 @@ html {
 .imageWrapper:hover .imageBtn {
   opacity: 1;
 }
+.commentAction {
+  transition: all 0.3s ease-in-out;
+}
+.commentBox:hover .commentAction {
+  display: flex;
+  transition: all 0.3s ease-in-out;
+}
 @layer base {
   * {
     @apply border-border;

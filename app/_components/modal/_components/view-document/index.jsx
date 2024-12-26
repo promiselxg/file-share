@@ -39,12 +39,12 @@ const ViewSelectedDocument = () => {
         className={cn(
           `absolute bottom-0 w-full transition-all duration-500 ease-in-out transform h-full ${
             openSelectedDocumentWrapper
-              ? "translate-y-0 scale-1 z-[999] opacity-1"
+              ? "translate-y-0 scale-1 z-[50] opacity-1"
               : "translate-y-full  scale-0 opacity-0 "
           }`
         )}
       >
-        <div className="w-full flex h-[50px] sticky top-0 left-0 z-[999] bg-[rgba(0,0,0,0.4)] text-white items-center">
+        <div className="w-full flex h-[50px] sticky top-0 left-0 z-[20] bg-[rgba(0,0,0,0.4)] text-white items-center">
           <div className="absolute top-0 right-0 flex items-center h-[50px] gap-5 px-8">
             <div className="flex  items-center gap-4">
               <div className="flex items-center gap-3">
@@ -84,7 +84,7 @@ const ViewSelectedDocument = () => {
         <div className="w-full flex p-3 h-full bg-[--body-bg] overflow-scroll ">
           <div className="container mt-[10px] mx-auto mb-0 max-w-[1400px]">
             <div className="w-full flex gap-3 ">
-              <div className="w-[80%] ">
+              <div className="w-[75%] ">
                 <div className="w-full flex rounded-[8px] h-[550px]  bg-[--header-bg] shadow-md">
                   {selectedDocumentId?.mediaInfo?.mediaType === "image" ? (
                     <div className="w-full flex justify-center h-[550px] items-center p-[60px]">
@@ -154,7 +154,7 @@ const ViewSelectedDocument = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[20%] bg-[--header-bg] rounded-[8px] shadow-md h-fit relative">
+              <div className="w-[25%] bg-[--header-bg] rounded-[8px] shadow-md h-fit relative">
                 <Tabs
                   value={isOwner ? activeTab : "comment"}
                   onValueChange={handleTabChange}
