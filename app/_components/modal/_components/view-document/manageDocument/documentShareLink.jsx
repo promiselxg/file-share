@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -11,14 +12,53 @@ import { BsGithub } from "react-icons/bs";
 import { SiAsana } from "react-icons/si";
 import { FaTrello } from "react-icons/fa";
 import { FaSlack } from "react-icons/fa";
+import ShareFileLink from "./_component/share-link";
+import { useDialog } from "@/context/Dialog.context";
+import { Loader2 } from "lucide-react";
 
 const DocumentShareLink = () => {
+  const [shareFile, setShareFile] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fileId, setFileId] = useState("");
+
+  const { selectedDocumentId } = useDialog();
+
+  const handleShareFile = (id) => {
+    setLoading(true);
+    setTimeout(() => {
+      setShareFile(true);
+      setFileId(id);
+      setLoading(false);
+    }, 3000);
+  };
+
   return (
     <>
-      <p className="text-sm">Share your Image</p>
-      <Button className="w-full bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover] rounded-[8px] my-1">
-        Generate Shareable Link
-      </Button>
+      {shareFile ? (
+        <>
+          <ShareFileLink id={fileId} />
+        </>
+      ) : (
+        <>
+          <p className="text-sm">Share your Image</p>
+          <Button
+            className="w-full bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover] rounded-[8px] my-1"
+            onClick={() => handleShareFile(selectedDocumentId?.id)}
+            disabled={loading}
+          >
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <Loader2 className="animate-spin" />
+                <span>Generating link...</span>
+              </div>
+            ) : (
+              <>
+                <span>Generate Shareable Link</span>
+              </>
+            )}
+          </Button>
+        </>
+      )}
       <div className="w-full flex justify-center my-2 items-center gap-2">
         <p className="text-sm">Support:</p>
         <div className="flex gap-2">

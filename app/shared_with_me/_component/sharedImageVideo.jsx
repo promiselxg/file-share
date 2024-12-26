@@ -53,7 +53,7 @@ const SharedImageVideo = ({ data }) => {
                   alt={item?.createdBy?.username}
                 />
                 <AvatarFallback className="uppercase">
-                  {truncateText(item?.createdBy?.username, 2)}
+                  {item?.createdBy?.username?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>

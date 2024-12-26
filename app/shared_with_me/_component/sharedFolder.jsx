@@ -39,7 +39,7 @@ const SharedFolder = ({ data }) => {
                   alt={folder?.createdBy?.username}
                 />
                 <AvatarFallback className="uppercase">
-                  {truncateText(folder?.createdBy?.username, 2)}
+                  {folder?.createdBy?.username?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import CustomModal from ".";
+import CustomModal from "./custom.modal";
 import NewFolder from "./_components/newFolder";
 import ImageUpload from "./_components/imageUpload";
 import { useDialog } from "@/context/Dialog.context";
@@ -24,7 +24,7 @@ const Modals = () => {
       {/**UPLOAD IMAGES */}
       <CustomModal
         heading="Upload images"
-        className="w-[25%] top-[30%]"
+        className="w-[25%]"
         isOpen={dialogs.uploadImage}
         openDialog={() => openDialog("uploadImage")}
         closeDialog={() => closeDialog("uploadImage")}

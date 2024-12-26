@@ -6,7 +6,7 @@ import { ScreenRecordProvider } from "@/context/screenRecord.context";
 import { FolderCRUDProvider } from "@/context/folder.context";
 import Header from "../_components/header";
 import SideBar from "../_components/sidebar";
-import ViewSelectedDocument from "../_components/modal/_components/view-document";
+import ViewSelectedDocument from "../_components/modal/_components/view-document/selectedDocumentModal";
 
 export const metadata = {
   title: "Create Next Appss",

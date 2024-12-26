@@ -5,7 +5,7 @@ import { ImageProvider } from "@/context/imageUpload.context";
 import { Toaster } from "@/components/ui/toaster";
 import { ScreenRecordProvider } from "@/context/screenRecord.context";
 import { FolderCRUDProvider } from "@/context/folder.context";
-import ViewSelectedDocument from "../_components/modal/_components/view-document";
+import ViewSelectedDocument from "../_components/modal/_components/view-document/selectedDocumentModal";
 import Header from "../_components/header";
 import SideBar from "../_components/sidebar";
 

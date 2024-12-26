@@ -4,7 +4,7 @@ import Header from "@/app/_components/header";
 import { DialogProvider } from "@/context/Dialog.context";
 import { FolderCRUDProvider } from "@/context/folder.context";
 import { ImageProvider } from "@/context/imageUpload.context";
-import ViewSelectedDocument from "../_components/modal/_components/view-document";
+import ViewSelectedDocument from "../_components/modal/_components/view-document/selectedDocumentModal";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {

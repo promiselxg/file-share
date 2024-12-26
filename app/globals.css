@@ -73,6 +73,7 @@ html {
     --gray: gray;
     --sidebar-link-color: hsla(0, 0%, 100%, 0.85);
     --sidebar-link-active-bg: rgba(58, 125, 213, 0.2);
+    --input-bg: rgba(85, 85, 85, 0.4);
     --sidebar-link-active-text: #177ddc;
     --folder-bg: hsla(0, 0%, 100%, 0.08);
     --folder-border-color: #434343;

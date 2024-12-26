@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { FiEye, FiPlus, FiTrash2 } from "react-icons/fi";
-import CustomModal from "../modal";
+import CustomModal from "../modal/custom.modal";
 import { useDialog } from "@/context/Dialog.context";
 
 const SelectedImagesDisplay = ({ source, onRemoveImage }) => {
