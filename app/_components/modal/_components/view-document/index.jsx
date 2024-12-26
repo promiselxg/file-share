@@ -7,7 +7,7 @@ import { truncateText } from "@/utils/trucateText";
 import Image from "next/image";
 import React, { useState } from "react";
 import { FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
-import ManageDocument from "./manage-document";
+import ManageDocument from "./manageDocument/manageDocument";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CommentContainer from "./comment/comment-container";
 
@@ -82,7 +82,7 @@ const ViewSelectedDocument = () => {
           </div>
         </div>
         <div className="w-full flex p-3 h-full bg-[--body-bg] overflow-scroll ">
-          <div className="container mt-[10px] mx-auto mb-0 max-w-[1400px]">
+          <div className="container mt-[10px] mx-auto mb-0 max-w-[1300px]">
             <div className="w-full flex gap-3 ">
               <div className="w-[75%] ">
                 <div className="w-full flex rounded-[8px] h-[550px]  bg-[--header-bg] shadow-md">
@@ -158,7 +158,7 @@ const ViewSelectedDocument = () => {
                 <Tabs
                   value={isOwner ? activeTab : "comment"}
                   onValueChange={handleTabChange}
-                  className="flex w-full gap-5 transition-all delay-300 duration-300 flex-col px-5 py-2"
+                  className="flex w-full gap-5 transition-all delay-300 duration-300 flex-col px-3 py-2"
                 >
                   <TabsList
                     className={cn(

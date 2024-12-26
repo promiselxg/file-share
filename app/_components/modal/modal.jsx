@@ -13,7 +13,7 @@ const Modals = () => {
     <>
       {/**CREATE NEW FOLDER */}
       <CustomModal
-        className="w-[30%]"
+        className="w-[30%] top-[20%]"
         heading="New folder"
         isOpen={dialogs.newFolder}
         openDialog={() => openDialog("newFolder")}
@@ -24,7 +24,7 @@ const Modals = () => {
       {/**UPLOAD IMAGES */}
       <CustomModal
         heading="Upload images"
-        className="w-[25%]"
+        className="w-[25%] top-[30%]"
         isOpen={dialogs.uploadImage}
         openDialog={() => openDialog("uploadImage")}
         closeDialog={() => closeDialog("uploadImage")}
@@ -33,7 +33,7 @@ const Modals = () => {
       </CustomModal>
       {/**RECORD VIDEO */}
       <CustomModal
-        className="w-fit"
+        className="w-fit top-[40%]"
         isOpen={dialogs.recordVideo}
         openDialog={() => openDialog("recordVideo")}
         closeDialog={() => closeDialog("recordVideo")}

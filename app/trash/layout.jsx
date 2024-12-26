@@ -1,12 +1,12 @@
-import "./globals.css";
-import Header from "./_components/header";
-import SideBar from "./_components/sidebar";
+import "../globals.css";
 import { DialogProvider } from "@/context/Dialog.context";
 import { ImageProvider } from "@/context/imageUpload.context";
 import { Toaster } from "@/components/ui/toaster";
 import { ScreenRecordProvider } from "@/context/screenRecord.context";
 import { FolderCRUDProvider } from "@/context/folder.context";
-import ViewSelectedDocument from "./_components/modal/_components/view-document";
+import Header from "../_components/header";
+import SideBar from "../_components/sidebar";
+import ViewSelectedDocument from "../_components/modal/_components/view-document";
 
 export const metadata = {
   title: "Create Next Appss",

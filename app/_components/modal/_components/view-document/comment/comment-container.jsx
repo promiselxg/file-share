@@ -40,7 +40,7 @@ const CommentContainer = ({ documentid, userid, username }) => {
 
   return (
     <>
-      <div className="w-full flex mx-[-5px] flex-col">
+      <div className="w-full flex mx-[-5px] flex-col px-2">
         {username !== "promiselxg" && (
           <h1 className="text-[16px] text-[--popover-text-color] -mt-6">
             {comment?.length} comment
@@ -85,7 +85,7 @@ const CommentContainer = ({ documentid, userid, username }) => {
           <div className="w-full absolute bottom-5">
             <Button
               className="w-[90%] bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover]"
-              onClick={handleToggleComment}
+              onClick={() => handleToggleComment("")}
             >
               Leave a comment
             </Button>
@@ -97,7 +97,7 @@ const CommentContainer = ({ documentid, userid, username }) => {
               <Textarea
                 className="w-full h-[105px] p-2 text-[--popover-text-color] outline-none resize-none border-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-none"
                 placeholder="Use @ to mention team members"
-                defaultValue={`${replyTo ? `@${replyTo} ` : ""}`}
+                defaultValue={`${replyTo ? `@${replyTo} ` : " "}`}
               ></Textarea>
               <div className="w-full">
                 <div className="flex items-center justify-between mx-1">
@@ -119,7 +119,7 @@ const CommentContainer = ({ documentid, userid, username }) => {
                     <Button
                       className="bg-transparent text-[--popover-text-color] hover:text-[--primary-btn-hover] link-transition hover:bg-transparent"
                       size="sm"
-                      onClick={handleToggleComment}
+                      onClick={() => handleToggleComment("")}
                     >
                       Cancel
                     </Button>

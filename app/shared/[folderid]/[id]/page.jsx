@@ -1,5 +1,6 @@
 "use client";
 import { Icon } from "@/app/_components/icon/icon";
+import CustomAlertModal from "@/app/_components/modal/alert-modal";
 import SharedImageVideo from "@/app/shared_with_me/_component/sharedImageVideo";
 import { imageVideo } from "@/app/shared_with_me/data";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -58,6 +59,7 @@ const SharedFolderPage = ({ params }) => {
           </div>
         </div>
       </div>
+      <CustomAlertModal />
     </>
   );
 };
