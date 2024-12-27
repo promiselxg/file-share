@@ -1,7 +1,7 @@
 import { useImageContext } from "@/context/imageUpload.context";
 import React from "react";
 import { BiImageAdd } from "react-icons/bi";
-import { RenderImages } from "../../image-upload/selectedImageDisplay";
+import { RenderImages } from "../../../image-upload/selectedImageDisplay";
 import { Button } from "@/components/ui/button";
 
 const ImageUpload = () => {

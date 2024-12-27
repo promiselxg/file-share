@@ -4,6 +4,7 @@ import SharedFolder from "./_component/sharedFolder";
 import SharedImageVideo from "./_component/sharedImageVideo";
 import { folders, imageVideo } from "./data";
 import CustomAlertModal from "../_components/modal/alert-modal";
+import Modals from "../_components/modal/modal";
 
 const SharedWithMe = () => {
   return (
@@ -43,6 +44,7 @@ const SharedWithMe = () => {
       </div>
       {/** MODALS */}
       <CustomAlertModal />
+      <Modals />
       {/** MODALS */}
     </>
   );

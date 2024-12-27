@@ -1,10 +1,11 @@
 import React from "react";
 import CustomModal from "./custom.modal";
-import NewFolder from "./_components/newFolder";
-import ImageUpload from "./_components/imageUpload";
+import NewFolder from "./_components/folder/newFolder";
+import ImageUpload from "./_components/upload/imageUpload";
 import { useDialog } from "@/context/Dialog.context";
 import RecordVideo from "./_components/record";
 import CustomAlertModal from "./alert-modal";
+import EditStarredFolder from "./_components/folder/starredFolder";
 
 const Modals = () => {
   const { dialogs, openDialog, closeDialog, alertDescription, alertTitle } =
@@ -39,6 +40,16 @@ const Modals = () => {
         closeDialog={() => closeDialog("recordVideo")}
       >
         <RecordVideo />
+      </CustomModal>
+      {/** EDIT STARRED FOLDERS */}
+      <CustomModal
+        className="w-[30%] top-[40%]"
+        heading="Edit Starred Folders"
+        isOpen={dialogs.editStarredFolders}
+        openDialog={() => openDialog("editStarredFolders")}
+        closeDialog={() => closeDialog("editStarredFolders")}
+      >
+        <EditStarredFolder />
       </CustomModal>
 
       <CustomAlertModal
