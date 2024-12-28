@@ -6,10 +6,19 @@ import { useDialog } from "@/context/Dialog.context";
 import RecordVideo from "./_components/record";
 import CustomAlertModal from "./alert-modal";
 import EditStarredFolder from "./_components/folder/starredFolder";
+import ShareLink from "./_components/folder/share";
+import Rename from "./_components/folder/rename";
 
 const Modals = () => {
-  const { dialogs, openDialog, closeDialog, alertDescription, alertTitle } =
-    useDialog();
+  const {
+    renameFolderTitle,
+    renameFolderId,
+    dialogs,
+    openDialog,
+    closeDialog,
+    alertDescription,
+    alertTitle,
+  } = useDialog();
   return (
     <>
       {/**CREATE NEW FOLDER */}
@@ -22,6 +31,18 @@ const Modals = () => {
       >
         <NewFolder />
       </CustomModal>
+
+      {/** RENAME FOLDER / DOCUMENT */}
+      <CustomModal
+        className="w-[30%] top-[20%]"
+        heading="Rename"
+        isOpen={dialogs.rename}
+        openDialog={() => openDialog("rename")}
+        closeDialog={() => closeDialog("rename")}
+      >
+        <Rename title={renameFolderTitle} id={renameFolderId} />
+      </CustomModal>
+
       {/**UPLOAD IMAGES */}
       <CustomModal
         heading="Upload images"
@@ -50,6 +71,16 @@ const Modals = () => {
         closeDialog={() => closeDialog("editStarredFolders")}
       >
         <EditStarredFolder />
+      </CustomModal>
+
+      <CustomModal
+        className="w-[30%] top-[20%]"
+        heading="Share"
+        isOpen={dialogs.share}
+        openDialog={() => openDialog("share")}
+        closeDialog={() => closeDialog("share")}
+      >
+        <ShareLink />
       </CustomModal>
 
       <CustomAlertModal

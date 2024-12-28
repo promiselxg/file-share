@@ -4,7 +4,6 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Icon } from "../../_components/icon/icon";
-import { truncateText } from "@/utils/trucateText";
 import { useRouter } from "next/navigation";
 
 const SharedFolder = ({ data }) => {

@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -7,19 +6,31 @@ import {
 } from "@/components/ui/popover";
 import Link from "next/link";
 import { FiCheck, FiChevronDown } from "react-icons/fi";
-import Folder from "../_components/folder";
+import Folder from "../_components/folder/folder";
 import ThumbNail from "../_components/thumbnail";
 
-import { LinkWithIcon } from "../_components/nav/sideBarNav";
-import { IoImageOutline } from "react-icons/io5";
-import { MdVideoCameraBack } from "react-icons/md";
-import { useDialog } from "@/context/Dialog.context";
 import Modals from "../_components/modal/modal";
 import { imageVideo } from "../shared_with_me/data";
+import NewFolder from "../_components/new-item/new-folder";
+import NewItem from "../_components/new-item/newItem";
 
-export default function Home() {
-  const { openDialog } = useDialog();
+const folders = [
+  {
+    id: 1,
+    name: "Folder 1",
+    star: true,
+  },
+  { id: 2, name: "Folder 2" },
+  { id: 3, name: "Folder 3" },
+  { id: 4, name: "Folder 4" },
+  { id: 5, name: "Folder 5" },
+  { id: 6, name: "Folder 6" },
+  { id: 7, name: "Folder 7" },
+  { id: 8, name: "Folder 8" },
+  { id: 9, name: "Folder 9" },
+];
 
+export default function page() {
   return (
     <>
       <div className="w-full flex">
@@ -95,38 +106,8 @@ export default function Home() {
                   </PopoverContent>
                 </Popover>
                 <div className="flex gap-3">
-                  <Button
-                    className="w-full rounded-[8px] bg-transparent border-[--gray] border text-[--gray] hover:bg-transparent hover:border-[--nav-selected] hover:text-[--sidebar-link-active-text] outline-none transition-all delay-75 duration-200"
-                    onClick={() => openDialog("newFolder")}
-                  >
-                    New folder
-                  </Button>
-
-                  <Popover>
-                    <PopoverTrigger className="w-full rounded-[8px] bg-[--primary-btn] border-none border text-[white] hover:bg-[--sidebar-link-active-text]  outline-none transition-all delay-75 duration-200 hover:text-[rgba(255,255,255,.8)] flex items-center px-5 text-wrap whitespace-nowrap text-sm">
-                      New item
-                    </PopoverTrigger>
-                    <PopoverContent className="flex w-[200px] bg-[--dialog-bg] shadow-md border-none mr-[30px]">
-                      <ul className="flex flex-col w-full">
-                        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg]  rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<MdVideoCameraBack size={20} />}
-                            name="Record video"
-                            color="text-[--popover-text-color]"
-                            onClick={() => openDialog("recordVideo")}
-                          />
-                        </li>
-                        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg]  rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<IoImageOutline size={20} />}
-                            name="Upload image"
-                            color="text-[--popover-text-color]"
-                            onClick={() => openDialog("uploadImage")}
-                          />
-                        </li>
-                      </ul>
-                    </PopoverContent>
-                  </Popover>
+                  <NewFolder />
+                  <NewItem />
                 </div>
               </div>
             </div>
@@ -138,15 +119,7 @@ export default function Home() {
                   Folders
                 </p>
                 <div className="grid w-full grid-cols-4 gap-5 relative">
-                  <Folder name="folder 9" star />
-                  <Folder name="My private folder" star />
-                  <Folder name="folder 9" star />
-                  <Folder name="folder 9" star />
-                  <Folder name="folder 9" star />
-                  <Folder name="folder 9" star />
-                  <Folder name="folder 9" star />
-                  <Folder name="folder 9" star />
-                  <Folder name="Untitled folder" />
+                  <Folder data={folders} />
                 </div>
               </div>
             </div>

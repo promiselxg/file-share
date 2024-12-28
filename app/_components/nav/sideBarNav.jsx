@@ -43,16 +43,15 @@ export const LinkWithIcon = ({
         className={cn(`flex text-[--gray] w-full ${color}`, className)}
         {...props}
       >
-        <Link
-          href={url || ""}
+        <div
           className={cn(
-            `flex items-center gap-2 w-full rounded-[8px] p-2 link-transition border-none outline-none`,
+            `flex items-center gap-2 w-full rounded-[8px] p-2 link-transition border-none outline-none cursor-pointer`,
             className
           )}
         >
           <span>{Icon}</span>
           <span className="text-sm">{name}</span>
-        </Link>
+        </div>
       </div>
     </>
   );

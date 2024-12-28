@@ -8,6 +8,8 @@ export const DialogProvider = ({ children }) => {
   const [dialogs, setDialogs] = useState({});
   const [toggleComment, setToggleComment] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
+  const [renameFolderTitle, setRenameFolderTitle] = useState("");
+  const [renameFolderId, setRenameFolderId] = useState("");
   const [alertDescription, setAlertDescription] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
   const [alertBtnText, setAlertBtnText] = useState("");
@@ -25,6 +27,12 @@ export const DialogProvider = ({ children }) => {
     setAlertDescription(desc);
     setAlertTitle(title);
     setAlertBtnText(btnText);
+  };
+
+  const openRenameDialog = (dialogName, id, title) => {
+    setDialogs((prev) => ({ ...prev, [dialogName]: true }));
+    setRenameFolderTitle(title);
+    setRenameFolderId(id);
   };
 
   const closeDialog = (dialogName) => {
@@ -75,7 +83,10 @@ export const DialogProvider = ({ children }) => {
         currentIndex,
         toggleComment,
         replyTo,
+        renameFolderTitle,
+        renameFolderId,
         openDialog,
+        openRenameDialog,
         closeDialog,
         handleViewSelectedDocument,
         handleToggleComment,

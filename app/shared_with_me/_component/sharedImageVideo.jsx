@@ -1,7 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useDialog } from "@/context/Dialog.context";
-import { truncateText } from "@/utils/trucateText";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { FiVideo } from "react-icons/fi";

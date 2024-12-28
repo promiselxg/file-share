@@ -3,8 +3,8 @@ import { Icon } from "@/app/_components/icon/icon";
 import CustomAlertModal from "@/app/_components/modal/alert-modal";
 import SharedImageVideo from "@/app/shared_with_me/_component/sharedImageVideo";
 import { imageVideo } from "@/app/shared_with_me/data";
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Avatar } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import Link from "next/link";
 import React, { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";

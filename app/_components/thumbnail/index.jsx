@@ -22,7 +22,12 @@ import { BsArrowRightSquare, BsTrash3 } from "react-icons/bs";
 import { useDialog } from "@/context/Dialog.context";
 
 const ThumbNail = ({ data }) => {
-  const { openDialog, setSharedData, handleViewSelectedDocument } = useDialog();
+  const {
+    openRenameDialog,
+    openDialog,
+    setSharedData,
+    handleViewSelectedDocument,
+  } = useDialog();
 
   useEffect(() => {
     setSharedData(data);
@@ -71,6 +76,14 @@ const ThumbNail = ({ data }) => {
                             Icon={<FiEdit3 size={20} />}
                             name="Rename"
                             color="text-[--popover-text-color]"
+                            onClick={(e) => {
+                              e.stopPropagation(),
+                                openRenameDialog(
+                                  "rename",
+                                  item?.id,
+                                  item?.title
+                                );
+                            }}
                           />
                         </li>
                         <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
@@ -139,6 +152,9 @@ const ThumbNail = ({ data }) => {
                   Icon={<FiEdit3 size={20} />}
                   name="Rename"
                   color="text-[--popover-text-color]"
+                  onClick={() =>
+                    openRenameDialog("rename", item?.id, item?.title)
+                  }
                 />
               </ContextMenuItem>
               <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
