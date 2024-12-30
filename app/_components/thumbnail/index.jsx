@@ -20,6 +20,7 @@ import {
 import { LuCopyCheck } from "react-icons/lu";
 import { BsArrowRightSquare, BsTrash3 } from "react-icons/bs";
 import { useDialog } from "@/context/Dialog.context";
+import { ImageVideoMenuItem } from "../menuItem/menu";
 
 const ThumbNail = ({ data }) => {
   const {
@@ -69,67 +70,13 @@ const ThumbNail = ({ data }) => {
                         <FiMoreHorizontal size={20} className="text-white" />
                       </span>
                     </PopoverTrigger>
-                    <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px] absolute right-5 top-0 z-10">
-                      <ul className="flex flex-col w-full">
-                        <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<FiEdit3 size={20} />}
-                            name="Rename"
-                            color="text-[--popover-text-color]"
-                            onClick={(e) => {
-                              e.stopPropagation(),
-                                openRenameDialog(
-                                  "rename",
-                                  item?.id,
-                                  item?.title
-                                );
-                            }}
-                          />
-                        </li>
-                        <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<GrLink size={20} />}
-                            name="Copy sharable link"
-                            color="text-[--popover-text-color]"
-                          />
-                        </li>
-                        <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<BsArrowRightSquare size={20} />}
-                            name="Move"
-                            color="text-[--popover-text-color]"
-                          />
-                        </li>
-                        <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<LuCopyCheck size={20} />}
-                            name="Select multiple items"
-                            color="text-[--popover-text-color]"
-                          />
-                        </li>
-                        <li className="flex w-full  hover:bg-[--folder-bg] rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            Icon={<RiExternalLinkLine size={20} />}
-                            name="Open in new tab"
-                            color="text-[--popover-text-color]"
-                          />
-                        </li>
-                        <li className="flex w-full  hover:bg-[--bg-red]  rounded-[5px] link-transition">
-                          <LinkWithIcon
-                            color="text-[--bg-red] hover:text-white "
-                            Icon={<BsTrash3 size={20} />}
-                            name="Remove"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openDialog(
-                                "alert",
-                                "Are you sure you want to remove this item?",
-                                ""
-                              );
-                            }}
-                          />
-                        </li>
-                      </ul>
+                    <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px] z-10">
+                      <ImageVideoMenuItem
+                        openDialog={openDialog}
+                        openRenameDialog={openRenameDialog}
+                        id={item.id}
+                        title={item.title}
+                      />
                     </PopoverContent>
                   </Popover>
                 </div>

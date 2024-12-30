@@ -15,6 +15,8 @@ export const DialogProvider = ({ children }) => {
   const [alertBtnText, setAlertBtnText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sharedData, setSharedData] = useState([]);
+  const [selectedMoveFolder, setSelectedMoveFolder] = useState("");
+  const [moveFolderId, setMoveFolderId] = useState("");
   const [selectedDocumentId, setSelectedDocumentId] = useState(
     sharedData[currentIndex] || null
   );
@@ -22,6 +24,7 @@ export const DialogProvider = ({ children }) => {
   const [openSelectedDocumentWrapper, setOpenSelectedDocumentWrapper] =
     useState(false);
 
+  // Open Dialog
   const openDialog = (dialogName, desc, title, btnText) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setAlertDescription(desc);
@@ -29,12 +32,20 @@ export const DialogProvider = ({ children }) => {
     setAlertBtnText(btnText);
   };
 
+  // Rename folder/document
   const openRenameDialog = (dialogName, id, title) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setRenameFolderTitle(title);
     setRenameFolderId(id);
   };
 
+  // move folder dialog
+  const openMoveFolderDialog = (dialogName, folderId) => {
+    setDialogs((prev) => ({ ...prev, [dialogName]: true }));
+    setMoveFolderId(folderId);
+  };
+
+  // close dialog
   const closeDialog = (dialogName) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: false }));
   };
@@ -46,6 +57,7 @@ export const DialogProvider = ({ children }) => {
     setCurrentIndex(sharedData.indexOf(data)); // reset current data index
   };
 
+  // Toggle Comment
   const handleToggleComment = (user) => {
     setToggleComment(!toggleComment);
     if (user) {
@@ -85,12 +97,16 @@ export const DialogProvider = ({ children }) => {
         replyTo,
         renameFolderTitle,
         renameFolderId,
+        selectedMoveFolder,
+        moveFolderId,
         openDialog,
         openRenameDialog,
+        openMoveFolderDialog,
         closeDialog,
         handleViewSelectedDocument,
         handleToggleComment,
         setSharedData,
+        setSelectedMoveFolder,
         nextItem,
         prevItem,
       }}

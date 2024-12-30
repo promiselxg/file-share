@@ -1,8 +1,11 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDialog } from "@/context/Dialog.context";
 import React from "react";
 
 const NewFolder = () => {
+  const { closeDialog } = useDialog();
   return (
     <>
       <Input
@@ -13,6 +16,7 @@ const NewFolder = () => {
         <Button
           variant="outline"
           className="bg-transparent border-[#434343] hover:bg-transparent hover:border-[--primary-btn] hover:text-[--primary-btn] text-[--popover-text-color]"
+          onClick={() => closeDialog("newFolder")}
         >
           Cancel
         </Button>

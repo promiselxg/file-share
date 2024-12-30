@@ -1,21 +1,13 @@
 "use client";
 
 import React from "react";
-import { FiEdit3, FiMoreHorizontal } from "react-icons/fi";
-import { BsArrowRightSquare } from "react-icons/bs";
-import { PiShareFatLight } from "react-icons/pi";
-import { TfiDownload } from "react-icons/tfi";
-import { PiStarLight } from "react-icons/pi";
-import { LuCopyCheck } from "react-icons/lu";
-
-import { BsTrash3 } from "react-icons/bs";
+import { FiMoreHorizontal } from "react-icons/fi";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { LinkWithIcon } from "../nav/sideBarNav";
 import { Icon, StarIcon } from "../icon/icon";
 import {
   ContextMenu,
@@ -24,10 +16,11 @@ import {
 } from "@/components/ui/context-menu";
 import { useDialog } from "@/context/Dialog.context";
 import { useRouter } from "next/navigation";
+import { MenuItems } from "../menuItem/menuItems";
 
 const Folder = ({ data }) => {
   const navigate = useRouter();
-  const { openRenameDialog, openDialog } = useDialog();
+  const { openRenameDialog, openDialog, openMoveFolderDialog } = useDialog();
 
   return (
     <>
@@ -58,12 +51,13 @@ const Folder = ({ data }) => {
                       <FiMoreHorizontal className="text-[--gray]" />
                     </span>
                   </PopoverTrigger>
-                  <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px] absolute right-5 top-0">
+                  <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px]">
                     <MenuItems
                       openDialog={openDialog}
                       id={folder?.id}
                       title={folder.name}
                       openRenameDialog={openRenameDialog}
+                      openMoveFolderDialog={openMoveFolderDialog}
                     />
                   </PopoverContent>
                 </Popover>
@@ -76,79 +70,11 @@ const Folder = ({ data }) => {
               id={folder?.id}
               title={folder.name}
               openRenameDialog={openRenameDialog}
+              openMoveFolderDialog={openMoveFolderDialog}
             />
           </ContextMenuContent>
         </ContextMenu>
       ))}
-    </>
-  );
-};
-
-// Helper Component for Reusable Menu Items
-const MenuItems = ({ openDialog, id, title, openRenameDialog }) => {
-  return (
-    <>
-      <ul className="flex flex-col w-full">
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
-          <LinkWithIcon
-            Icon={<PiShareFatLight size={20} />}
-            name="Share"
-            color="text-[--popover-text-color]"
-          />
-        </li>
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
-          <LinkWithIcon
-            Icon={<FiEdit3 size={20} />}
-            name="Rename"
-            color="text-[--popover-text-color]"
-            onClick={(e) => {
-              e.stopPropagation(), openRenameDialog("rename", id, title);
-            }}
-          />
-        </li>
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
-          <LinkWithIcon
-            Icon={<BsArrowRightSquare size={20} />}
-            name="Move"
-            color="text-[--popover-text-color]"
-          />
-        </li>
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
-          <LinkWithIcon
-            Icon={<TfiDownload size={20} />}
-            name="Download"
-            color="text-[--popover-text-color]"
-          />
-        </li>
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
-          <LinkWithIcon
-            Icon={<PiStarLight size={20} />}
-            name="Remove from starred"
-            color="text-[--popover-text-color]"
-          />
-        </li>
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition">
-          <LinkWithIcon
-            Icon={<LuCopyCheck size={20} />}
-            name="Multiple select"
-            color="text-[--popover-text-color]"
-          />
-        </li>
-        <li className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--bg-red] rounded-[5px] link-transition">
-          <LinkWithIcon
-            color="text-[--bg-red] hover:text-white"
-            Icon={<BsTrash3 size={20} />}
-            name="Remove"
-            onClick={() =>
-              openDialog(
-                "alert",
-                "All items in this folder will be moved to the Trash.",
-                "Are you sure you want to remove this folder?"
-              )
-            }
-          />
-        </li>
-      </ul>
     </>
   );
 };

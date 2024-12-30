@@ -25,6 +25,8 @@ import {
 } from "react-icons/fi";
 import { TbShare3 } from "react-icons/tb";
 import CustomAlertModal from "@/app/_components/modal/alert-modal";
+import { LinkWithIcon } from "@/app/_components/nav/sideBarNav";
+import { RouteMenuItem } from "@/app/_components/menuItem/menu";
 
 const folders = [
   {
@@ -37,7 +39,7 @@ const folders = [
 ];
 
 const FolderPage = ({ params }) => {
-  const { openDialog } = useDialog();
+  const { openRenameDialog, openDialog } = useDialog();
   return (
     <>
       <div className="w-full flex">
@@ -101,9 +103,24 @@ const FolderPage = ({ params }) => {
                 </div>
                 <div className="flex w-fit gap-2">
                   <NewItem />
-                  <Button className="w-fit px-2 bg-transparent  hover:bg-[--folder-bg]  rounded-[5px] link-transition">
-                    <FiMoreHorizontal />
-                  </Button>
+                  <Popover className="w-full">
+                    <PopoverTrigger
+                      className="flex items-center gap-[4px] text-[--sidebar-link-color] text-[14px]"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span className="w-fit px-2 bg-transparent  hover:bg-[--folder-bg]  rounded-[5px] link-transition">
+                        <FiMoreHorizontal />
+                      </span>
+                    </PopoverTrigger>
+                    <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px]">
+                      <RouteMenuItem
+                        openDialog={openDialog}
+                        id={params?.id}
+                        title="Folder Name"
+                        openRenameDialog={openRenameDialog}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
