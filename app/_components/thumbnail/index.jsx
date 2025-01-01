@@ -28,6 +28,7 @@ const ThumbNail = ({ data }) => {
     openDialog,
     setSharedData,
     handleViewSelectedDocument,
+    openMoveFolderDialog,
   } = useDialog();
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const ThumbNail = ({ data }) => {
                       <ImageVideoMenuItem
                         openDialog={openDialog}
                         openRenameDialog={openRenameDialog}
+                        openMoveFolderDialog={openMoveFolderDialog}
                         id={item.id}
                         title={item.title}
                       />
@@ -116,6 +118,7 @@ const ThumbNail = ({ data }) => {
                   Icon={<BsArrowRightSquare size={20} />}
                   name="Move"
                   color="text-[--popover-text-color]"
+                  onClick={() => openMoveFolderDialog("moveFolder", item?.id)}
                 />
               </ContextMenuItem>
               <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">

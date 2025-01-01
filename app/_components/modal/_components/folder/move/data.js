@@ -1,5 +1,9 @@
 export const folderStructure = [
   {
+    name: "My items",
+    id: "34567d",
+  },
+  {
     name: "folder 8",
     id: "1",
     subfolders: [

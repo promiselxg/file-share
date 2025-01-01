@@ -9,8 +9,7 @@ import EditStarredFolder from "./_components/folder/starredFolder";
 import ShareLink from "./_components/folder/share";
 import Rename from "./_components/folder/rename";
 import AddDescription from "./_components/folder/description";
-import MoveFolder from "./_components/folder/move";
-import { folderStructure } from "./_components/folder/move/data";
+import FolderSelector from "./_components/folder/move/folderSelector";
 
 const Modals = () => {
   const {
@@ -21,7 +20,6 @@ const Modals = () => {
     closeDialog,
     alertDescription,
     alertTitle,
-    moveFolderId,
   } = useDialog();
   return (
     <>
@@ -107,16 +105,13 @@ const Modals = () => {
       />
 
       <CustomModal
-        className="w-[30%]"
+        className="w-[30%] top-[40%] border-none outline-none"
         heading="Move to"
         isOpen={dialogs.moveFolder}
         openDialog={() => openDialog("moveFolder")}
         closeDialog={() => closeDialog("moveFolder")}
       >
-        <MoveFolder
-          moveFolderId={moveFolderId}
-          folderStructure={folderStructure}
-        />
+        <FolderSelector />
       </CustomModal>
     </>
   );

@@ -15,7 +15,7 @@ export const DialogProvider = ({ children }) => {
   const [alertBtnText, setAlertBtnText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sharedData, setSharedData] = useState([]);
-  const [selectedMoveFolder, setSelectedMoveFolder] = useState("");
+  const [selectedMoveFolderId, setSelectedMoveFolderId] = useState(null);
   const [moveFolderId, setMoveFolderId] = useState("");
   const [selectedDocumentId, setSelectedDocumentId] = useState(
     sharedData[currentIndex] || null
@@ -97,8 +97,8 @@ export const DialogProvider = ({ children }) => {
         replyTo,
         renameFolderTitle,
         renameFolderId,
-        selectedMoveFolder,
-        moveFolderId,
+        selectedMoveFolderId,
+        moveFolderId: moveFolderId.toString(),
         openDialog,
         openRenameDialog,
         openMoveFolderDialog,
@@ -106,7 +106,7 @@ export const DialogProvider = ({ children }) => {
         handleViewSelectedDocument,
         handleToggleComment,
         setSharedData,
-        setSelectedMoveFolder,
+        setSelectedMoveFolderId,
         nextItem,
         prevItem,
       }}

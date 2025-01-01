@@ -25,7 +25,6 @@ import {
 } from "react-icons/fi";
 import { TbShare3 } from "react-icons/tb";
 import CustomAlertModal from "@/app/_components/modal/alert-modal";
-import { LinkWithIcon } from "@/app/_components/nav/sideBarNav";
 import { RouteMenuItem } from "@/app/_components/menuItem/menu";
 
 const folders = [
@@ -39,7 +38,7 @@ const folders = [
 ];
 
 const FolderPage = ({ params }) => {
-  const { openRenameDialog, openDialog } = useDialog();
+  const { openMoveFolderDialog, openRenameDialog, openDialog } = useDialog();
   return (
     <>
       <div className="w-full flex">
@@ -118,6 +117,7 @@ const FolderPage = ({ params }) => {
                         id={params?.id}
                         title="Folder Name"
                         openRenameDialog={openRenameDialog}
+                        openMoveFolderDialog={openMoveFolderDialog}
                       />
                     </PopoverContent>
                   </Popover>

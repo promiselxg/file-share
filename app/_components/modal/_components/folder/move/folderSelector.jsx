@@ -1,60 +1,33 @@
 "use client";
 import React from "react";
-import FolderTree from "./folderTree";
-import { folderStructure } from "./data";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { FiPlus } from "react-icons/fi";
 import { useDialog } from "@/context/Dialog.context";
+import { folderStructure } from "./data";
+import { findFolderById, isMoveDisabled } from "@/utils/folderTree";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { FiPlus } from "react-icons/fi";
 import { Icon } from "@/app/_components/icon/icon";
+import { BsImages } from "react-icons/bs";
+import MoveFolder from "./moveFolder";
 
-const MoveFolder = () => {
+function FolderSelector() {
   const {
-    selectedMoveFolder,
-    setSelectedMoveFolder,
-    closeDialog,
-    openDialog,
+    selectedMoveFolderId,
     moveFolderId,
+    setSelectedMoveFolderId,
+    openDialog,
+    closeDialog,
   } = useDialog();
 
-  const isMoveDisabled = (folders, moveFolderId, selectedFolderId) => {
-    const checkFolders = (folders, parentId = null) => {
-      for (let i = 0; i < folders.length; i++) {
-        const folder = folders[i];
-        const isLastFolder = i === folders.length - 1; // Check if this is the last folder in the parent's array
+  // selectedMoveFolderId is the folder ID that is currently clicked on
+  // moveFolderID is the ID of the folder that was clicked which called the Move folder modal
+  // folderStructure
 
-        // Disable if this folder is the one being moved
-        if (folder.id === moveFolderId) {
-          return true;
-        }
-        // Disable if the selected folder matches the parentFolderId
-        if (parentId === selectedFolderId) {
-          return true;
-        }
-
-        // Additional check: if the folder is the last folder in the parent array and its parentFolderId matches the folder being moved
-        console.log(parentId);
-        if (isLastFolder && parentId === moveFolderId) {
-          return true;
-        }
-
-        // Recursively check subfolders
-        if (folder.subfolders && folder.subfolders.length > 0) {
-          if (checkFolders(folder.subfolders, folder.id)) {
-            return true;
-          }
-        }
-      }
-      return false;
-    };
-
-    return checkFolders(folders);
-  };
-
+  const movedFolder = findFolderById(selectedMoveFolderId, folderStructure);
   const isDisabled = isMoveDisabled(
-    folderStructure,
+    selectedMoveFolderId,
     moveFolderId,
-    selectedMoveFolder?.id
+    folderStructure
   );
 
   return (
@@ -65,15 +38,17 @@ const MoveFolder = () => {
             Folders
           </p>
           <ScrollArea className="w-full flex border border-[--gray] h-fit max-h-[300px] bg-[--body-bg] p-5 text-[--gray] rounded-t-lg ">
-            <FolderTree folders={folderStructure} />
+            {folderStructure?.map((folder, index) => (
+              <MoveFolder key={index} folder={folder} />
+            ))}
           </ScrollArea>
           <div className="w-full flex border p-1 border-[--gray] rounded-b-lg border-t-0 text-center justify-center text-[--primary-btn] cursor-pointer">
-            {selectedMoveFolder?.name ? (
+            {movedFolder ? (
               <Button
                 className="bg-transparent hover:bg-transparent w-full flex items-center gap-2 text-[--primary-btn] hover:text-[--primary-btn-hover] link-transition"
                 onClick={() => openDialog("newFolder")}
               >
-                <FiPlus /> create a new folder in {selectedMoveFolder.name}
+                <FiPlus /> create a new folder in {movedFolder?.name}
               </Button>
             ) : (
               <Button
@@ -89,7 +64,7 @@ const MoveFolder = () => {
               className="w-fit rounded-[8px] bg-transparent border-[--folder-border-color] border text-[--gray] hover:bg-transparent hover:border-[--nav-selected] hover:text-[--sidebar-link-active-text] link-transition h-[40px] px-5"
               onClick={() => {
                 closeDialog("moveFolder");
-                setSelectedMoveFolder(null);
+                setSelectedMoveFolderId(null);
               }}
             >
               Cancel
@@ -99,9 +74,14 @@ const MoveFolder = () => {
               disabled={isDisabled}
             >
               Move to{" "}
-              {selectedMoveFolder?.name && (
+              {movedFolder?.name && (
                 <>
-                  <Icon /> {selectedMoveFolder?.name}
+                  {movedFolder.name.toLowerCase() === "my items" ? (
+                    <BsImages />
+                  ) : (
+                    <Icon />
+                  )}{" "}
+                  {movedFolder?.name}
                 </>
               )}
             </Button>
@@ -110,6 +90,6 @@ const MoveFolder = () => {
       </div>
     </>
   );
-};
+}
 
-export default MoveFolder;
+export default FolderSelector;

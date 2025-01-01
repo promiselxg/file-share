@@ -24,10 +24,6 @@ const folders = [
   { id: 3, name: "Folder 3" },
   { id: 4, name: "Folder 4" },
   { id: 5, name: "Folder 5" },
-  { id: 6, name: "Folder 6" },
-  { id: 7, name: "Folder 7" },
-  { id: 8, name: "Folder 8" },
-  { id: 9, name: "Folder 9" },
 ];
 
 export default function page() {

@@ -30,6 +30,7 @@ const ControlWrapper = ({ Icon, heading, type, media }) => {
     deviceMic,
     isMicOn,
   } = useScreenRecord();
+
   return (
     <>
       <div className="w-full flex items-center justify-between bg-[--switch-bg] py-2 px-3 rounded-[8px] my-1 flex-col">
