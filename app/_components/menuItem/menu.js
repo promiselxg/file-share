@@ -26,13 +26,19 @@ export const ImageVideoMenuItem = ({
         openRenameDialog("rename", id, title);
       },
     },
-    { name: "Copy sharable link", icon: <GrLink size={20} /> },
+    {
+      name: "Copy sharable link",
+      icon: <GrLink size={20} />,
+      action: (e) => {
+        e.stopPropagation();
+      },
+    },
     {
       name: "Move",
       icon: <MdDriveFileMoveOutline size={20} />,
       action: (e) => {
         e.stopPropagation();
-        openMoveFolderDialog("moveFolder", id);
+        openMoveFolderDialog("moveFolder", id, "image");
       },
     },
     { name: "Duplicate", icon: <HiOutlineDocumentDuplicate size={20} /> },

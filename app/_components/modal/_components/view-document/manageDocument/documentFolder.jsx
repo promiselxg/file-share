@@ -6,7 +6,8 @@ import React from "react";
 import { FiChevronRight } from "react-icons/fi";
 
 const DocumentFolder = ({ data }) => {
-  const { openMoveFolderDialog } = useDialog();
+  const { selectedDocumentId, openMoveFolderDialog } = useDialog();
+  console.log(selectedDocumentId);
   return (
     <>
       {data?.folder ? (
@@ -29,7 +30,16 @@ const DocumentFolder = ({ data }) => {
             Move from <span className="font-bold">&quot;My items&quot;</span> to
           </p>
           <div className="w-full flex gap-2 justify-between items-center my-2">
-            <Button className="w-1/2 bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover] rounded-[8px]">
+            <Button
+              className="w-1/2 bg-[--primary-btn] border border-[--primary-btn] text-white hover:bg-[--primary-btn-hover] link-transition hover:border-[--primary-btn-hover] rounded-[8px]"
+              onClick={() =>
+                openMoveFolderDialog(
+                  "moveFolder",
+                  selectedDocumentId?.id,
+                  "image"
+                )
+              }
+            >
               Folder
             </Button>
             <span>or</span>

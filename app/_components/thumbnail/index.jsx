@@ -118,7 +118,9 @@ const ThumbNail = ({ data }) => {
                   Icon={<BsArrowRightSquare size={20} />}
                   name="Move"
                   color="text-[--popover-text-color]"
-                  onClick={() => openMoveFolderDialog("moveFolder", item?.id)}
+                  onClick={() =>
+                    openMoveFolderDialog("moveFolder", item?.id, "image")
+                  }
                 />
               </ContextMenuItem>
               <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">

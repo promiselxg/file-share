@@ -7,8 +7,11 @@ import { useEffect, useState } from "react";
 import StarredFolder from "../starredFolder/starredFolder";
 import { useDialog } from "@/context/Dialog.context";
 import { useFolderCRUD } from "@/context/folder.context";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const SideBar = () => {
+  const currentRoute = usePathname();
   const { openDialog } = useDialog();
   const { starredFolders, setStarredFolders } = useFolderCRUD();
 
@@ -43,7 +46,11 @@ const SideBar = () => {
               <div className="flex text-[--sidebar-link-color] w-full">
                 <Link
                   href="/my_items"
-                  className="flex text-[--sidebar-link-color] items-center gap-2 pl-[12px] active w-full rounded-[8px] p-3 sideLink"
+                  className={cn(
+                    `${
+                      currentRoute === "/my_items" && "active "
+                    } flex text-[--sidebar-link-color] items-center gap-2 pl-[12px] w-full rounded-[8px] p-3   link-transition hover:bg-[--folder-bg]`
+                  )}
                 >
                   <span>
                     <FiUser />
@@ -56,7 +63,11 @@ const SideBar = () => {
               <div className="flex text-[--sidebar-link-color] w-full">
                 <Link
                   href="/shared_with_me"
-                  className="flex text-[--sidebar-link-color] items-center gap-2 pl-[12px] w-full rounded-[8px] p-3 hover:bg-[--folder-bg] link-transition"
+                  className={cn(
+                    `${
+                      currentRoute === "/shared_with_me" && "active"
+                    } flex text-[--sidebar-link-color] items-center gap-2 pl-[12px] w-full rounded-[8px] p-3 hover:bg-[--folder-bg] link-transition`
+                  )}
                 >
                   <span>
                     <FiUsers />
@@ -112,8 +123,20 @@ const SideBar = () => {
         </div>
         <div className="p-2 absolute bottom-0 w-full">
           <div className="flex items-center justify-between w-full gap-2">
-            <Link href="/trash" className="w-[70%] active rounded-[8px] ">
-              <Button className="w-full text-left flex justify-start bg-transparent  hover:bg-[--folder-bg] rounded-[8px] text-[--sidebar-link-active-text]">
+            <Link
+              href="/trash"
+              className={cn(
+                `${currentRoute === "/trash" && "active"} w-[70%] rounded-[8px]`
+              )}
+            >
+              <Button
+                className={cn(
+                  `${
+                    currentRoute === "/trash" &&
+                    "text-[--sidebar-link-active-text]"
+                  } w-full text-left flex justify-start bg-transparent  hover:bg-[--folder-bg] rounded-[8px] `
+                )}
+              >
                 <FiTrash />
                 <span className="text-[14px]">Trash</span>
               </Button>
