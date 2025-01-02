@@ -1,11 +1,15 @@
+"use client";
 import Image from "next/image";
 import SearchBox from "../search";
 import NavigationBar from "../nav/headerNav";
 import { FileScan } from "lucide-react";
 import { FiBell, FiGift } from "react-icons/fi";
 import ProfileAvatar from "../profile";
+import Link from "next/link";
+import { useSidebarVisibility } from "@/hooks/use-sidebar-visibility";
 
 const Header = () => {
+  const showSidebar = useSidebarVisibility();
   return (
     <>
       <div className="h-[50px] flex w-full  bg-[--header-bg] items-center z-50 py-3">
@@ -22,7 +26,15 @@ const Header = () => {
             </div>
             <div className="flex items-center justify-between w-full">
               <SearchBox />
-              <div className="flex gap-[5px] items-center">
+              <div className="flex gap-[5px] items-center text-[--popover-text-color]">
+                {!showSidebar && (
+                  <Link
+                    href="/my_items"
+                    className="mr-5 text-[--popover-text-color]"
+                  >
+                    My Items
+                  </Link>
+                )}
                 <NavigationBar label="Pricing" url="/pricing" />
                 <NavigationBar url="/pricing" Icon={<FileScan />} />
                 <NavigationBar url="/pricing" Icon={<FiBell />} />

@@ -9,9 +9,17 @@ import { FiPlus } from "react-icons/fi";
 import { Icon } from "@/app/_components/icon/icon";
 import { BsImages } from "react-icons/bs";
 import MoveFolder from "./moveFolder";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function FolderSelector() {
   const {
+    moveFolderDocumentType,
     selectedMoveFolderId,
     moveFolderId,
     setSelectedMoveFolderId,
@@ -34,15 +42,43 @@ function FolderSelector() {
     <>
       <div className="w-full flex">
         <div className="w-full flex mt-5 flex-col">
+          {moveFolderDocumentType === "image" && (
+            <div className="w-full mb-2">
+              <p className="text-[14px] text-[--popover-text-color] mb-2">
+                Personal & Workspaces
+              </p>
+              <Select>
+                <SelectTrigger className="w-full border border-[--divider-border-color] text-[--gray] outline-none focus-visible:outline-none">
+                  <SelectValue placeholder="Personal" />
+                </SelectTrigger>
+                <SelectContent className="bg-[--dialog-bg] border-none rounded-lg DialogBoxShadow border-transparent text-[--gray]">
+                  <div className="px-2 py-1">
+                    <SelectItem
+                      value="personal"
+                      className="link-transition hover:bg-[--folder-bg] cursor-pointer"
+                    >
+                      Personal
+                    </SelectItem>
+                    <SelectItem
+                      value="test"
+                      className="link-transition hover:bg-[--folder-bg] cursor-pointer"
+                    >
+                      test
+                    </SelectItem>
+                  </div>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           <p className="text-[14px] text-[--popover-text-color] mb-2">
             Folders
           </p>
-          <ScrollArea className="w-full flex border border-[--gray] h-fit max-h-[300px] bg-[--body-bg] p-5 text-[--gray] rounded-t-lg ">
+          <ScrollArea className="w-full flex border border-[--divider-border-color] h-fit max-h-[300px] bg-[--body-bg] p-5 text-[--gray] rounded-t-lg ">
             {folderStructure?.map((folder, index) => (
               <MoveFolder key={index} folder={folder} />
             ))}
           </ScrollArea>
-          <div className="w-full flex border p-1 border-[--gray] rounded-b-lg border-t-0 text-center justify-center text-[--primary-btn] cursor-pointer">
+          <div className="w-full flex border p-1 border-[--divider-border-color] rounded-b-lg border-t-0 text-center justify-center text-[--primary-btn] cursor-pointer">
             {movedFolder ? (
               <Button
                 className="bg-transparent hover:bg-transparent w-full flex items-center gap-2 text-[--primary-btn] hover:text-[--primary-btn-hover] link-transition"

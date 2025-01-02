@@ -17,6 +17,10 @@ export const DialogProvider = ({ children }) => {
   const [sharedData, setSharedData] = useState([]);
   const [selectedMoveFolderId, setSelectedMoveFolderId] = useState(null);
   const [moveFolderId, setMoveFolderId] = useState("");
+  const [fullScreenMode, setFullScreenMode] = useState(false);
+  const [moveFolderDocumentType, setMoveFolderDocumentType] =
+    useState("folder");
+
   const [selectedDocumentId, setSelectedDocumentId] = useState(
     sharedData[currentIndex] || null
   );
@@ -40,9 +44,10 @@ export const DialogProvider = ({ children }) => {
   };
 
   // move folder dialog
-  const openMoveFolderDialog = (dialogName, folderId) => {
+  const openMoveFolderDialog = (dialogName, folderId, documentType) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setMoveFolderId(folderId);
+    setMoveFolderDocumentType(documentType);
   };
 
   // close dialog
@@ -55,6 +60,12 @@ export const DialogProvider = ({ children }) => {
     setOpenSelectedDocumentWrapper(!openSelectedDocumentWrapper);
     setSelectedDocumentId(data);
     setCurrentIndex(sharedData.indexOf(data)); // reset current data index
+  };
+
+  // view selected document in Full Screen
+  const handleViewDocumentInFullScreen = (data) => {
+    setFullScreenMode(!fullScreenMode);
+    setSelectedDocumentId(data);
   };
 
   // Toggle Comment
@@ -91,6 +102,7 @@ export const DialogProvider = ({ children }) => {
         alertBtnText,
         selectedDocumentId,
         openSelectedDocumentWrapper,
+        fullScreenMode,
         sharedData,
         currentIndex,
         toggleComment,
@@ -99,11 +111,13 @@ export const DialogProvider = ({ children }) => {
         renameFolderId,
         selectedMoveFolderId,
         moveFolderId: moveFolderId.toString(),
+        moveFolderDocumentType,
         openDialog,
         openRenameDialog,
         openMoveFolderDialog,
         closeDialog,
         handleViewSelectedDocument,
+        handleViewDocumentInFullScreen,
         handleToggleComment,
         setSharedData,
         setSelectedMoveFolderId,

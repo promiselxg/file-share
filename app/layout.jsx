@@ -8,6 +8,7 @@ import { FolderCRUDProvider } from "@/context/folder.context";
 import Header from "./_components/header";
 import ViewSelectedDocument from "./_components/modal/_components/view-document/selectedDocumentModal";
 import ClientLayout from "./clientLayout";
+import ViewSelectedDocumentFullScreen from "./_components/modal/_components/view-document/viewSelectedDocumentFullScreen";
 
 export const metadata = {
   title: "Create Next Appss",
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
                 </div>
                 <ClientLayout>{children}</ClientLayout>
                 <ViewSelectedDocument />
+                <ViewSelectedDocumentFullScreen />
                 <Toaster />
               </body>
             </ImageProvider>

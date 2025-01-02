@@ -56,7 +56,7 @@ const ShareFileLink = ({ id }) => {
         </div>
         <div className="w-full flex flex-col">
           <Input
-            defaultValue={`http://localhost:3000/view-document/${id}`}
+            defaultValue={`http://localhost:3000/image/${id}?key='123'`}
             name="share-link"
             className="bg-[--input-bg] border border-[--input-bg] shadow-md text-[--sidebar-link-color] text-[14px] rounded-[8px] disabled:cursor-not-allowed mt-1"
             disabled
@@ -70,7 +70,7 @@ const ShareFileLink = ({ id }) => {
               } w-full border  text-white  link-transition  rounded-[8px] my-1`
             )}
             onClick={() => {
-              copyToClipboard(`http://localhost:3000/view-document/${id}`);
+              copyToClipboard(`http://localhost:3000/image/${id}?key='123'`);
               setCopyText(true);
             }}
           >
