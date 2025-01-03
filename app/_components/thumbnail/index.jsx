@@ -24,8 +24,11 @@ import { ImageVideoMenuItem } from "../menuItem/menu";
 import { useFolderCRUD } from "@/context/folder.context";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import useDuplicateItem from "@/hooks/use-duplicate";
+import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 
 const ThumbNail = ({ data }) => {
+  const { items, duplicateItem } = useDuplicateItem(data);
   const {
     openRenameDialog,
     openDialog,
@@ -33,15 +36,19 @@ const ThumbNail = ({ data }) => {
     handleViewSelectedDocument,
     openMoveFolderDialog,
   } = useDialog();
+
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
 
   useEffect(() => {
     setSharedData(data);
   }, [data, setSharedData]);
 
+  const handleDuplicate = (id) => {
+    duplicateItem(id);
+  };
   return (
     <>
-      {data?.map((item) => {
+      {items?.map((item) => {
         const isChecked = !!checkedStates[item.id];
         return (
           <ContextMenu className="flex flex-col" key={item?.id}>
@@ -79,7 +86,7 @@ const ThumbNail = ({ data }) => {
                 )}
                 <div className="link-transition">
                   <div
-                    class={cn(
+                    className={cn(
                       `absolute top-0 bottom-0 inset-0 bg-overlay opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100 ${
                         checkedCount > 0
                           ? "bg-[--sidebar-link-active-bg]"
@@ -106,6 +113,8 @@ const ThumbNail = ({ data }) => {
                           openRenameDialog={openRenameDialog}
                           openMoveFolderDialog={openMoveFolderDialog}
                           handleCheckboxChange={handleCheckboxChange}
+                          handleDuplicate={() => handleDuplicate(item?.id)}
+                          mediaType={item?.mediaInfo?.mediaType}
                           id={item.id}
                           title={item.title}
                         />
@@ -173,6 +182,16 @@ const ThumbNail = ({ data }) => {
                     }
                   />
                 </ContextMenuItem>
+                {item?.mediaInfo?.mediaType === "image" && (
+                  <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
+                    <LinkWithIcon
+                      Icon={<HiOutlineDocumentDuplicate size={20} />}
+                      name="Duplicate"
+                      color="text-[--popover-text-color]"
+                      onClick={() => duplicateItem(item?.id)}
+                    />
+                  </ContextMenuItem>
+                )}
                 <ContextMenuItem className="flex w-full hover:bg-[--folder-bg]   rounded-[5px] link-transition p-0">
                   <LinkWithIcon
                     Icon={<LuCopyCheck size={20} />}

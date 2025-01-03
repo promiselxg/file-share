@@ -17,6 +17,8 @@ export const ImageVideoMenuItem = ({
   openDialog,
   openMoveFolderDialog,
   handleCheckboxChange,
+  handleDuplicate,
+  mediaType,
 }) => {
   const menuItem = [
     {
@@ -42,7 +44,15 @@ export const ImageVideoMenuItem = ({
         openMoveFolderDialog("moveFolder", id, "image");
       },
     },
-    { name: "Duplicate", icon: <HiOutlineDocumentDuplicate size={20} /> },
+    {
+      name: "Duplicate",
+      icon: <HiOutlineDocumentDuplicate size={20} />,
+      image: `${mediaType}`,
+      action: (e) => {
+        e.stopPropagation();
+        handleDuplicate(id);
+      },
+    },
     {
       name: "Select multiple items",
       icon: <LuCopyCheck size={20} />,
@@ -65,19 +75,24 @@ export const ImageVideoMenuItem = ({
 
   return (
     <ul className="flex flex-col w-full">
-      {menuItem.map((item, index) => (
-        <li
-          key={index}
-          className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition"
-        >
-          <LinkWithIcon
-            Icon={item?.icon}
-            name={item.name}
-            color={item?.color || "text-[--popover-text-color]"}
-            onClick={item.action}
-          />
-        </li>
-      ))}
+      {menuItem.map((item, index) => {
+        if (item.image !== "video") {
+          return (
+            <li
+              key={index}
+              className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition"
+            >
+              <LinkWithIcon
+                Icon={item?.icon}
+                name={item.name}
+                color={item?.color || "text-[--popover-text-color]"}
+                onClick={item.action}
+              />
+            </li>
+          );
+        }
+        return null;
+      })}
     </ul>
   );
 };
