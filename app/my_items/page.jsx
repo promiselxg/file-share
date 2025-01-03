@@ -13,6 +13,8 @@ import Modals from "../_components/modal/modal";
 import { imageVideo } from "../shared_with_me/data";
 import NewFolder from "../_components/new-item/new-folder";
 import NewItem from "../_components/new-item/newItem";
+import TrashCheckBoxControl from "../_components/trash";
+import { useFolderCRUD } from "@/context/folder.context";
 
 const folders = [
   {
@@ -26,7 +28,8 @@ const folders = [
   { id: 5, name: "Folder 5" },
 ];
 
-export default function page() {
+const MyItem = () => {
+  const { checkedCount } = useFolderCRUD();
   return (
     <>
       <div className="w-full flex">
@@ -129,10 +132,13 @@ export default function page() {
             </div>
           </div>
         </div>
+        {checkedCount > 0 && <TrashCheckBoxControl />}
       </div>
       {/** MODALS */}
       <Modals />
       {/** MODALS */}
     </>
   );
-}
+};
+
+export default MyItem;

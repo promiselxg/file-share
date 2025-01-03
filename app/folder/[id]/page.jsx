@@ -26,6 +26,8 @@ import {
 import { TbShare3 } from "react-icons/tb";
 import CustomAlertModal from "@/app/_components/modal/alert-modal";
 import { RouteMenuItem } from "@/app/_components/menuItem/menu";
+import TrashCheckBoxControl from "@/app/_components/trash";
+import { useFolderCRUD } from "@/context/folder.context";
 
 const folders = [
   {
@@ -39,6 +41,7 @@ const folders = [
 
 const FolderPage = ({ params }) => {
   const { openMoveFolderDialog, openRenameDialog, openDialog } = useDialog();
+  const { checkedCount } = useFolderCRUD();
   return (
     <>
       <div className="w-full flex">
@@ -175,6 +178,7 @@ const FolderPage = ({ params }) => {
             </>
           )}
         </div>
+        {checkedCount > 0 && <TrashCheckBoxControl />}
       </div>
       <Modals />
       <CustomAlertModal />

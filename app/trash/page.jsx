@@ -9,11 +9,8 @@ import TrashFolder from "../_components/folder/trash";
 import { Button } from "@/components/ui/button";
 import ImageVideoDelete from "../_components/thumbnail/thumbnail-delete";
 import { useFolderCRUD } from "@/context/folder.context";
-import { Badge } from "@/components/ui/badge";
-import { MdOutlineRestorePage } from "react-icons/md";
-import { GoTrash } from "react-icons/go";
-import { useDialog } from "@/context/Dialog.context";
 import CustomAlertModal from "../_components/modal/alert-modal";
+import TrashCheckBoxControl from "../_components/trash";
 
 const folders = [
   { id: 1, name: "Folder 1" },
@@ -45,8 +42,8 @@ const imageVideoData = [
   },
 ];
 const TrashPage = () => {
-  const { resetCheckBox, checkedCount } = useFolderCRUD();
-  const { openDialog } = useDialog();
+  const { checkedCount } = useFolderCRUD();
+
   return (
     <>
       <div className="w-full flex relative flex-col">
@@ -108,41 +105,7 @@ const TrashPage = () => {
             </div>
           </div>
         </div>
-        {checkedCount > 0 && (
-          <div className="fixed bottom-0 bg-[--primary-btn] w-fit left-1/2 transform -translate-x-1/2 rounded-t-[8px] p-5 z-50">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-white">Selected</span>
-                <Badge className="bg-white  rounded-[8px] text-[--primary-btn] hover:bg-white  hover:text-[--primary-btn]">
-                  {checkedCount}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button className="bg-white  rounded-[8px] text-[--primary-btn] hover:bg-white  hover:text-[--primary-btn]">
-                  <MdOutlineRestorePage /> Restore
-                </Button>
-                <Button
-                  className="bg-white  rounded-[8px] text-[--primary-btn] hover:bg-white  hover:text-[--primary-btn]"
-                  onClick={() =>
-                    openDialog(
-                      "alert",
-                      "Are you sure you want to permanently delete the selected item(s)?"
-                    )
-                  }
-                >
-                  <GoTrash /> Delete
-                </Button>
-              </div>
-              <div className=" ml-3 hover:bg-[rgba(0,0,0,0.4)] transition-all delay-75 duration-100 p-[4px] cursor-pointer rounded-[5px]">
-                <FiX
-                  size={25}
-                  className="text-white"
-                  onClick={() => resetCheckBox()}
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        {checkedCount > 0 && <TrashCheckBoxControl />}
       </div>
       <CustomAlertModal />
     </>
