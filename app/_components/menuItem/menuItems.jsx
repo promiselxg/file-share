@@ -7,6 +7,8 @@ export const MenuItems = ({
   title,
   openRenameDialog,
   openMoveFolderDialog,
+  openDownloadFolderDialog,
+  handleCheckboxChange,
 }) => {
   return (
     <>
@@ -16,6 +18,8 @@ export const MenuItems = ({
         title={title}
         openRenameDialog={openRenameDialog}
         openMoveFolderDialog={openMoveFolderDialog}
+        openDownloadFolderDialog={openDownloadFolderDialog}
+        handleCheckboxChange={handleCheckboxChange}
       />
     </>
   );
@@ -27,6 +31,8 @@ export const MenuItem = ({
   title,
   openRenameDialog,
   openMoveFolderDialog,
+  openDownloadFolderDialog,
+  handleCheckboxChange,
 }) => {
   return (
     <>
@@ -36,6 +42,8 @@ export const MenuItem = ({
         title={title}
         openRenameDialog={openRenameDialog}
         openMoveFolderDialog={openMoveFolderDialog}
+        openDownloadFolderDialog={openDownloadFolderDialog}
+        handleCheckboxChange={handleCheckboxChange}
       />
     </>
   );

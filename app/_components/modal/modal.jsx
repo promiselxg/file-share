@@ -10,6 +10,7 @@ import ShareLink from "./_components/folder/share";
 import Rename from "./_components/folder/rename";
 import AddDescription from "./_components/folder/description";
 import FolderSelector from "./_components/folder/move/folderSelector";
+import DownloadFolder from "./_components/download/download";
 
 const Modals = () => {
   const {
@@ -105,13 +106,23 @@ const Modals = () => {
       />
 
       <CustomModal
-        className="w-[30%] top-[40%] border-none outline-none"
+        className="w-[30%] border-none outline-none"
         heading="Move to"
         isOpen={dialogs.moveFolder}
         openDialog={() => openDialog("moveFolder")}
         closeDialog={() => closeDialog("moveFolder")}
       >
         <FolderSelector />
+      </CustomModal>
+
+      <CustomModal
+        className="w-[25%]"
+        heading="Download folder?"
+        isOpen={dialogs.download}
+        openDialog={() => openDialog("download")}
+        closeDialog={() => closeDialog("download")}
+      >
+        <DownloadFolder />
       </CustomModal>
     </>
   );

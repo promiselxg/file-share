@@ -20,12 +20,12 @@ const CustomModal = ({
     <Dialog
       open={isOpen}
       onOpenChange={(open) => open && openDialog}
-      className="relative"
+      className="relative "
     >
       <DialogContent
         closeDialog={closeDialog}
         className={cn(
-          `bg-[--dialog-bg] shadow-md border-none DialogBoxShadow md:absolute  p-5`,
+          `bg-[--dialog-bg] shadow-md border-none DialogBoxShadow md:absolute  p-5  `,
           className
         )}
       >

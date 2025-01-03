@@ -14,8 +14,6 @@ const StarredFolder = ({ data }) => {
         <div className="w-full">
           {data.map((item) => {
             const isActive = pathname === `/folder/${item?.id}`;
-            console.log(isActive);
-            console.log(pathname);
             return (
               <div
                 className="flex text-[--sidebar-link-color] w-full pl-[24px]"

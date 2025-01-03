@@ -171,10 +171,7 @@ html {
 .folder:hover .folderBtn {
   opacity: 1;
 }
-.imgThubnail:hover .bg-overlay {
-  position: absolute;
-  transition: all 0.3s ease-in-out;
-}
+
 .imgThubnail:hover .horizontalIcon {
   opacity: 1;
 }
@@ -191,6 +188,9 @@ html {
 .commentBox:hover .commentAction {
   display: flex;
   transition: all 0.3s ease-in-out;
+}
+.checkedBoxShadow {
+  box-shadow: 0 0 0 1px var(--primary-btn);
 }
 @layer base {
   * {

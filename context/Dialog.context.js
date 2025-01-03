@@ -18,6 +18,7 @@ export const DialogProvider = ({ children }) => {
   const [selectedMoveFolderId, setSelectedMoveFolderId] = useState(null);
   const [moveFolderId, setMoveFolderId] = useState("");
   const [fullScreenMode, setFullScreenMode] = useState(false);
+  const [dataID, setDataID] = useState(null);
   const [moveFolderDocumentType, setMoveFolderDocumentType] =
     useState("folder");
 
@@ -43,6 +44,12 @@ export const DialogProvider = ({ children }) => {
     setRenameFolderId(id);
   };
 
+  // Rename folder/document
+  const openDownloadFolderDialog = (dialogName, id) => {
+    setDialogs((prev) => ({ ...prev, [dialogName]: true }));
+    setDataID(id);
+  };
+
   // move folder dialog
   const openMoveFolderDialog = (dialogName, folderId, documentType) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
@@ -53,6 +60,7 @@ export const DialogProvider = ({ children }) => {
   // close dialog
   const closeDialog = (dialogName) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: false }));
+    setDataID(null);
   };
 
   // view selected document
@@ -99,22 +107,24 @@ export const DialogProvider = ({ children }) => {
         dialogs,
         alertDescription,
         alertTitle,
+        renameFolderTitle,
         alertBtnText,
-        selectedDocumentId,
         openSelectedDocumentWrapper,
         fullScreenMode,
         sharedData,
         currentIndex,
         toggleComment,
         replyTo,
-        renameFolderTitle,
+        selectedDocumentId,
         renameFolderId,
+        dataID,
         selectedMoveFolderId,
         moveFolderId: moveFolderId.toString(),
         moveFolderDocumentType,
         openDialog,
         openRenameDialog,
         openMoveFolderDialog,
+        openDownloadFolderDialog,
         closeDialog,
         handleViewSelectedDocument,
         handleViewDocumentInFullScreen,

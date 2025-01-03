@@ -16,6 +16,7 @@ export const ImageVideoMenuItem = ({
   openRenameDialog,
   openDialog,
   openMoveFolderDialog,
+  handleCheckboxChange,
 }) => {
   const menuItem = [
     {
@@ -42,7 +43,14 @@ export const ImageVideoMenuItem = ({
       },
     },
     { name: "Duplicate", icon: <HiOutlineDocumentDuplicate size={20} /> },
-    { name: "Select multiple items", icon: <LuCopyCheck size={20} /> },
+    {
+      name: "Select multiple items",
+      icon: <LuCopyCheck size={20} />,
+      action: (e) => {
+        e.stopPropagation();
+        handleCheckboxChange(id, true);
+      },
+    },
     { name: "Open in new tab", icon: <RiExternalLinkLine size={20} /> },
     {
       name: "Remove",
@@ -79,6 +87,8 @@ export const FolderMenuItem = ({
   title,
   openRenameDialog,
   openMoveFolderDialog,
+  openDownloadFolderDialog,
+  handleCheckboxChange,
   openDialog,
 }) => {
   const menuItem = [
@@ -106,9 +116,23 @@ export const FolderMenuItem = ({
         openMoveFolderDialog("moveFolder", id);
       },
     },
-    { name: "Download", icon: <CgPushDown size={20} /> },
+    {
+      name: "Download",
+      icon: <CgPushDown size={20} />,
+      action: (e) => {
+        e.stopPropagation();
+        openDownloadFolderDialog("download", id);
+      },
+    },
     { name: "Add to starred", icon: <FiStar size={20} /> },
-    { name: "Multiple select", icon: <LuCopyCheck size={20} /> },
+    {
+      name: "Multiple select",
+      icon: <LuCopyCheck size={20} />,
+      action: (e) => {
+        e.stopPropagation();
+        handleCheckboxChange(id, true);
+      },
+    },
     {
       name: "Remove",
       icon: <BsTrash3 size={20} />,
@@ -143,6 +167,7 @@ export const RouteMenuItem = ({
   id,
   title,
   openRenameDialog,
+  openDownloadFolderDialog,
   openDialog,
   openMoveFolderDialog,
 }) => {
@@ -171,7 +196,14 @@ export const RouteMenuItem = ({
         openMoveFolderDialog("moveFolder", id);
       },
     },
-    { name: "Download", icon: <CgPushDown size={20} /> },
+    {
+      name: "Download",
+      icon: <CgPushDown size={20} />,
+      action: (e) => {
+        e.stopPropagation();
+        openDownloadFolderDialog("download", id);
+      },
+    },
     { name: "Add to starred", icon: <FiStar size={20} /> },
     {
       name: "Remove",

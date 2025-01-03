@@ -34,9 +34,7 @@ const ImageVideoDelete = ({ data }) => {
             >
               <div
                 className={cn(
-                  `${
-                    isChecked ? "p-8" : "p-0"
-                  } relative overflow-hidden transition-all delay-200 duration-200 link-transition`
+                  `relative overflow-hidden transition-all delay-200 duration-200 link-transition`
                 )}
               >
                 <Image
@@ -47,9 +45,9 @@ const ImageVideoDelete = ({ data }) => {
                   className={cn(
                     `${
                       isChecked
-                        ? "h-[130px] object-cover"
-                        : "h-[200px] object-cover"
-                    } w-full  z-10 `
+                        ? "scale-75 object-cover"
+                        : "scale-100 object-cover"
+                    } w-full h-[200px] transition-all delay-200 duration-200 link-transition`
                   )}
                 />
                 {item?.type === "video" && (
