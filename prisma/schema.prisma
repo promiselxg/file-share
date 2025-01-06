@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb+srv://file-share:M3UcstTmmwwZJOD7@file-share.jxmqg.mongodb.net/file-share"
+}
+
+model User {
+  id                  String          @id @default(cuid()) @map("_id")
+  name                String?
+  email               String?         @unique
+  emailVerified       DateTime?
+  image               String?
+  accounts            Account[]       
+  sessions            Session[]
+  admin               Boolean         @default(false)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  documents           Document[]      @relation("UserToDocument")
+  folders             Folder[]        @relation("UserToFolder")
+}
+
+model Account {
+  id                String            @id @default(cuid()) @map("_id")
+  userId            String 
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? 
+  access_token      String? 
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([provider, providerAccountId])
+}
+ 
+model Session {
+  id           String     @id @default(uuid()) @map("_id")
+  sessionToken String     @unique
+  userId       String   
+  expires      DateTime
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  id         String   @id @default(uuid()) @map("_id")
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@unique([identifier, token])
+}
+
+model Document {
+  id        String    @id @default(cuid()) @map("_id")
+  title     String    @unique
+  folderId  String?
+  view      Int       @default(0)
+  userId    String
+  user      User      @relation("UserToDocument", fields: [userId], references: [id], onDelete: Cascade)
+  position  Int?
+  starred   Boolean   @default(false)
+  mediaInfo Json?
+  createdBy Json?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Folder {
+  id         String           @id @default(cuid()) @map("_id")
+  name       String
+  userId     String
+  user       User             @relation("UserToFolder", fields: [userId], references: [id], onDelete: Cascade)
+  subfolders Subfolder[]      @relation("ParentToSubfolder")
+  rootSubfolders Subfolder[]  @relation("RootFolderToSubfolder")
+}
+
+model Subfolder {
+  id             String       @id @default(cuid()) @map("_id")
+  parentFolderId String
+  parent         Folder       @relation("ParentToSubfolder", fields: [parentFolderId], references: [id])
+  rootFolderId   String  
+  rootFolder     Folder       @relation("RootFolderToSubfolder", fields: [rootFolderId], references: [id])
+}
