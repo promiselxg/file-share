@@ -14,9 +14,10 @@ import { RiVipCrown2Line } from "react-icons/ri";
 import { IoImageOutline } from "react-icons/io5";
 import { MdVideoCameraBack } from "react-icons/md";
 import Link from "next/link";
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 
 const ProfileAvatar = () => {
+  const { signOut } = useClerk();
   const { isLoaded, isSignedIn, user } = useUser();
 
   if (!isLoaded || !isSignedIn) {
@@ -132,9 +133,9 @@ const ProfileAvatar = () => {
               <Separator className="mt-5 bg-[--divider-color]" />
               <div className="w-full flex mt-2 -mb-2">
                 <li className="flex w-full hover:bg-[--folder-bg]  rounded-[8px] link-transition p-2">
-                  <SignOutButton>
-                    <Link href="#">Log out</Link>
-                  </SignOutButton>
+                  <Link href="#" onClick={() => signOut({ redirectUrl: "/" })}>
+                    Sign out
+                  </Link>
                 </li>
               </div>
             </div>
