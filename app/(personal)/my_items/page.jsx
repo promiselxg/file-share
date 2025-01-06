@@ -15,21 +15,12 @@ import NewFolder from "../_components/new-item/new-folder";
 import NewItem from "../_components/new-item/newItem";
 import TrashCheckBoxControl from "../_components/trash";
 import { useFolderCRUD } from "@/context/folder.context";
-
-const folders = [
-  {
-    id: 1,
-    name: "Folder 1",
-    star: true,
-  },
-  { id: 2, name: "Folder 2" },
-  { id: 3, name: "Folder 3" },
-  { id: 4, name: "Folder 4" },
-  { id: 5, name: "Folder 5" },
-];
+import { useUserData } from "@/context/user.context";
 
 const MyItem = () => {
   const { checkedCount } = useFolderCRUD();
+  const { folder } = useUserData();
+
   return (
     <>
       <div className="w-full flex">
@@ -118,7 +109,7 @@ const MyItem = () => {
                   Folders
                 </p>
                 <div className="grid w-full grid-cols-4 gap-5 relative">
-                  <Folder data={folders} />
+                  <Folder data={folder} />
                 </div>
               </div>
             </div>

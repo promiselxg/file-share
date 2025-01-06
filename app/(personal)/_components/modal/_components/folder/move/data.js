@@ -4,7 +4,7 @@ export const folderStructure = [
     id: "34567d",
   },
   {
-    name: "folder 8",
+    name: "folder 9",
     id: "1",
     subfolders: [
       {
@@ -22,7 +22,7 @@ export const folderStructure = [
     ],
   },
   {
-    name: "Untitled Folder",
+    name: "My Folder",
     id: "345",
     subfolders: [],
   },

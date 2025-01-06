@@ -30,7 +30,6 @@ const Folder = ({ data }) => {
     openMoveFolderDialog,
   } = useDialog();
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
-
   return (
     <>
       {data?.map((folder) => {

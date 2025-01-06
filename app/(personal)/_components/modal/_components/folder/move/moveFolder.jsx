@@ -36,6 +36,7 @@ const MoveFolder = ({ folder }) => {
     );
   };
 
+  //console.log(folder);
   return (
     <div className="w-full link-transition">
       <Collapsible open={isOpen}>
@@ -53,8 +54,12 @@ const MoveFolder = ({ folder }) => {
             </span>
           )}
           <div className="flex items-center gap-3">
-            {folder.name.toLowerCase() === "my items" ? <BsImages /> : <Icon />}
-            <span>{folder.name}</span>
+            {folder?.name?.toLowerCase() === "my items" ? (
+              <BsImages />
+            ) : (
+              <Icon />
+            )}
+            <span>{folder?.name}</span>
           </div>
         </CollapsibleTrigger>
         {hasSubfolders && (

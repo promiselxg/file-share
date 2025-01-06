@@ -7,7 +7,7 @@ import { FiChevronRight } from "react-icons/fi";
 
 const DocumentFolder = ({ data }) => {
   const { selectedDocumentId, openMoveFolderDialog } = useDialog();
-  console.log(selectedDocumentId);
+
   return (
     <>
       {data?.folder ? (
