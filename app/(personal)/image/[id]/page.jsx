@@ -11,7 +11,7 @@ import CustomAlertModal from "@/app/(personal)/_components/modal/alert-modal";
 import Modals from "@/app/(personal)/_components/modal/modal";
 import { MdCloseFullscreen } from "react-icons/md";
 import { useDialog } from "@/context/Dialog.context";
-import { useGetURLInfo } from "@/app/hooks/use-get-url-info";
+import { useGetURLInfo } from "@/hooks/use-get-url-info";
 
 export const selectedDocumentId = [
   {

@@ -29,7 +29,9 @@ const Folder = ({ data }) => {
     openDialog,
     openMoveFolderDialog,
   } = useDialog();
+
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
+
   return (
     <>
       {data?.map((folder) => {

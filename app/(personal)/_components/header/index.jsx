@@ -6,7 +6,7 @@ import { FileScan } from "lucide-react";
 import { FiBell, FiGift } from "react-icons/fi";
 import ProfileAvatar from "../profile";
 import Link from "next/link";
-import { useSidebarVisibility } from "@/app/hooks/use-sidebar-visibility";
+import { useSidebarVisibility } from "@/hooks/use-sidebar-visibility";
 
 const Header = () => {
   const showSidebar = useSidebarVisibility();

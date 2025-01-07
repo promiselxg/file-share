@@ -14,17 +14,16 @@ import { Icon } from "@/app/(personal)/_components/icon/icon";
 
 const MoveFolder = ({ folder }) => {
   const { selectedMoveFolderId, setSelectedMoveFolderId } = useDialog();
+  const hasSubfolders = folder?.children?.length > 0;
 
-  const hasSubfolders = folder?.subfolders?.length > 0;
-
-  // Determine if this folder or any of its subfolders is selected
+  // Determine if this folder or any of its subfolders(children) is selected
   const isOpen =
     selectedMoveFolderId === folder.id ||
     (hasSubfolders &&
-      folder?.subfolders?.some(
-        (subfolder) =>
-          subfolder.id === selectedMoveFolderId ||
-          subfolder?.subfolders?.some(
+      folder?.children?.some(
+        (children) =>
+          children.id === selectedMoveFolderId ||
+          children?.children?.some(
             (nestedSubfolder) => nestedSubfolder.id === selectedMoveFolderId
           )
       ));
@@ -36,7 +35,6 @@ const MoveFolder = ({ folder }) => {
     );
   };
 
-  //console.log(folder);
   return (
     <div className="w-full link-transition">
       <Collapsible open={isOpen}>
@@ -64,7 +62,7 @@ const MoveFolder = ({ folder }) => {
         </CollapsibleTrigger>
         {hasSubfolders && (
           <CollapsibleContent className="link-transition pl-4">
-            {folder.subfolders.map((subfolder) => (
+            {folder?.children?.map((subfolder) => (
               <MoveFolder key={subfolder.id} folder={subfolder} />
             ))}
           </CollapsibleContent>

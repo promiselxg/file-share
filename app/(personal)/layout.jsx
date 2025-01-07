@@ -9,7 +9,6 @@ import ViewSelectedDocument from "./_components/modal/_components/view-document/
 import ClientLayout from "./clientLayout";
 import ViewSelectedDocumentFullScreen from "./_components/modal/_components/view-document/viewSelectedDocumentFullScreen";
 import { ClerkProvider } from "@clerk/nextjs";
-import { UserCRUDProvider } from "@/context/user.context";
 
 export const metadata = {
   title: "Create Next Appss",
@@ -23,16 +22,14 @@ export default function RootLayout({ children }) {
         <ScreenRecordProvider>
           <DialogProvider>
             <FolderCRUDProvider>
-              <UserCRUDProvider>
-                <ImageProvider>
-                  <body className="flex bg-[--body-bg] w-full flex-col overflow-hidden relative">
-                    <ClientLayout>{children}</ClientLayout>
-                    <ViewSelectedDocument />
-                    <ViewSelectedDocumentFullScreen />
-                    <Toaster />
-                  </body>
-                </ImageProvider>
-              </UserCRUDProvider>
+              <ImageProvider>
+                <body className="flex bg-[--body-bg] w-full flex-col overflow-hidden relative">
+                  <ClientLayout>{children}</ClientLayout>
+                  <ViewSelectedDocument />
+                  <ViewSelectedDocumentFullScreen />
+                  <Toaster />
+                </body>
+              </ImageProvider>
             </FolderCRUDProvider>
           </DialogProvider>
         </ScreenRecordProvider>

@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Icon } from "@/app/(personal)/_components/icon/icon";
-import { useUserData } from "@/context/user.context";
+import { useFolderCRUD } from "@/context/folder.context";
 
 function FolderSelector() {
   const {
@@ -28,7 +28,8 @@ function FolderSelector() {
     openDialog,
     closeDialog,
   } = useDialog();
-  const { folder: folderStructure } = useUserData();
+  const { folderStructure } = useFolderCRUD();
+
   // selectedMoveFolderId is the folder ID that is currently clicked on
   // moveFolderID is the ID of the folder that was clicked which called the Move folder modal
   // folderStructure

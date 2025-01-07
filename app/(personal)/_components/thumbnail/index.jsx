@@ -24,7 +24,7 @@ import { ImageVideoMenuItem } from "../menuItem/menu";
 import { useFolderCRUD } from "@/context/folder.context";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import useDuplicateItem from "@/app/hooks/use-duplicate";
+import useDuplicateItem from "@/hooks/use-duplicate";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 
 const ThumbNail = ({ data }) => {

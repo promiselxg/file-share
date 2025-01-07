@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import Header from "./_components/header";
 import { useEffect, useState } from "react";
 import SideBar from "./_components/sidebar";
-import { useSidebarVisibility } from "../hooks/use-sidebar-visibility";
+import { useSidebarVisibility } from "../../hooks/use-sidebar-visibility";
 
 export default function ClientLayout({ children }) {
   const [isClient, setIsClient] = useState(false);

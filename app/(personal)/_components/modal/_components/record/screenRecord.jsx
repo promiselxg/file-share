@@ -6,7 +6,7 @@ import { TbDeviceComputerCamera } from "react-icons/tb";
 import { BsBadgeHd } from "react-icons/bs";
 import { GoClock } from "react-icons/go";
 import { Button } from "@/components/ui/button";
-import useDesktopScreenRecorder from "@/app/hooks/use-desktop-screen-recorder";
+import useDesktopScreenRecorder from "@/hooks/use-desktop-screen-recorder";
 import { cn } from "@/lib/utils";
 
 const ImageAndVideoScreenRecord = ({ source }) => {

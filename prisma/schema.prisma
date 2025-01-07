@@ -4,26 +4,27 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = "mongodb+srv://file-share:M3UcstTmmwwZJOD7@file-share.jxmqg.mongodb.net/file-share"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id                      String          @id @default(cuid()) @map("_id")
-  name                    String?
-  email                   String?         @unique
-  emailVerified           DateTime?
-  imageUrl                String?
-  admin                   Boolean         @default(false)
-  createdAt               DateTime        @default(now())
-  updatedAt               DateTime        @updatedAt
-  documents               Document[]      @relation("UserToDocument")
-  folders                 Folder[]        @relation("UserToFolder")
+  id          String       @id @default(cuid()) @map("_id")
+  name        String?
+  email       String?      @unique
+  emailVerified DateTime?
+  imageUrl    String?
+  admin       Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  documents   Document[]   @relation("UserToDocument")
+  folders     Folder[]     @relation("UserToFolder")
 }
 
 model Document {
   id        String    @id @default(cuid()) @map("_id")
   title     String    @unique
   folderId  String?
+  folder    Folder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   view      Int       @default(0)
   userId    String
   user      User      @relation("UserToDocument", fields: [userId], references: [id], onDelete: Cascade)
@@ -36,18 +37,14 @@ model Document {
 }
 
 model Folder {
-  id              String           @id @default(cuid()) @map("_id")
-  name            String
-  userId          String
-  user            User             @relation("UserToFolder", fields: [userId], references: [id], onDelete: Cascade)
-  subfolders      Subfolder[]      @relation("ParentToSubfolder")
-  rootSubfolders  Subfolder[]     @relation("RootFolderToSubfolder")
-}
-
-model Subfolder {
-  id             String       @id @default(cuid()) @map("_id")
-  parentFolderId String
-  parent         Folder       @relation("ParentToSubfolder", fields: [parentFolderId], references: [id])
-  rootFolderId   String  
-  rootFolder     Folder       @relation("RootFolderToSubfolder", fields: [rootFolderId], references: [id])
+  id          String       @id @default(cuid()) @map("_id")
+  name        String
+  userId      String
+  user        User         @relation("UserToFolder", fields: [userId], references: [id], onDelete: Cascade)
+  parentId    String?       
+  parent      Folder?      @relation("ParentToFolder", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children    Folder[]     @relation("ParentToFolder")
+  documents   Document[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }

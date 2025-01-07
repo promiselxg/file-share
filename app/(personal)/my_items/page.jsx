@@ -15,11 +15,9 @@ import NewFolder from "../_components/new-item/new-folder";
 import NewItem from "../_components/new-item/newItem";
 import TrashCheckBoxControl from "../_components/trash";
 import { useFolderCRUD } from "@/context/folder.context";
-import { useUserData } from "@/context/user.context";
 
 const MyItem = () => {
-  const { checkedCount } = useFolderCRUD();
-  const { folder } = useUserData();
+  const { checkedCount, folder, folderLoading } = useFolderCRUD();
 
   return (
     <>
@@ -103,16 +101,21 @@ const MyItem = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="container">
-              <div className="flex w-full p-3 flex-col gap-y-2">
-                <p className="text-[14px] text-[--gray] leading-[14px]">
-                  Folders
-                </p>
-                <div className="grid w-full grid-cols-4 gap-5 relative">
-                  <Folder data={folder} />
+            {folderLoading ? (
+              <h1>loading...</h1>
+            ) : (
+              <div className="container">
+                <div className="flex w-full p-3 flex-col gap-y-2">
+                  <p className="text-[14px] text-[--gray] leading-[14px]">
+                    Folders
+                  </p>
+                  <div className="grid w-full grid-cols-4 gap-5 relative">
+                    <Folder data={folder} />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
             <div className="flex w-full p-3 flex-col gap-y-2">
               <p className="text-[14px] text-[--gray] leading-[14px]">
                 Images &amp; Videos

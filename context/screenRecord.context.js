@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import useCamera from "@/app/hooks/use-camera";
-import useMicrophone from "@/app/hooks/use-microphone";
+import useCamera from "@/hooks/use-camera";
+import useMicrophone from "@/hooks/use-microphone";
 
 const ScreenRecordContext = createContext();
 

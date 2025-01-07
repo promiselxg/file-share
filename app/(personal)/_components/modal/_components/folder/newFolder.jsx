@@ -7,8 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useUserData } from "@/context/user.context";
-import { generateRandomString } from "@/utils/randomStringGenerator";
+import axios from "axios";
+import { useFolderCRUD } from "@/context/folder.context";
 
 const FormSchema = z.object({
   folder_name: z.string().min(2, {
@@ -18,7 +18,7 @@ const FormSchema = z.object({
 
 const NewFolder = () => {
   const { closeDialog } = useDialog();
-  const { folder, addFolder } = useUserData();
+  const { addFolder } = useFolderCRUD();
 
   const {
     register,
@@ -30,31 +30,23 @@ const NewFolder = () => {
 
   const onSubmit = async (data) => {
     // Create Parent Folder
-    // const newFolder = {
-    //   name: data.folder_name,
-    //   id: generateRandomString(10),
-    //   subfolders: [],
-    // };
-
-    // create sub folder
     const newFolder = {
-      name: "New Subfolder 11",
-      id: generateRandomString(10),
-      parentFolderId: "WC9zU2mAJA",
-      subfolders: [],
+      name: data.folder_name,
+      parentId: null,
+      children: [],
     };
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      addFolder(newFolder, "WC9zU2mAJA");
-      closeDialog("newFolder");
+      const response = await axios.post(`/api/folder`, newFolder);
+      if (response) {
+        addFolder(newFolder);
+        closeDialog("newFolder");
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  console.log("is submitting", isSubmitting);
-  console.log(folder);
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">

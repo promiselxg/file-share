@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 "use client";
 
-import { useToast } from "@/app/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import React, { createContext, useContext, useState } from "react";
 
 // Constants
