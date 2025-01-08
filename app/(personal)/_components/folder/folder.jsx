@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/context-menu";
 import { useDialog } from "@/context/Dialog.context";
 import { useRouter } from "next/navigation";
-import { MenuItems } from "../menuItem/menuItems";
 import { useFolderCRUD } from "@/context/folder.context";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FolderMenuItem } from "../menuItem/menu";
 
 const Folder = ({ data }) => {
   const navigate = useRouter();
@@ -30,7 +30,12 @@ const Folder = ({ data }) => {
     openMoveFolderDialog,
   } = useDialog();
 
-  const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
+  const {
+    checkedCount,
+    checkedStates,
+    handleCheckboxChange,
+    handleAddToFavorite,
+  } = useFolderCRUD();
 
   return (
     <>
@@ -52,7 +57,7 @@ const Folder = ({ data }) => {
                 }
               >
                 <div className="flex items-center gap-2">
-                  {folder?.star ? (
+                  {folder?.favorite ? (
                     <StarIcon className="text-[30px]" />
                   ) : (
                     <Icon className="text-[30px]" />
@@ -73,7 +78,7 @@ const Folder = ({ data }) => {
                         </span>
                       </PopoverTrigger>
                       <PopoverContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px]">
-                        <MenuItems
+                        <FolderMenuItem
                           openDialog={openDialog}
                           id={folder?.id}
                           title={folder.name}
@@ -81,6 +86,10 @@ const Folder = ({ data }) => {
                           openMoveFolderDialog={openMoveFolderDialog}
                           openDownloadFolderDialog={openDownloadFolderDialog}
                           handleCheckboxChange={handleCheckboxChange}
+                          favorite={folder.favorite}
+                          handleAddToFavorite={() =>
+                            handleAddToFavorite(folder.id)
+                          }
                         />
                       </PopoverContent>
                     </Popover>
@@ -105,7 +114,7 @@ const Folder = ({ data }) => {
             </ContextMenuTrigger>
             {checkedCount < 1 && (
               <ContextMenuContent className="flex bg-[--dialog-bg] shadow-md border-none w-[220px] flex-col text-[--sidebar-link-color] p-2">
-                <MenuItems
+                <FolderMenuItem
                   openDialog={openDialog}
                   id={folder?.id}
                   title={folder.name}
@@ -113,6 +122,8 @@ const Folder = ({ data }) => {
                   openMoveFolderDialog={openMoveFolderDialog}
                   openDownloadFolderDialog={openDownloadFolderDialog}
                   handleCheckboxChange={handleCheckboxChange}
+                  favorite={folder.favorite}
+                  handleAddToFavorite={() => handleAddToFavorite(folder.id)}
                 />
               </ContextMenuContent>
             )}

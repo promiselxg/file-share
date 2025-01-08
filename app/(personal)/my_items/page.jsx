@@ -101,16 +101,14 @@ const MyItem = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            {folderLoading ? (
-              <h1>loading...</h1>
-            ) : (
+            {folder?.length > 0 && (
               <div className="container">
                 <div className="flex w-full p-3 flex-col gap-y-2">
                   <p className="text-[14px] text-[--gray] leading-[14px]">
                     Folders
                   </p>
                   <div className="grid w-full grid-cols-4 gap-5 relative">
-                    <Folder data={folder} />
+                    <Folder data={folder} loading={folderLoading} />
                   </div>
                 </div>
               </div>

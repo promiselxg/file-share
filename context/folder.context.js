@@ -3,36 +3,17 @@
 import useCheckboxStates from "@/hooks/use-checkbox";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDialog } from "./Dialog.context";
-import useFetch from "@/hooks/use-fetch";
+import axios from "axios";
 
 const FolderCRUDOperation = createContext();
 
 export const FolderCRUDProvider = ({ children }) => {
   const [starredFolders, setStarredFolders] = useState([]);
   const [folderStructure, setFolderStructure] = useState([]);
+  const [loadingStarredFolders, setLoadingStarredFolders] = useState(false);
   const [folder, setFolder] = useState([]);
+
   const { closeDialog } = useDialog();
-  const { data, loading: folderLoading } = useFetch(`/folder`);
-  const { data: folderData } = useFetch(`/folder?type=withChildren`);
-
-  useEffect(() => {
-    if (data) {
-      setFolder(data?.response);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (folderData) {
-      setFolderStructure(folderData?.response);
-    }
-  }, [folderData]);
-
-  const addFolder = (newFolder, parentId = "") => {
-    if (parentId === "") {
-      setFolder((prev) => [newFolder, ...prev]);
-    }
-  };
-
   const {
     resetCheckBox,
     checkedStates,
@@ -41,12 +22,53 @@ export const FolderCRUDProvider = ({ children }) => {
     handleCheckboxChange,
   } = useCheckboxStates();
 
-  const removeItem = (itemArray, itemId) => {
-    const updatedArray = itemArray.filter((item) => item.id !== itemId);
-    if (updatedArray.length < 1) {
-      closeDialog("editStarredFolders");
+  const updateFolderFavoriteStatus = (id, isFavorite) => {
+    setFolder((prevFolders) =>
+      prevFolders.map((folder) =>
+        folder.id === id ? { ...folder, favorite: isFavorite } : folder
+      )
+    );
+  };
+
+  const handleAddToFavorite = async (folderId) => {
+    try {
+      const { data } = await axios.put(`/api/folder`, { folderId });
+      setStarredFolders((prev) => {
+        const exists = prev.some((folder) => folder.id === folderId);
+        if (exists) {
+          // Remove the folder if it already exists
+          return prev.filter((folder) => folder.id !== folderId);
+        } else {
+          // Add the folder if it doesn't exist
+          return [...prev, data.data];
+        }
+      });
+      updateFolderFavoriteStatus(folderId, data?.data?.favorite);
+    } catch (error) {
+      console.log(error);
     }
-    setStarredFolders(updatedArray);
+  };
+
+  // partially append to the folder array immediately it a new folder has been created
+  const addFolder = (newFolder, parentId = "") => {
+    if (parentId === "") {
+      setFolder((prev) => [newFolder, ...prev]);
+    }
+  };
+
+  // remove favorite folder
+  const removeItem = async (itemArray, itemId) => {
+    try {
+      const { data } = await axios.put(`/api/folder`, { folderId: itemId });
+      updateFolderFavoriteStatus(itemId, data?.data?.favorite);
+      const updatedArray = itemArray.filter((item) => item.id !== itemId);
+      if (updatedArray.length < 1) {
+        closeDialog("editStarredFolders");
+      }
+      setStarredFolders(updatedArray);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /**
@@ -86,6 +108,47 @@ export const FolderCRUDProvider = ({ children }) => {
   //   }
   // };
 
+  // get favoorite folders
+
+  useEffect(() => {
+    fetchStarredFolders();
+    fetchTopLevelFolders();
+    fetchFolderStructure();
+  }, []);
+
+  const fetchTopLevelFolders = async () => {
+    try {
+      const { data } = await axios.get(`/api/folder`);
+      setFolder(data?.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchStarredFolders = async () => {
+    try {
+      setLoadingStarredFolders(true);
+      const { data } = await axios.get(`/api/folder?type=favorite`);
+      setStarredFolders(data.response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingStarredFolders(false);
+    }
+  };
+
+  const fetchFolderStructure = async () => {
+    try {
+      setLoadingStarredFolders(true);
+      const { data } = await axios.get(`/api/folder?type=withChildren`);
+      setFolderStructure(data.response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingStarredFolders(false);
+    }
+  };
+
   return (
     <FolderCRUDOperation.Provider
       value={{
@@ -95,10 +158,12 @@ export const FolderCRUDProvider = ({ children }) => {
         starredFolders,
         folderStructure,
         folder,
-        folderLoading,
+        loadingStarredFolders,
+
         addFolder,
         resetCheckBox,
         handleCheckboxChange,
+        handleAddToFavorite,
         setStarredFolders,
         removeItem,
       }}

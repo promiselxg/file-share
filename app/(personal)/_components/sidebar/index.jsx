@@ -3,7 +3,6 @@ import { FiLogOut, FiStar, FiTrash, FiUser, FiUsers } from "react-icons/fi";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import StarredFolder from "../starredFolder/starredFolder";
 import { useDialog } from "@/context/Dialog.context";
 import { useFolderCRUD } from "@/context/folder.context";
@@ -13,27 +12,7 @@ import { cn } from "@/lib/utils";
 const SideBar = () => {
   const currentRoute = usePathname();
   const { openDialog } = useDialog();
-  const { starredFolders, setStarredFolders } = useFolderCRUD();
-
-  const [data, setData] = useState([
-    {
-      id: "re456cvs",
-      name: "folder 1",
-    },
-    {
-      id: "Fcressx44",
-      name: "untittled folder",
-    },
-    {
-      id: "23fre34",
-      name: "my personal document",
-    },
-  ]);
-
-  useEffect(() => {
-    setStarredFolders(data);
-  }, [data, setStarredFolders]);
-
+  const { starredFolders, loadingStarredFolders } = useFolderCRUD();
   return (
     <>
       <div className="text-white relative h-[calc(100vh-70px)] md:flex md:w-[280px] w-full flex-col">
@@ -99,7 +78,10 @@ const SideBar = () => {
               </div>
             </div>
             {starredFolders.length > 0 ? (
-              <StarredFolder data={starredFolders} />
+              <StarredFolder
+                data={starredFolders}
+                loading={loadingStarredFolders}
+              />
             ) : (
               <div className="shared-folder-empty border border-dashed p-2 my-2 rounded-[8px] border-[--folder-border-color]">
                 <p className="text-[12px] text-[--gray]">

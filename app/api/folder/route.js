@@ -38,7 +38,6 @@ export const POST = async (req, res) => {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
     return errorResponse("Something went wrong!", error);
   }
 };
@@ -46,11 +45,13 @@ export const POST = async (req, res) => {
 export const GET = async (req) => {
   const query = req.nextUrl.searchParams;
   const queryType = query.get("type");
-  let response; // Declare response variable outside the try block
+  let response;
 
   try {
     if (queryType === "withChildren") {
       response = await fetchFolderWithChildren();
+    } else if (queryType === "favorite") {
+      response = await fetchFavoriteFolders();
     } else {
       response = await fetchParentFolders();
     }
@@ -61,9 +62,24 @@ export const GET = async (req) => {
         response,
       },
       { status: 200 }
-    ); // Respond with JSON and status 200
+    );
   } catch (error) {
     return errorResponse("Something went wrong!", error); // Handle errors
+  }
+};
+
+export const PUT = async (req) => {
+  const body = await req.json();
+  try {
+    if (!body.folderId) {
+      return errorResponse("Folder ID is required");
+    }
+
+    const data = await toggleFolderFavoriteStatus(body);
+    return NextResponse.json({ data }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return errorResponse("Something went wrong!", error);
   }
 };
 
@@ -116,4 +132,48 @@ const fetchParentFolders = async () => {
   });
 
   return parentFolders;
+};
+
+const toggleFolderFavoriteStatus = async (body) => {
+  const folder = await prisma.folder.findUnique({
+    where: { id: body?.folderId },
+    select: { favorite: true },
+  });
+
+  if (!folder) {
+    throw new Error("Folder not found");
+  }
+
+  const toggleFavorite = await prisma.folder.update({
+    where: { id: body?.folderId },
+    data: {
+      favorite: !folder.favorite,
+    },
+    select: {
+      favorite: true,
+      name: true,
+      id: true,
+    },
+  });
+
+  return toggleFavorite;
+};
+
+const fetchFavoriteFolders = async () => {
+  const favoriteFolders = await prisma.folder.findMany({
+    where: {
+      favorite: true,
+    },
+    select: {
+      id: true,
+      name: true,
+      favorite: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+
+  return favoriteFolders;
 };

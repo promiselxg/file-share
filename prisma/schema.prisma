@@ -29,7 +29,7 @@ model Document {
   userId    String
   user      User      @relation("UserToDocument", fields: [userId], references: [id], onDelete: Cascade)
   position  Int?
-  starred   Boolean   @default(false)
+  shareLink   String?
   mediaInfo Json?
   createdBy Json?
   createdAt DateTime  @default(now())
@@ -40,6 +40,9 @@ model Folder {
   id          String       @id @default(cuid()) @map("_id")
   name        String
   userId      String
+  favorite    Boolean      @default(false)
+  position    Int?
+  shareLink   String?
   user        User         @relation("UserToFolder", fields: [userId], references: [id], onDelete: Cascade)
   parentId    String?       
   parent      Folder?      @relation("ParentToFolder", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)

@@ -9,6 +9,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { CgPushDown } from "react-icons/cg";
 import { GrNotes } from "react-icons/gr";
 import { MdDriveFileMoveOutline } from "react-icons/md";
+import { cn } from "@/lib/utils";
 
 export const ImageVideoMenuItem = ({
   id,
@@ -104,6 +105,8 @@ export const FolderMenuItem = ({
   openMoveFolderDialog,
   openDownloadFolderDialog,
   handleCheckboxChange,
+  handleAddToFavorite,
+  favorite,
   openDialog,
 }) => {
   const menuItem = [
@@ -139,7 +142,14 @@ export const FolderMenuItem = ({
         openDownloadFolderDialog("download", id);
       },
     },
-    { name: "Add to starred", icon: <FiStar size={20} /> },
+    {
+      name: favorite ? "Remove from starred" : "Add to starred",
+      icon: <FiStar size={20} />,
+      action: (e) => {
+        e.stopPropagation();
+        handleAddToFavorite(id);
+      },
+    },
     {
       name: "Multiple select",
       icon: <LuCopyCheck size={20} />,
@@ -164,7 +174,9 @@ export const FolderMenuItem = ({
       {menuItem.map((item, index) => (
         <li
           key={index}
-          className="flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition"
+          className={`${cn(
+            `flex w-full text-[--sidebar-link-active-text] hover:bg-[--folder-bg] rounded-[5px] link-transition`
+          )}`}
         >
           <LinkWithIcon
             Icon={item?.icon}
