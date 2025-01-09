@@ -20,6 +20,7 @@ import { useFolderCRUD } from "@/context/folder.context";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FolderMenuItem } from "../menuItem/menu";
+import { IoIosLink } from "react-icons/io";
 
 const Folder = ({ data }) => {
   const navigate = useRouter();
@@ -29,6 +30,7 @@ const Folder = ({ data }) => {
     openDialog,
     openMoveFolderDialog,
     openShareFolder,
+    setClosePopUp,
   } = useDialog();
 
   const {
@@ -36,14 +38,19 @@ const Folder = ({ data }) => {
     checkedStates,
     handleCheckboxChange,
     handleAddToFavorite,
+    link,
   } = useFolderCRUD();
 
+  console.log(link);
   return (
     <>
       {data?.map((folder) => {
         const isChecked = !!checkedStates[folder.id];
         return (
-          <ContextMenu key={folder.id}>
+          <ContextMenu
+            key={folder.id}
+            onOpenChange={() => setClosePopUp((prev) => !prev)}
+          >
             <ContextMenuTrigger>
               <div
                 className={cn(
@@ -59,9 +66,23 @@ const Folder = ({ data }) => {
               >
                 <div className="flex items-center gap-2">
                   {folder?.favorite ? (
-                    <StarIcon className="text-[30px]" />
+                    <div className="relative">
+                      <StarIcon className="text-[30px]" />
+                      {folder?.shareLink && (
+                        <div className="absolute bottom-0 right-0 bg-[--body-bg] rounded-full text-sm flex items-center justify-center p-[2px] text-[--gray]">
+                          <IoIosLink size={8} />
+                        </div>
+                      )}
+                    </div>
                   ) : (
-                    <Icon className="text-[30px]" />
+                    <div className="relative">
+                      <Icon className="text-[30px]" />
+                      {folder?.shareLink && (
+                        <div className="absolute bottom-0 right-0 bg-[--body-bg] rounded-full text-sm flex items-center justify-center p-[2px] text-[--gray]">
+                          <IoIosLink size={8} />
+                        </div>
+                      )}
+                    </div>
                   )}
                   <span className="text-[12px] text-[--sidebar-link-color] font-[600]">
                     {folder?.name}
@@ -90,6 +111,7 @@ const Folder = ({ data }) => {
                           openDownloadFolderDialog={openDownloadFolderDialog}
                           handleCheckboxChange={handleCheckboxChange}
                           favorite={folder.favorite}
+                          setClosePopUp={setClosePopUp}
                           handleAddToFavorite={() =>
                             handleAddToFavorite(folder.id)
                           }
@@ -124,6 +146,7 @@ const Folder = ({ data }) => {
                   sharableLink={folder.shareLink}
                   openRenameDialog={openRenameDialog}
                   openShareFolder={openShareFolder}
+                  setClosePopUp={setClosePopUp}
                   openMoveFolderDialog={openMoveFolderDialog}
                   openDownloadFolderDialog={openDownloadFolderDialog}
                   handleCheckboxChange={handleCheckboxChange}

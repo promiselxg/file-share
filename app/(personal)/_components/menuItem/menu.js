@@ -110,6 +110,7 @@ export const FolderMenuItem = ({
   handleAddToFavorite,
   favorite,
   openDialog,
+  setClosePopUp,
 }) => {
   const menuItem = [
     {

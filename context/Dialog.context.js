@@ -22,6 +22,7 @@ export const DialogProvider = ({ children }) => {
   const [moveFolderId, setMoveFolderId] = useState("");
   const [fullScreenMode, setFullScreenMode] = useState(false);
   const [dataID, setDataID] = useState(null);
+  const [closePopUp, setClosePopUp] = useState(false);
   const [moveFolderDocumentType, setMoveFolderDocumentType] =
     useState("folder");
 
@@ -131,7 +132,7 @@ export const DialogProvider = ({ children }) => {
         renameFolderId,
         shareID,
         dataID,
-
+        closePopUp,
         selectedMoveFolderId,
         moveFolderId: moveFolderId.toString(),
         moveFolderDocumentType,
@@ -148,6 +149,7 @@ export const DialogProvider = ({ children }) => {
         setSharedData,
         setShareLinkData,
         setSelectedMoveFolderId,
+        setClosePopUp,
         nextItem,
         prevItem,
       }}
