@@ -4,13 +4,25 @@ import useCheckboxStates from "@/hooks/use-checkbox";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDialog } from "./Dialog.context";
 import axios from "axios";
+import { toast } from "@/hooks/use-toast";
 
 const FolderCRUDOperation = createContext();
+
+const apiCall = async (method, url, payload = {}) => {
+  try {
+    const response = await axios[method](url, payload);
+    return response.data;
+  } catch (error) {
+    console.error(`API ${method.toUpperCase()} error:`, error);
+    throw error;
+  }
+};
 
 export const FolderCRUDProvider = ({ children }) => {
   const [starredFolders, setStarredFolders] = useState([]);
   const [folderStructure, setFolderStructure] = useState([]);
   const [loadingStarredFolders, setLoadingStarredFolders] = useState(false);
+  const [renameFolderStatus, setRenameFolderStatus] = useState(false);
   const [folder, setFolder] = useState([]);
 
   const { closeDialog } = useDialog();
@@ -22,53 +34,134 @@ export const FolderCRUDProvider = ({ children }) => {
     handleCheckboxChange,
   } = useCheckboxStates();
 
-  const updateFolderFavoriteStatus = (id, isFavorite) => {
-    setFolder((prevFolders) =>
-      prevFolders.map((folder) =>
-        folder.id === id ? { ...folder, favorite: isFavorite } : folder
-      )
-    );
-  };
-
-  const handleAddToFavorite = async (folderId) => {
+  // Fetch Functions
+  const fetchStarredFolders = async () => {
+    setLoadingStarredFolders(true);
     try {
-      const { data } = await axios.put(`/api/folder`, { folderId });
-      setStarredFolders((prev) => {
-        const exists = prev.some((folder) => folder.id === folderId);
-        if (exists) {
-          // Remove the folder if it already exists
-          return prev.filter((folder) => folder.id !== folderId);
-        } else {
-          // Add the folder if it doesn't exist
-          return [...prev, data.data];
-        }
-      });
-      updateFolderFavoriteStatus(folderId, data?.data?.favorite);
+      const data = await apiCall("get", `/api/folder?type=favorite`);
+      setStarredFolders(data.response);
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Failed to fetch starred folders",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingStarredFolders(false);
     }
   };
 
-  // partially append to the folder array immediately it a new folder has been created
+  const fetchTopLevelFolders = async () => {
+    try {
+      const data = await apiCall("get", `/api/folder`);
+      setFolder(data.response);
+    } catch (error) {
+      toast({
+        title: "Failed to fetch top-level folders",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const fetchFolderStructure = async () => {
+    setLoadingStarredFolders(true);
+    try {
+      const data = await apiCall("get", `/api/folder?type=withChildren`);
+      setFolderStructure(data.response);
+    } catch (error) {
+      toast({
+        title: "Failed to fetch folder structure",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingStarredFolders(false);
+    }
+  };
+
+  // CRUD Functions
+  const handleAddToFavorite = async (folderId) => {
+    try {
+      const data = await apiCall("put", `/api/folder`, { folderId });
+      setStarredFolders((prev) => {
+        const exists = prev.some((folder) => folder.id === folderId);
+        return exists
+          ? prev.filter((folder) => folder.id !== folderId)
+          : [...prev, data.data];
+      });
+      updateFolderFavoriteStatus(folderId, data?.data?.favorite);
+    } catch (error) {
+      toast({
+        title: "Failed to update favorite status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRenameFolder = async (newFolderName, folderId) => {
+    if (!newFolderName) return;
+    try {
+      setRenameFolderStatus(true);
+      const data = await apiCall("put", `/api/folder/${folderId}`, {
+        folder_name: newFolderName,
+        folderId,
+      });
+      if (data?.status === "success") {
+        // update the folder array
+        setFolder((prevFolders) =>
+          prevFolders.map((folder) =>
+            folder.id === folderId ? { ...folder, name: newFolderName } : folder
+          )
+        );
+        // Update the starred folders state if the folder exists there
+        setStarredFolders((prevStarredFolders) =>
+          prevStarredFolders.map((folder) =>
+            folder.id === folderId ? { ...folder, name: newFolderName } : folder
+          )
+        );
+        // close dialog
+        closeDialog("rename");
+      } else {
+        toast({
+          title:
+            data?.message ||
+            error?.response?.data?.message ||
+            "An error occurred",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: error?.response?.data?.message || "Failed to rename folder",
+        variant: "destructive",
+      });
+    } finally {
+      setRenameFolderStatus(false);
+    }
+  };
+
+  const removeItem = async (itemArray, itemId) => {
+    try {
+      const data = await apiCall("put", `/api/folder`, { folderId: itemId });
+      updateFolderFavoriteStatus(itemId, data?.data?.favorite);
+      const updatedArray = itemArray.filter((item) => item.id !== itemId);
+      if (updatedArray.length < 1) closeDialog("editStarredFolders");
+      setStarredFolders(updatedArray);
+    } catch (error) {
+      toast({ title: "Failed to remove item", variant: "destructive" });
+    }
+  };
+
   const addFolder = (newFolder, parentId = "") => {
     if (parentId === "") {
       setFolder((prev) => [newFolder, ...prev]);
     }
   };
 
-  // remove favorite folder
-  const removeItem = async (itemArray, itemId) => {
-    try {
-      const { data } = await axios.put(`/api/folder`, { folderId: itemId });
-      updateFolderFavoriteStatus(itemId, data?.data?.favorite);
-      const updatedArray = itemArray.filter((item) => item.id !== itemId);
-      if (updatedArray.length < 1) {
-        closeDialog("editStarredFolders");
-      }
-      setStarredFolders(updatedArray);
-    } catch (error) {
-      console.log(error);
-    }
+  const updateFolderFavoriteStatus = (id, isFavorite) => {
+    setFolder((prevFolders) =>
+      prevFolders.map((folder) =>
+        folder.id === id ? { ...folder, favorite: isFavorite } : folder
+      )
+    );
   };
 
   /**
@@ -116,38 +209,38 @@ export const FolderCRUDProvider = ({ children }) => {
     fetchFolderStructure();
   }, []);
 
-  const fetchTopLevelFolders = async () => {
-    try {
-      const { data } = await axios.get(`/api/folder`);
-      setFolder(data?.response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchTopLevelFolders = async () => {
+  //   try {
+  //     const { data } = await axios.get(`/api/folder`);
+  //     setFolder(data?.response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const fetchStarredFolders = async () => {
-    try {
-      setLoadingStarredFolders(true);
-      const { data } = await axios.get(`/api/folder?type=favorite`);
-      setStarredFolders(data.response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingStarredFolders(false);
-    }
-  };
+  // const fetchStarredFolders = async () => {
+  //   try {
+  //     setLoadingStarredFolders(true);
+  //     const { data } = await axios.get(`/api/folder?type=favorite`);
+  //     setStarredFolders(data.response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoadingStarredFolders(false);
+  //   }
+  // };
 
-  const fetchFolderStructure = async () => {
-    try {
-      setLoadingStarredFolders(true);
-      const { data } = await axios.get(`/api/folder?type=withChildren`);
-      setFolderStructure(data.response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingStarredFolders(false);
-    }
-  };
+  // const fetchFolderStructure = async () => {
+  //   try {
+  //     setLoadingStarredFolders(true);
+  //     const { data } = await axios.get(`/api/folder?type=withChildren`);
+  //     setFolderStructure(data.response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoadingStarredFolders(false);
+  //   }
+  // };
 
   return (
     <FolderCRUDOperation.Provider
@@ -159,11 +252,12 @@ export const FolderCRUDProvider = ({ children }) => {
         folderStructure,
         folder,
         loadingStarredFolders,
-
+        renameFolderStatus,
         addFolder,
         resetCheckBox,
         handleCheckboxChange,
         handleAddToFavorite,
+        handleRenameFolder,
         setStarredFolders,
         removeItem,
       }}

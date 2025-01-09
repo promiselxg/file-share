@@ -2,7 +2,7 @@ import prisma from "@/utils/db";
 import { errorResponse, successResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
-export const POST = async (req, res) => {
+export const POST = async (req) => {
   try {
     const body = await req.json();
     const { parentId, name } = body;
