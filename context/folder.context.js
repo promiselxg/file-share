@@ -211,44 +211,87 @@ export const FolderCRUDProvider = ({ children }) => {
     }
   };
 
+  const handleMoveFolder = async (
+    currentFolder,
+    folderToMoveId,
+    newFolderParentId
+  ) => {
+    const moveAndRemoveFolder = (folders) => {
+      return folders
+        .filter((folder) => folder.id !== folderToMoveId)
+        .map((folder) => {
+          if (folder.id === newFolderParentId) {
+            // Add the folder to the `children` array of the target folder
+            const updatedChildren = folder.children
+              ? [...folder.children, currentFolder]
+              : [currentFolder];
+            return { ...folder, children: updatedChildren };
+          }
+
+          // Recursively check and update subfolders
+          if (folder.children) {
+            return {
+              ...folder,
+              children: moveAndRemoveFolder(folder.children),
+            };
+          }
+          return folder;
+        });
+    };
+    setFolder((prev) => moveAndRemoveFolder(prev));
+
+    toast({
+      title: "Folders moved successfully.",
+      className: "bg-[--body-bg] text-[--gray] DialogBoxShadow border-none",
+    });
+    closeDialog("moveFolder");
+
+    try {
+      const data = await apiCall("post", `/api/moveFolder`, {
+        folderToMoveId,
+        newFolderParentId,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   /**
    * Add a new folder to the folder structure.
    * @param {Object} newFolder - The new folder object to add.
    * @param {string} [parentId] - The ID of the folder to add a subfolder to (optional).
    */
-  // const addFolder = (newFolder, parentId = "") => {
-  //   if (!parentId) {
-  //     // If no parentId, add as a top-level folder
-  //     setFolder((prev) => [newFolder, ...prev]);
-  //   } else {
-  //     // If parentId exists, add as a subfolder
-  //     const addFolderRecursive = (folders) => {
-  //       return folders.map((folder) => {
-  //         if (folder.id === parentId) {
-  //           // Add new folder to the `subfolders` array
-  //           const updatedSubfolders = folder.subfolders
-  //             ? [...folder.subfolders, newFolder]
-  //             : [newFolder];
-  //           return { ...folder, subfolders: updatedSubfolders };
-  //         }
+  const text = (newFolder, parentId = "") => {
+    if (!parentId) {
+      // If no parentId, add as a top-level folder
+      setFolder((prev) => [newFolder, ...prev]);
+    } else {
+      // If parentId exists, add as a subfolder
+      const addFolderRecursive = (folders) => {
+        return folders.map((folder) => {
+          if (folder.id === parentId) {
+            // Add new folder to the `subfolders` array
+            const updatedSubfolders = folder.subfolders
+              ? [...folder.subfolders, newFolder]
+              : [newFolder];
+            return { ...folder, subfolders: updatedSubfolders };
+          }
 
-  //         // Recursively check subfolders
-  //         if (folder.subfolders) {
-  //           return {
-  //             ...folder,
-  //             subfolders: addFolderRecursive(folder.subfolders),
-  //           };
-  //         }
+          // Recursively check subfolders
+          if (folder.subfolders) {
+            return {
+              ...folder,
+              subfolders: addFolderRecursive(folder.subfolders),
+            };
+          }
 
-  //         return folder;
-  //       });
-  //     };
+          return folder;
+        });
+      };
 
-  //     setFolder((prev) => addFolderRecursive(prev));
-  //   }
-  // };
-
-  // get favoorite folders
+      setFolder((prev) => addFolderRecursive(prev));
+    }
+  };
 
   useEffect(() => {
     fetchStarredFolders();
@@ -309,6 +352,7 @@ export const FolderCRUDProvider = ({ children }) => {
         handleRenameFolder,
         handleGenerateShareLink,
         handleRevokeShareLink,
+        handleMoveFolder,
         setStarredFolders,
         setLink,
         removeItem,

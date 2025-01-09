@@ -110,7 +110,7 @@ export const FolderMenuItem = ({
   handleAddToFavorite,
   favorite,
   openDialog,
-  setClosePopUp,
+  selectedActionData,
 }) => {
   const menuItem = [
     {
@@ -134,7 +134,7 @@ export const FolderMenuItem = ({
       icon: <MdDriveFileMoveOutline size={20} />,
       action: (e) => {
         e.stopPropagation();
-        openMoveFolderDialog("moveFolder", id);
+        openMoveFolderDialog("moveFolder", id, "folder", selectedActionData);
       },
     },
     {

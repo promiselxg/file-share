@@ -38,10 +38,7 @@ const Folder = ({ data }) => {
     checkedStates,
     handleCheckboxChange,
     handleAddToFavorite,
-    link,
   } = useFolderCRUD();
-
-  console.log(link);
   return (
     <>
       {data?.map((folder) => {
@@ -111,6 +108,7 @@ const Folder = ({ data }) => {
                           openDownloadFolderDialog={openDownloadFolderDialog}
                           handleCheckboxChange={handleCheckboxChange}
                           favorite={folder.favorite}
+                          selectedActionData={folder}
                           setClosePopUp={setClosePopUp}
                           handleAddToFavorite={() =>
                             handleAddToFavorite(folder.id)
@@ -146,6 +144,7 @@ const Folder = ({ data }) => {
                   sharableLink={folder.shareLink}
                   openRenameDialog={openRenameDialog}
                   openShareFolder={openShareFolder}
+                  selectedActionData={folder}
                   setClosePopUp={setClosePopUp}
                   openMoveFolderDialog={openMoveFolderDialog}
                   openDownloadFolderDialog={openDownloadFolderDialog}

@@ -19,7 +19,7 @@ import {
 import { Icon } from "@/app/(personal)/_components/icon/icon";
 import { useFolderCRUD } from "@/context/folder.context";
 
-function FolderSelector() {
+function FolderSelector({ selectedActionData }) {
   const {
     moveFolderDocumentType,
     selectedMoveFolderId,
@@ -28,7 +28,7 @@ function FolderSelector() {
     openDialog,
     closeDialog,
   } = useDialog();
-  const { folderStructure } = useFolderCRUD();
+  const { folder, handleMoveFolder, folderStructure } = useFolderCRUD();
 
   // selectedMoveFolderId is the folder ID that is currently clicked on
   // moveFolderID is the ID of the folder that was clicked which called the Move folder modal
@@ -41,6 +41,7 @@ function FolderSelector() {
     folderStructure
   );
 
+  console.log(folder);
   return (
     <>
       <div className="w-full flex">
@@ -111,6 +112,13 @@ function FolderSelector() {
             <Button
               className="w-fit rounded-[8px] bg-[--primary-btn] border-[--primary-btn] border text-white hover:bg-[--primary-btn-hover] hover:border-[--primary-btn-hover] hover:text-white link-transition h-[40px] px-5 disabled:bg-[--gray] disabled:border-[--gray] disabled:cursor-not-allowed"
               disabled={isDisabled}
+              onClick={() =>
+                handleMoveFolder(
+                  selectedActionData,
+                  moveFolderId,
+                  selectedMoveFolderId
+                )
+              }
             >
               Move to{" "}
               {movedFolder?.name && (

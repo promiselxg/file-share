@@ -25,7 +25,7 @@ export const DialogProvider = ({ children }) => {
   const [closePopUp, setClosePopUp] = useState(false);
   const [moveFolderDocumentType, setMoveFolderDocumentType] =
     useState("folder");
-
+  const [selectedActionData, setSelectedActionData] = useState([]);
   const [selectedDocumentId, setSelectedDocumentId] = useState(
     sharedData[currentIndex] || null
   );
@@ -63,10 +63,11 @@ export const DialogProvider = ({ children }) => {
   };
 
   // move folder dialog
-  const openMoveFolderDialog = (dialogName, folderId, documentType) => {
+  const openMoveFolderDialog = (dialogName, folderId, documentType, data) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setMoveFolderId(folderId);
     setMoveFolderDocumentType(documentType);
+    setSelectedActionData(data);
   };
 
   // close dialog
@@ -142,6 +143,7 @@ export const DialogProvider = ({ children }) => {
         openMoveFolderDialog,
         openDownloadFolderDialog,
         openShareFolder,
+        selectedActionData,
         closeDialog,
         handleViewSelectedDocument,
         handleViewDocumentInFullScreen,
@@ -149,6 +151,7 @@ export const DialogProvider = ({ children }) => {
         setSharedData,
         setShareLinkData,
         setSelectedMoveFolderId,
+        setSelectedActionData,
         setClosePopUp,
         nextItem,
         prevItem,
