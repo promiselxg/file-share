@@ -28,6 +28,7 @@ const Folder = ({ data }) => {
     openRenameDialog,
     openDialog,
     openMoveFolderDialog,
+    openShareFolder,
   } = useDialog();
 
   const {
@@ -82,7 +83,9 @@ const Folder = ({ data }) => {
                           openDialog={openDialog}
                           id={folder?.id}
                           title={folder.name}
+                          link={folder.shareLink}
                           openRenameDialog={openRenameDialog}
+                          openShareFolder={openShareFolder}
                           openMoveFolderDialog={openMoveFolderDialog}
                           openDownloadFolderDialog={openDownloadFolderDialog}
                           handleCheckboxChange={handleCheckboxChange}
@@ -118,7 +121,9 @@ const Folder = ({ data }) => {
                   openDialog={openDialog}
                   id={folder?.id}
                   title={folder.name}
+                  link={folder.shareLink}
                   openRenameDialog={openRenameDialog}
+                  openShareFolder={openShareFolder}
                   openMoveFolderDialog={openMoveFolderDialog}
                   openDownloadFolderDialog={openDownloadFolderDialog}
                   handleCheckboxChange={handleCheckboxChange}

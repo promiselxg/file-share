@@ -3,6 +3,7 @@ import {
   createErrorResponse,
   createSuccessResponse,
 } from "@/utils/errorMessage";
+import { generateRandomString } from "@/utils/randomStringGenerator";
 
 export const PUT = async (req) => {
   try {
@@ -15,6 +16,33 @@ export const PUT = async (req) => {
     const data = await handleRenameFolder(body);
     return createSuccessResponse(data);
   } catch (error) {
+    return createErrorResponse(error.message, error, 400);
+  }
+};
+
+export const GET = async (req, { params }) => {
+  const query = req.nextUrl.searchParams;
+  const queryType = query.get("type");
+  const action = query.get("action");
+
+  let response;
+
+  try {
+    // Check if queryType exists and action is not "revoke"
+    if (queryType && action !== "revoke") {
+      response = await handleGenerateShareableLink(params?.id, queryType);
+    }
+    // If action is "revoke"
+    else if (queryType && action === "revoke") {
+      response = await handleRevokeShareableLink(params?.id, queryType);
+    }
+    // Default: Fetch folder details
+    else {
+      response = await handleFetchFolderDetails(params?.id);
+    }
+    return createSuccessResponse(response);
+  } catch (error) {
+    console.error("Error processing GET request:", error);
     return createErrorResponse(error.message, error, 400);
   }
 };
@@ -39,6 +67,7 @@ const handleRenameFolder = async (body) => {
   if (duplicateFolder) {
     throw new Error("Renaming folder failed. Name already exists.");
   }
+  // check if userId match with logged user
 
   // Rename the folder
   const renamedFolder = await prisma.folder.update({
@@ -47,4 +76,55 @@ const handleRenameFolder = async (body) => {
   });
 
   return renamedFolder;
+};
+
+const handleGenerateShareableLink = async (id, doctype) => {
+  if (doctype !== "folder" && doctype !== "document") {
+    throw new Error("Invalid document type");
+  }
+
+  const link = generateRandomString(25);
+
+  const linkExist = await prisma.folder.findUnique({
+    where: { id },
+    select: { shareLink: true },
+  });
+
+  if (!linkExist) {
+    throw new Error("Document or Folder ID not found");
+  }
+
+  if (!linkExist.shareLink) {
+    const updatedFolder = await prisma[doctype].update({
+      where: { id },
+      data: { shareLink: link },
+    });
+    return updatedFolder.shareLink;
+  }
+
+  return linkExist.shareLink;
+};
+
+const handleFetchFolderDetails = async (id) => {
+  const response = await prisma.folder.findUnique({
+    where: { id },
+  });
+  return response;
+};
+
+const handleRevokeShareableLink = async (id, doctype) => {
+  const linkExist = await prisma.folder.findUnique({
+    where: { id },
+    select: { shareLink: true },
+  });
+
+  if (!linkExist) {
+    throw new Error("Document or Folder ID not found");
+  }
+  const updatedFolder = await prisma[doctype].update({
+    where: { id },
+    data: { shareLink: null },
+  });
+
+  return updatedFolder;
 };

@@ -101,7 +101,9 @@ export const ImageVideoMenuItem = ({
 export const FolderMenuItem = ({
   id,
   title,
+  link,
   openRenameDialog,
+  openShareFolder,
   openMoveFolderDialog,
   openDownloadFolderDialog,
   handleCheckboxChange,
@@ -115,7 +117,7 @@ export const FolderMenuItem = ({
       icon: <RiShareForwardLine size={20} />,
       action: (e) => {
         e.stopPropagation();
-        openDialog("share");
+        openShareFolder("share", id, "folder", link);
       },
     },
     {

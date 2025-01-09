@@ -9,6 +9,9 @@ export const DialogProvider = ({ children }) => {
   const [toggleComment, setToggleComment] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
   const [renameFolderTitle, setRenameFolderTitle] = useState("");
+  const [shareID, setShareID] = useState("");
+  const [shareType, setShareType] = useState("");
+  const [shareLinkData, setShareLinkData] = useState("");
   const [renameFolderId, setRenameFolderId] = useState("");
   const [alertDescription, setAlertDescription] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
@@ -44,7 +47,15 @@ export const DialogProvider = ({ children }) => {
     setRenameFolderId(id);
   };
 
-  // Rename folder/document
+  // share Folder
+  const openShareFolder = (dialogName, id, type, data) => {
+    setDialogs((prev) => ({ ...prev, [dialogName]: true }));
+    setShareID(id);
+    setShareType(type);
+    setShareLinkData(data);
+  };
+
+  // Download
   const openDownloadFolderDialog = (dialogName, id) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setDataID(id);
@@ -112,19 +123,24 @@ export const DialogProvider = ({ children }) => {
         openSelectedDocumentWrapper,
         fullScreenMode,
         sharedData,
+        shareLinkData,
         currentIndex,
         toggleComment,
         replyTo,
         selectedDocumentId,
         renameFolderId,
+        shareID,
         dataID,
+
         selectedMoveFolderId,
         moveFolderId: moveFolderId.toString(),
         moveFolderDocumentType,
+        shareType,
         openDialog,
         openRenameDialog,
         openMoveFolderDialog,
         openDownloadFolderDialog,
+        openShareFolder,
         closeDialog,
         handleViewSelectedDocument,
         handleViewDocumentInFullScreen,

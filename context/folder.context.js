@@ -5,6 +5,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useDialog } from "./Dialog.context";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
+import { copyToClipboard } from "@/utils/copyText";
+import host from "@/utils/host";
 
 const FolderCRUDOperation = createContext();
 
@@ -23,6 +25,8 @@ export const FolderCRUDProvider = ({ children }) => {
   const [folderStructure, setFolderStructure] = useState([]);
   const [loadingStarredFolders, setLoadingStarredFolders] = useState(false);
   const [renameFolderStatus, setRenameFolderStatus] = useState(false);
+  const [link, setLink] = useState("");
+  const [loading, setLoading] = useState(false);
   const [folder, setFolder] = useState([]);
 
   const { closeDialog } = useDialog();
@@ -164,6 +168,49 @@ export const FolderCRUDProvider = ({ children }) => {
     );
   };
 
+  const handleGenerateShareLink = async (id, type) => {
+    try {
+      setLoading(true);
+      const data = await apiCall("get", `/api/folder/${id}?type=${type}`);
+      if (data.status === "success") {
+        setLink(`${host.host_url}/${id}/${data?.data}`);
+        copyToClipboard(link);
+        setFolder((prevFolders) =>
+          prevFolders.map((folder) =>
+            folder.id === id ? { ...folder, shareLink: data?.data } : folder
+          )
+        );
+        toast({
+          title: "Shareable link copied to clipboard.",
+          className: "bg-[green] border-none text-white",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRevokeShareLink = async (id, type) => {
+    try {
+      setLink("");
+      const data = await apiCall(
+        "get",
+        `/api/folder/${id}?type=${type}&action=revoke`
+      );
+      if (data.status === "success") {
+        setFolder((prevFolders) =>
+          prevFolders.map((folder) =>
+            folder.id === id ? { ...folder, shareLink: null } : folder
+          )
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   /**
    * Add a new folder to the folder structure.
    * @param {Object} newFolder - The new folder object to add.
@@ -245,6 +292,7 @@ export const FolderCRUDProvider = ({ children }) => {
   return (
     <FolderCRUDOperation.Provider
       value={{
+        link,
         checkedStates,
         checkedIds,
         checkedCount,
@@ -252,13 +300,17 @@ export const FolderCRUDProvider = ({ children }) => {
         folderStructure,
         folder,
         loadingStarredFolders,
+        loading,
         renameFolderStatus,
         addFolder,
         resetCheckBox,
         handleCheckboxChange,
         handleAddToFavorite,
         handleRenameFolder,
+        handleGenerateShareLink,
+        handleRevokeShareLink,
         setStarredFolders,
+        setLink,
         removeItem,
       }}
     >

@@ -16,11 +16,13 @@ const Modals = () => {
   const {
     renameFolderTitle,
     renameFolderId,
+    shareID,
     dialogs,
     openDialog,
     closeDialog,
     alertDescription,
     alertTitle,
+    shareLinkData,
   } = useDialog();
   return (
     <>
@@ -66,6 +68,7 @@ const Modals = () => {
       >
         <ImageUpload />
       </CustomModal>
+
       {/**RECORD VIDEO */}
       <CustomModal
         className="w-fit top-[40%]"
@@ -75,6 +78,7 @@ const Modals = () => {
       >
         <RecordVideo />
       </CustomModal>
+
       {/** EDIT STARRED FOLDERS */}
       <CustomModal
         className="w-[30%] top-[40%]"
@@ -93,7 +97,7 @@ const Modals = () => {
         openDialog={() => openDialog("share")}
         closeDialog={() => closeDialog("share")}
       >
-        <ShareLink />
+        <ShareLink id={shareID} docType="folder" sharedLink={shareLinkData} />
       </CustomModal>
 
       <CustomAlertModal

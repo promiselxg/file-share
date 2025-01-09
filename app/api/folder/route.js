@@ -1,5 +1,5 @@
 import prisma from "@/utils/db";
-import { errorResponse, successResponse } from "@/utils/errorMessage";
+import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
@@ -64,7 +64,11 @@ export const GET = async (req) => {
       { status: 200 }
     );
   } catch (error) {
-    return errorResponse("Something went wrong!", error); // Handle errors
+    return createErrorResponse(
+      error.message || "Something went wrong!",
+      error,
+      400
+    );
   }
 };
 
