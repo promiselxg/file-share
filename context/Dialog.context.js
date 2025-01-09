@@ -48,11 +48,11 @@ export const DialogProvider = ({ children }) => {
   };
 
   // share Folder
-  const openShareFolder = (dialogName, id, type, data) => {
+  const openShareFolder = (dialogName, id, type, link) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setShareID(id);
     setShareType(type);
-    setShareLinkData(data);
+    setShareLinkData(link);
   };
 
   // Download
@@ -146,6 +146,7 @@ export const DialogProvider = ({ children }) => {
         handleViewDocumentInFullScreen,
         handleToggleComment,
         setSharedData,
+        setShareLinkData,
         setSelectedMoveFolderId,
         nextItem,
         prevItem,

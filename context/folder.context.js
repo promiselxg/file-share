@@ -29,7 +29,7 @@ export const FolderCRUDProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [folder, setFolder] = useState([]);
 
-  const { closeDialog } = useDialog();
+  const { setShareLinkData, closeDialog } = useDialog();
   const {
     resetCheckBox,
     checkedStates,
@@ -173,7 +173,7 @@ export const FolderCRUDProvider = ({ children }) => {
       setLoading(true);
       const data = await apiCall("get", `/api/folder/${id}?type=${type}`);
       if (data.status === "success") {
-        setLink(`${host.host_url}/${id}/${data?.data}`);
+        setShareLinkData(`${host.host_url}/${id}/${data?.data}`);
         copyToClipboard(link);
         setFolder((prevFolders) =>
           prevFolders.map((folder) =>
