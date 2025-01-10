@@ -8,6 +8,7 @@ import { useDialog } from "@/context/Dialog.context";
 import { useFolderCRUD } from "@/context/folder.context";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 const SideBar = () => {
   const currentRoute = usePathname();
@@ -77,7 +78,11 @@ const SideBar = () => {
                 )}
               </div>
             </div>
-            {starredFolders.length > 0 ? (
+            {loadingStarredFolders ? (
+              <div className="flex w-full justify-center items-center h-fit">
+                <Loader2 className=" animate-spin text-white" />
+              </div>
+            ) : starredFolders?.length > 0 ? (
               <StarredFolder
                 data={starredFolders}
                 loading={loadingStarredFolders}

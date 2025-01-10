@@ -16,9 +16,10 @@ import {
 import { useFolderCRUD } from "@/context/folder.context";
 import { imageVideo } from "../shared_with_me/data";
 import NewFolder from "../_components/new-item/new-folder";
+import { SkeletonCard } from "../_components/skeleton/skeleton";
 
 const MyItems = () => {
-  const { checkedCount, folder, folderLoading } = useFolderCRUD();
+  const { checkedCount, folder, loadTopLevelFolder } = useFolderCRUD();
   return (
     <>
       <div className="w-full flex">
@@ -101,17 +102,26 @@ const MyItems = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            {folder?.length > 0 && (
-              <div className="container">
-                <div className="flex w-full p-3 flex-col gap-y-2">
-                  <p className="text-[14px] text-[--gray] leading-[14px]">
-                    Folders
-                  </p>
-                  <div className="grid w-full grid-cols-4 gap-5 relative">
-                    <Folder data={folder} loading={folderLoading} />
+            {loadTopLevelFolder ? (
+              <div className="grid w-full grid-cols-4 gap-5 relative">
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            ) : (
+              folder?.length > 0 && (
+                <div className="container">
+                  <div className="flex w-full p-3 flex-col gap-y-2">
+                    <p className="text-[14px] text-[--gray] leading-[14px]">
+                      Folders
+                    </p>
+                    <div className="grid w-full grid-cols-4 gap-5 relative">
+                      <Folder data={folder} />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )}
 
             <div className="flex w-full p-3 flex-col gap-y-2">

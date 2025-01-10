@@ -3,10 +3,32 @@ import React from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { RenderImages } from "../../../image-upload/selectedImageDisplay";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { useDialog } from "@/context/Dialog.context";
 
 const ImageUpload = () => {
-  const { files, selectedImages, handleImageChange, removeSelectedImage } =
-    useImageContext();
+  const {
+    files,
+    selectedImages,
+    setSelectedImages,
+    handleImageChange,
+    removeSelectedImage,
+    handleImageUpload,
+    loading,
+    uploadStatus,
+    setFiles,
+    setUploadStatus,
+  } = useImageContext();
+
+  const { closeDialog } = useDialog();
+
+  const handleClose = () => {
+    closeDialog("uploadImage");
+    setSelectedImages([]);
+    setFiles([]);
+    setUploadStatus("");
+  };
+
   return (
     <>
       <div className="w-full flex mt-2">
@@ -39,7 +61,11 @@ const ImageUpload = () => {
               name="files"
               id="files"
               accept="image/png, image/gif, image/jpeg"
-              onChange={(event) => handleImageChange(event, 8)}
+              onChange={(event) =>
+                uploadStatus === "completed"
+                  ? null
+                  : handleImageChange(event, 8)
+              }
               multiple
               className="hidden"
             />
@@ -53,13 +79,29 @@ const ImageUpload = () => {
                 onRemoveImage={removeSelectedImage}
                 files={files}
                 handleImageChange={handleImageChange}
+                loading={loading}
+                uploadStatus={uploadStatus}
               />
             </div>
             <Button
               varient="ghost"
-              className="w-full bg-[--primary-btn] hover:bg-[--primary-btn-hover] link-transition mt-5"
+              className="w-full bg-[--primary-btn] hover:bg-[--primary-btn-hover] link-transition mt-5 disabled:cursor-not-allowed"
+              onClick={() =>
+                uploadStatus === "completed"
+                  ? handleClose()
+                  : handleImageUpload(files)
+              }
+              disabled={loading}
             >
-              Start upload ({selectedImages?.length})
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin" /> uploading...
+                </>
+              ) : uploadStatus === "completed" ? (
+                "Done"
+              ) : (
+                <>Start upload ({selectedImages?.length})</>
+              )}
             </Button>
           </div>
         )}

@@ -3,38 +3,29 @@
 import useCheckboxStates from "@/hooks/use-checkbox";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDialog } from "./Dialog.context";
-import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { copyToClipboard } from "@/utils/copyText";
 import host from "@/utils/host";
+import { apiCall } from "@/utils/apiCall";
 
 const FolderCRUDOperation = createContext();
-
-const apiCall = async (method, url, payload = {}) => {
-  try {
-    const response = await axios[method](url, payload);
-    return response.data;
-  } catch (error) {
-    console.error(`API ${method.toUpperCase()} error:`, error);
-    throw error;
-  }
-};
 
 export const FolderCRUDProvider = ({ children }) => {
   const [starredFolders, setStarredFolders] = useState([]);
   const [folderStructure, setFolderStructure] = useState([]);
   const [loadingStarredFolders, setLoadingStarredFolders] = useState(false);
+  const [loadTopLevelFolder, setLoadTopLevelFolder] = useState(false);
   const [renameFolderStatus, setRenameFolderStatus] = useState(false);
   const [link, setLink] = useState("");
   const [loading, setLoading] = useState(false);
   const [folder, setFolder] = useState([]);
-
   const { setShareLinkData, closeDialog } = useDialog();
+
   const {
-    resetCheckBox,
     checkedStates,
     checkedIds,
     checkedCount,
+    resetCheckBox,
     handleCheckboxChange,
   } = useCheckboxStates();
 
@@ -56,6 +47,7 @@ export const FolderCRUDProvider = ({ children }) => {
 
   const fetchTopLevelFolders = async () => {
     try {
+      setLoadTopLevelFolder(true);
       const data = await apiCall("get", `/api/folder`);
       setFolder(data.response);
     } catch (error) {
@@ -63,6 +55,8 @@ export const FolderCRUDProvider = ({ children }) => {
         title: "Failed to fetch top-level folders",
         variant: "destructive",
       });
+    } finally {
+      setLoadTopLevelFolder(false);
     }
   };
 
@@ -218,7 +212,7 @@ export const FolderCRUDProvider = ({ children }) => {
   ) => {
     const moveAndRemoveFolder = (folders) => {
       return folders
-        .filter((folder) => folder.id !== folderToMoveId)
+        .filter((folder) => folder.id !== folderToMoveId) // sort the folder array to remove this item from the UI
         .map((folder) => {
           if (folder.id === newFolderParentId) {
             // Add the folder to the `children` array of the target folder
@@ -247,12 +241,12 @@ export const FolderCRUDProvider = ({ children }) => {
     closeDialog("moveFolder");
 
     try {
-      const data = await apiCall("post", `/api/moveFolder`, {
+      await apiCall("post", `/api/moveFolder`, {
         folderToMoveId,
         newFolderParentId,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -261,37 +255,6 @@ export const FolderCRUDProvider = ({ children }) => {
    * @param {Object} newFolder - The new folder object to add.
    * @param {string} [parentId] - The ID of the folder to add a subfolder to (optional).
    */
-  const text = (newFolder, parentId = "") => {
-    if (!parentId) {
-      // If no parentId, add as a top-level folder
-      setFolder((prev) => [newFolder, ...prev]);
-    } else {
-      // If parentId exists, add as a subfolder
-      const addFolderRecursive = (folders) => {
-        return folders.map((folder) => {
-          if (folder.id === parentId) {
-            // Add new folder to the `subfolders` array
-            const updatedSubfolders = folder.subfolders
-              ? [...folder.subfolders, newFolder]
-              : [newFolder];
-            return { ...folder, subfolders: updatedSubfolders };
-          }
-
-          // Recursively check subfolders
-          if (folder.subfolders) {
-            return {
-              ...folder,
-              subfolders: addFolderRecursive(folder.subfolders),
-            };
-          }
-
-          return folder;
-        });
-      };
-
-      setFolder((prev) => addFolderRecursive(prev));
-    }
-  };
 
   useEffect(() => {
     fetchStarredFolders();
@@ -344,6 +307,7 @@ export const FolderCRUDProvider = ({ children }) => {
         folder,
         loadingStarredFolders,
         loading,
+        loadTopLevelFolder,
         renameFolderStatus,
         addFolder,
         resetCheckBox,

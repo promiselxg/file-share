@@ -17,16 +17,13 @@ const MoveFolder = ({ folder }) => {
   const hasSubfolders = folder?.children?.length > 0;
 
   // Determine if this folder or any of its subfolders(children) is selected
-  const isOpen =
-    selectedMoveFolderId === folder.id ||
-    (hasSubfolders &&
-      folder?.children?.some(
-        (children) =>
-          children.id === selectedMoveFolderId ||
-          children?.children?.some(
-            (nestedSubfolder) => nestedSubfolder.id === selectedMoveFolderId
-          )
-      ));
+  const isFolderOpen = (folder, selectedId) => {
+    if (folder.id === selectedId) return true;
+    if (!folder.children || folder.children.length === 0) return false;
+    return folder.children.some((child) => isFolderOpen(child, selectedId));
+  };
+
+  const isOpen = isFolderOpen(folder, selectedMoveFolderId);
 
   const handleFolderClick = () => {
     // If this folder is clicked, toggle its selection

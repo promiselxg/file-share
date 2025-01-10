@@ -41,7 +41,7 @@ function FolderSelector({ selectedActionData }) {
     folderStructure
   );
 
-  console.log(folder);
+  console.log(folderStructure);
   return (
     <>
       <div className="w-full flex">

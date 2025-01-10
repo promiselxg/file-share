@@ -3,6 +3,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
+import { uploadImagesToCloudinary } from "@/utils/uploadImageToCloudinary";
 import React, { createContext, useContext, useState } from "react";
 
 // Constants
@@ -16,10 +17,10 @@ export const ImageProvider = ({ children }) => {
   const { toast } = useToast();
   const [files, setFiles] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-
+  const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("pending");
   // Handle Image Change
   const handleImageChange = (e, maxFiles) => {
-    console.log(e, maxFiles);
     if (!e?.target?.files) return;
 
     // Clear previous selections
@@ -64,6 +65,30 @@ export const ImageProvider = ({ children }) => {
     fileURLs.forEach(URL.revokeObjectURL);
   };
 
+  const handleImageUpload = async (files) => {
+    const cloudinaryUrl =
+      "https://api.cloudinary.com/v1_1/promiselxg/image/upload";
+    const upload_preset = "file-share";
+    const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+
+    try {
+      setLoading(true);
+      const { photos } = await uploadImagesToCloudinary(
+        files,
+        cloudinaryUrl,
+        upload_preset,
+        apiKey
+      );
+      setUploadStatus("completed");
+      console.log(photos);
+      // add image details to DB
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Remove a selected image
   const removeSelectedImage = (index) => {
     const updatedImages = selectedImages.filter((_, i) => i !== index);
@@ -75,8 +100,14 @@ export const ImageProvider = ({ children }) => {
       value={{
         files,
         selectedImages,
+        uploadStatus,
+        loading,
         handleImageChange,
         removeSelectedImage,
+        handleImageUpload,
+        setSelectedImages,
+        setUploadStatus,
+        setFiles,
       }}
     >
       {children}
@@ -84,7 +115,6 @@ export const ImageProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the image context
 export const useImageContext = () => {
   return useContext(ImageContext);
 };
