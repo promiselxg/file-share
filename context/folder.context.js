@@ -262,39 +262,6 @@ export const FolderCRUDProvider = ({ children }) => {
     fetchFolderStructure();
   }, []);
 
-  // const fetchTopLevelFolders = async () => {
-  //   try {
-  //     const { data } = await axios.get(`/api/folder`);
-  //     setFolder(data?.response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const fetchStarredFolders = async () => {
-  //   try {
-  //     setLoadingStarredFolders(true);
-  //     const { data } = await axios.get(`/api/folder?type=favorite`);
-  //     setStarredFolders(data.response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoadingStarredFolders(false);
-  //   }
-  // };
-
-  // const fetchFolderStructure = async () => {
-  //   try {
-  //     setLoadingStarredFolders(true);
-  //     const { data } = await axios.get(`/api/folder?type=withChildren`);
-  //     setFolderStructure(data.response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoadingStarredFolders(false);
-  //   }
-  // };
-
   return (
     <FolderCRUDOperation.Provider
       value={{

@@ -78,6 +78,7 @@ export const DialogProvider = ({ children }) => {
 
   // view selected document
   const handleViewSelectedDocument = (data) => {
+    console.log(data);
     setOpenSelectedDocumentWrapper(!openSelectedDocumentWrapper);
     setSelectedDocumentId(data);
     setCurrentIndex(sharedData.indexOf(data)); // reset current data index

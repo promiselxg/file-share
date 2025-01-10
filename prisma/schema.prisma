@@ -21,14 +21,16 @@ model User {
 }
 
 model Document {
-  id        String    @id @default(cuid()) @map("_id")
-  title     String    @unique
-  folderId  String?
-  folder    Folder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  view      Int       @default(0)
-  userId    String
-  user      User      @relation("UserToDocument", fields: [userId], references: [id], onDelete: Cascade)
-  position  Int?
+  id          String    @id @default(cuid()) @map("_id")
+  title       String    
+  folderId    String?
+  folder      Folder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  view        Int       @default(0)
+  userId      String
+  imgUrl       String[]
+  imageId      String[]
+  user        User      @relation("UserToDocument", fields: [userId], references: [id], onDelete: Cascade)
+  position    Int?
   shareLink   String?
   mediaInfo Json?
   createdBy Json?

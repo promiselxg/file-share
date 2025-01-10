@@ -3,8 +3,10 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
+import { apiCall } from "@/utils/apiCall";
 import { uploadImagesToCloudinary } from "@/utils/uploadImageToCloudinary";
 import React, { createContext, useContext, useState } from "react";
+import { useDocument } from "./document.context";
 
 // Constants
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -19,6 +21,8 @@ export const ImageProvider = ({ children }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("pending");
+  const { setDocuments } = useDocument();
+
   // Handle Image Change
   const handleImageChange = (e, maxFiles) => {
     if (!e?.target?.files) return;
@@ -80,8 +84,9 @@ export const ImageProvider = ({ children }) => {
         apiKey
       );
       setUploadStatus("completed");
-      console.log(photos);
-      // add image details to DB
+      const response = await apiCall("post", `/api/image`, { photos });
+      const uploadedDocuments = response?.data || [];
+      setDocuments((prevDocuments) => [...uploadedDocuments, ...prevDocuments]);
     } catch (error) {
       console.log(error);
     } finally {

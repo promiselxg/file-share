@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useDuplicateItem = (initialItems) => {
   const [items, setItems] = useState(initialItems);
+
+  // Update items whenever initialItems changes
+  useEffect(() => {
+    setItems(initialItems);
+  }, [initialItems]);
 
   const duplicateItem = (id) => {
     setItems((prevItems) => {

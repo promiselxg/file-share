@@ -1,9 +1,8 @@
 "use client";
 
 import useCheckboxStates from "@/hooks/use-checkbox";
-import { toast } from "@/hooks/use-toast";
 import { apiCall } from "@/utils/apiCall";
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const DocumentCRUDOperation = createContext();
 
@@ -23,16 +22,17 @@ export const DocumentCRUDProvider = ({ children }) => {
     setLoading(true);
     try {
       const data = await apiCall("get", `/api/document`);
-      setDocuments(data.response);
+      setDocuments(data?.documents);
     } catch (error) {
-      toast({
-        title: "Failed to fetch starred folders",
-        variant: "destructive",
-      });
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchTopLevelDocuments();
+  }, []);
 
   return (
     <DocumentCRUDOperation.Provider
@@ -44,10 +44,12 @@ export const DocumentCRUDProvider = ({ children }) => {
         documents,
         resetCheckBox,
         handleCheckboxChange,
-        fetchTopLevelDocuments,
+        setDocuments,
       }}
     >
       {children}
     </DocumentCRUDOperation.Provider>
   );
 };
+
+export const useDocument = () => useContext(DocumentCRUDOperation);

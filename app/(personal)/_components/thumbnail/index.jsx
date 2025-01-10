@@ -7,7 +7,7 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { RiExternalLinkLine } from "react-icons/ri";
 
-import { FiEdit3, FiMoreHorizontal, FiVideo } from "react-icons/fi";
+import { FiEdit3, FiImage, FiMoreHorizontal, FiVideo } from "react-icons/fi";
 import { LinkWithIcon } from "../nav/sideBarNav";
 import { GrLink } from "react-icons/gr";
 
@@ -26,9 +26,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import useDuplicateItem from "@/hooks/use-duplicate";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
+import { formatDateWithoutTime } from "@/utils/getDateDifference";
+import { useDocument } from "@/context/document.context";
 
 const ThumbNail = ({ data }) => {
-  const { items, duplicateItem } = useDuplicateItem(data);
+  const { documents } = useDocument();
   const {
     openRenameDialog,
     openDialog,
@@ -36,8 +38,8 @@ const ThumbNail = ({ data }) => {
     handleViewSelectedDocument,
     openMoveFolderDialog,
   } = useDialog();
-
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
+  const { items, duplicateItem } = useDuplicateItem(documents);
 
   useEffect(() => {
     setSharedData(data);
@@ -46,6 +48,7 @@ const ThumbNail = ({ data }) => {
   const handleDuplicate = (id) => {
     duplicateItem(id);
   };
+
   return (
     <>
       {items?.map((item) => {
@@ -67,7 +70,7 @@ const ThumbNail = ({ data }) => {
                 }
               >
                 <Image
-                  src={item?.mediaInfo?.mediaUrl}
+                  src={item?.mediaInfo?.imgUrl}
                   width={500}
                   height={200}
                   alt={item.title}
@@ -146,9 +149,13 @@ const ThumbNail = ({ data }) => {
                   {item?.title}
                 </h1>
                 <div className="flex items-center gap-2 mt-1">
-                  <FiVideo size={14} />
+                  {item?.mediaInfo?.resource_type === "image" ? (
+                    <FiImage size={14} />
+                  ) : (
+                    <FiVideo size={14} />
+                  )}
                   <span className="text-[--gray] text-[12px]">
-                    {item?.createdAt}
+                    {formatDateWithoutTime(item?.createdAt)}
                   </span>
                 </div>
               </div>

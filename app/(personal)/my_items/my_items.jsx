@@ -14,12 +14,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useFolderCRUD } from "@/context/folder.context";
-import { imageVideo } from "../shared_with_me/data";
 import NewFolder from "../_components/new-item/new-folder";
 import { SkeletonCard } from "../_components/skeleton/skeleton";
+import { useDocument } from "@/context/document.context";
+import { useImageContext } from "@/context/imageUpload.context";
 
 const MyItems = () => {
   const { checkedCount, folder, loadTopLevelFolder } = useFolderCRUD();
+  const { loading, documents } = useDocument();
+
   return (
     <>
       <div className="w-full flex">
@@ -128,9 +131,18 @@ const MyItems = () => {
               <p className="text-[14px] text-[--gray] leading-[14px]">
                 Images &amp; Videos
               </p>
-              <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
-                <ThumbNail data={imageVideo} />
-              </div>
+              {loading ? (
+                <div className="grid w-full grid-cols-4 gap-5 relative">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+              ) : (
+                <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
+                  <ThumbNail data={documents} />
+                </div>
+              )}
             </div>
           </div>
         </div>
