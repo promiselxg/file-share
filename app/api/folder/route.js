@@ -2,6 +2,8 @@ import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
+const userId = "dyuosuryro";
+
 export const POST = async (req) => {
   try {
     const body = await req.json();
@@ -47,7 +49,6 @@ export const GET = async (req) => {
   const queryType = query.get("type");
   let response;
 
-  const userId = "user123";
   try {
     if (queryType === "withChildren") {
       response = await fetchFolderWithChildren(userId);
@@ -107,7 +108,7 @@ const fetchFolderWithChildren = async (userId) => {
       ],
     },
     include: {
-      children: true, // Includes immediate subfolders (1 level of nesting)
+      children: true,
     },
     orderBy: {
       createdAt: "desc",

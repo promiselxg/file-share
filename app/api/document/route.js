@@ -2,9 +2,11 @@ import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
+const userId = "dyuosuryro";
+//const userId = "user123";
 export const GET = async (req) => {
   try {
-    const documents = await fetchDocumentsWithoutFolderId();
+    const documents = await fetchDocumentsWithoutFolderId(userId);
     if (!documents) {
       return NextResponse.json(
         { message: "No documents found", count: 0, documents: [] },
@@ -53,11 +55,11 @@ export const PUT = async (req) => {
   }
 };
 
-const fetchDocumentsWithoutFolderId = async () => {
+const fetchDocumentsWithoutFolderId = async (userId) => {
   const documentsWithoutFolderId = await prisma.document.findMany({
     where: {
       AND: [
-        { userId: "dyuosuryro" },
+        { userId },
         {
           OR: [{ folderId: null }, { folderId: { isSet: false } }],
           OR: [{ trashed: null }, { trashed: { isSet: false } }],
@@ -77,23 +79,35 @@ const moveItemToTrash = async (documentId) => {
     return errorResponse("Invalid Request ID", 400);
   }
   const documentExit = await prisma.document.findUnique({
+    // where: {
+    //   id: documentId,
+    //   OR: [
+    //     {
+    //       trashed: null,
+    //     },
+    //     {
+    //       trashed: {
+    //         isSet: false,
+    //       },
+    //     },
+    //   ],
+    // },
     where: {
       id: documentId,
-      OR: [
-        {
-          trashed: null,
-        },
+      AND: [
         {
           trashed: {
             isSet: false,
           },
         },
+        {
+          userId,
+        },
       ],
     },
   });
-
   if (!documentExit) {
-    return errorResponse(
+    throw new Error(
       "The document you are trying to delete does not exist.",
       400
     );
