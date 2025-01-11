@@ -34,11 +34,12 @@ export const DialogProvider = ({ children }) => {
     useState(false);
 
   // Open Dialog
-  const openDialog = (dialogName, desc, title, btnText) => {
+  const openDialog = (dialogName, desc, title, btnText, id) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setAlertDescription(desc);
     setAlertTitle(title);
     setAlertBtnText(btnText);
+    setDataID(id);
   };
 
   // Rename folder/document
@@ -78,7 +79,6 @@ export const DialogProvider = ({ children }) => {
 
   // view selected document
   const handleViewSelectedDocument = (data) => {
-    console.log(data);
     setOpenSelectedDocumentWrapper(!openSelectedDocumentWrapper);
     setSelectedDocumentId(data);
     setCurrentIndex(sharedData.indexOf(data)); // reset current data index
@@ -139,12 +139,12 @@ export const DialogProvider = ({ children }) => {
         moveFolderId: moveFolderId.toString(),
         moveFolderDocumentType,
         shareType,
+        selectedActionData,
         openDialog,
         openRenameDialog,
         openMoveFolderDialog,
         openDownloadFolderDialog,
         openShareFolder,
-        selectedActionData,
         closeDialog,
         handleViewSelectedDocument,
         handleViewDocumentInFullScreen,

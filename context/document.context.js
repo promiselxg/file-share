@@ -9,6 +9,7 @@ const DocumentCRUDOperation = createContext();
 export const DocumentCRUDProvider = ({ children }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [deleteActionLoading, setDeleteActionLoading] = useState(false);
   const {
     checkedStates,
     checkedIds,
@@ -17,6 +18,17 @@ export const DocumentCRUDProvider = ({ children }) => {
     handleCheckboxChange,
   } = useCheckboxStates();
 
+  // Document CRUD
+  const handleDeleteDocument = async (id) => {
+    try {
+      setDeleteActionLoading(true);
+      console.log(id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDeleteActionLoading(false);
+    }
+  };
   // Fetch Functions
   const fetchTopLevelDocuments = async () => {
     setLoading(true);
@@ -41,9 +53,11 @@ export const DocumentCRUDProvider = ({ children }) => {
         checkedIds,
         checkedCount,
         loading,
+        deleteActionLoading,
         documents,
         resetCheckBox,
         handleCheckboxChange,
+        handleDeleteDocument,
         setDocuments,
       }}
     >

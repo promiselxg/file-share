@@ -37,12 +37,12 @@ const ViewSelectedDocumentFullScreen = () => {
             <div className="w-full mb-36">
               <Image
                 src={
-                  selectedDocumentId?.mediaUrl ??
-                  "https://res.cloudinary.com/promiselxg/image/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.jpg"
+                  selectedDocumentId?.mediaInfo?.imgUrl ??
+                  "https://res.cloudinary.com/promiselxg/image/upload/v1736593048/file-share/shape-11_gxoamk.png"
                 }
                 width={1200}
                 height={1000}
-                alt={selectedDocumentId?.mediaType || "selected title"}
+                alt={selectedDocumentId?.title || "selected title"}
                 className="object-cover h-full w-full"
               />
             </div>

@@ -223,8 +223,10 @@ const ThumbNail = ({ data }) => {
                       e.stopPropagation();
                       openDialog(
                         "alert",
+                        "",
                         "Are you sure you want to remove this item?",
-                        ""
+                        "Move to trash",
+                        item?.id
                       );
                     }}
                   />

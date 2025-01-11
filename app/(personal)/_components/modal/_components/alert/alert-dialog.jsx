@@ -11,6 +11,9 @@ import {
 import { IoAlertCircleOutline } from "react-icons/io5";
 
 import { cn } from "@/lib/utils";
+import { useDocument } from "@/context/document.context";
+import { useDialog } from "@/context/Dialog.context";
+import { Loader2 } from "lucide-react";
 
 const AlertModal = ({
   description,
@@ -21,6 +24,9 @@ const AlertModal = ({
   title,
   alertBtnText,
 }) => {
+  const { dataID } = useDialog();
+  const { deleteActionLoading, handleDeleteDocument } = useDocument();
+
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => open && openDialog}>
       <AlertDialogContent className={cn(``, className)}>
@@ -29,12 +35,12 @@ const AlertModal = ({
           <div>
             <div className="w-full flex  gap-2">
               <IoAlertCircleOutline
-                size={title ? 30 : 40}
+                size={title ? 25 : 40}
                 className={cn(`text-yellow-500 ${title === " " && "mt-2"}`)}
               />
               <div className="flex flex-col gap-y-3">
                 {title && (
-                  <span className="text-[16px] text-[--sidebar-link-color] font-[600]">
+                  <span className="text-[14px] text-[--sidebar-link-color] font-[600]">
                     {title}
                   </span>
                 )}
@@ -57,16 +63,26 @@ const AlertModal = ({
           <AlertDialogCancel
             onClick={() => closeDialog("alert")}
             className="bg-transparent text-[--sidebar-link-color] border border-[--folder-border-color] rounded-[10px] px-5 py-2 hover:bg-transparent hover:border-[--primary-btn] hover:text-[--primary-btn] link-transition"
+            disabled={deleteActionLoading}
           >
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => alert("Ok to Proceed")}
-            className="bg-transparent text-[--bg-red] border border-[--bg-red] rounded-[10px] px-5 py-2 hover:bg-transparent hover:border-[--bg-red-hover] hover:text-[--bg-red-hover] link-transition"
+            onClick={() => handleDeleteDocument(dataID)}
+            className="bg-transparent text-[--bg-red] border border-[--bg-red] rounded-[10px] px-5 py-2 hover:bg-transparent hover:border-[--bg-red-hover] hover:text-[--bg-red-hover] link-transition disabled:cursor-not-allowed"
+            disabled={deleteActionLoading}
           >
-            {title
-              ? "Move to Trash"
-              : `${alertBtnText ? alertBtnText : "Continue"}`}
+            {deleteActionLoading ? (
+              <div className="flex items-center gap-2">
+                <Loader2 className="animate-spin" /> please wait...
+              </div>
+            ) : title ? (
+              "Move to Trash"
+            ) : alertBtnText ? (
+              alertBtnText
+            ) : (
+              "Continue"
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -10,6 +10,7 @@ import { FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
 import ManageDocument from "./manageDocument/manageDocument";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CommentContainer from "./comment/comment-container";
+import { formatDateTime } from "@/utils/getDateDifference";
 
 const VideoPLayer = dynamic(() => import("../../../player/video-player"), {
   ssr: false,
@@ -33,6 +34,7 @@ const ViewSelectedDocument = () => {
   const handleTabChange = (value) => {
     setActiveTab(value);
   };
+
   return (
     <>
       <div
@@ -86,13 +88,10 @@ const ViewSelectedDocument = () => {
             <div className="w-full flex gap-3 ">
               <div className="w-[75%] ">
                 <div className="w-full flex rounded-[8px] h-[550px]  bg-[--header-bg] shadow-md">
-                  {selectedDocumentId?.mediaInfo?.mediaType === "image" ? (
+                  {selectedDocumentId?.mediaInfo?.resource_type === "image" ? (
                     <div className="w-full flex justify-center h-[550px] items-center p-[60px]">
                       <Image
-                        src={
-                          selectedDocumentId?.mediaInfo?.mediaUrl ??
-                          "https://res.cloudinary.com/promiselxg/image/upload/v1662427476/gallery/ckkepxrjszaaiketem6r.jpg"
-                        }
+                        src={selectedDocumentId?.mediaInfo?.imgUrl}
                         width={700}
                         height={500}
                         alt={selectedDocumentId?.title || "selected title"}
@@ -130,16 +129,13 @@ const ViewSelectedDocument = () => {
                   </h1>
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-2">
-                      <Avatar className="w-[30px] h-[30px] overflow-hidden cursor-pointer mt-1">
+                      <Avatar className="w-[30px] h-[30px] overflow-hidden cursor-pointer mt-1 text-[--primary-btn]">
                         <AvatarImage
-                          src={selectedDocumentId?.createdBy?.imageUrl}
+                          src={selectedDocumentId?.createdBy?.photoUrl}
                           alt={selectedDocumentId?.createdBy?.username}
                         />
                         <AvatarFallback className="uppercase">
-                          {truncateText(
-                            selectedDocumentId?.createdBy?.username,
-                            2
-                          )}
+                          {selectedDocumentId?.createdBy?.username.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <h1 className="text-[18px] mt-1">
@@ -149,7 +145,10 @@ const ViewSelectedDocument = () => {
                     <div className="text-sm flex gap-2">
                       <span>{selectedDocumentId?.view} views</span>
                       <span>.</span>
-                      <span>{selectedDocumentId?.createdAt}</span>
+                      <span>
+                        {selectedDocumentId &&
+                          formatDateTime(selectedDocumentId?.createdAt)}
+                      </span>
                     </div>
                   </div>
                 </div>

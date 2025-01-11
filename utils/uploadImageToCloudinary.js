@@ -1,5 +1,4 @@
 import axios from "axios";
-
 /**
  * Uploads an array of image files to Cloudinary.
  *

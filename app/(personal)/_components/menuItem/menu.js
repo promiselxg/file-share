@@ -69,7 +69,13 @@ export const ImageVideoMenuItem = ({
       color: "text-[--bg-red] hover:text-white",
       action: (e) => {
         e.stopPropagation();
-        openDialog("alert", "Are you sure you want to remove this item?", "");
+        openDialog(
+          "alert",
+          "",
+          "Are you sure you want to remove this item?",
+          "Move to trash",
+          id
+        );
       },
     },
   ];
