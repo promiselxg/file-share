@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 import { useDocument } from "@/context/document.context";
 import { useDialog } from "@/context/Dialog.context";
 import { Loader2 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 
 const AlertModal = ({
   description,
@@ -25,19 +24,9 @@ const AlertModal = ({
   title,
   alertBtnText,
 }) => {
-  const { dataID } = useDialog();
-  const {
-    documentActionErroMessage,
-    deleteActionLoading,
-    handleDeleteDocument,
-  } = useDocument();
+  const { deleteItemId, deleteItemType } = useDialog();
+  const { deleteActionLoading, handleDeleteDocument } = useDocument();
 
-  if (documentActionErroMessage) {
-    toast({
-      title: documentActionErroMessage,
-      className: "bg-[--bg-red] text-white border-none",
-    });
-  }
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => open && openDialog}>
       <AlertDialogContent className={cn(``, className)}>
@@ -79,7 +68,7 @@ const AlertModal = ({
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => handleDeleteDocument(dataID)}
+            onClick={() => handleDeleteDocument(deleteItemId, deleteItemType)}
             className="bg-transparent text-[--bg-red] border border-[--bg-red] rounded-[10px] px-5 py-2 hover:bg-transparent hover:border-[--bg-red-hover] hover:text-[--bg-red-hover] link-transition disabled:cursor-not-allowed"
             disabled={deleteActionLoading}
           >

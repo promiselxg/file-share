@@ -15,7 +15,7 @@ export const ImageVideoMenuItem = ({
   id,
   title,
   openRenameDialog,
-  openDialog,
+  openDeleteDialog,
   openMoveFolderDialog,
   handleCheckboxChange,
   handleDuplicate,
@@ -69,12 +69,13 @@ export const ImageVideoMenuItem = ({
       color: "text-[--bg-red] hover:text-white",
       action: (e) => {
         e.stopPropagation();
-        openDialog(
+        openDeleteDialog(
           "alert",
           "",
           "Are you sure you want to remove this item?",
           "Move to trash",
-          id
+          id,
+          "document"
         );
       },
     },
@@ -112,10 +113,10 @@ export const FolderMenuItem = ({
   openShareFolder,
   openMoveFolderDialog,
   openDownloadFolderDialog,
+  openDeleteDialog,
   handleCheckboxChange,
   handleAddToFavorite,
   favorite,
-  openDialog,
   selectedActionData,
 }) => {
   const menuItem = [
@@ -173,7 +174,14 @@ export const FolderMenuItem = ({
       color: "text-[--bg-red] hover:text-white",
       action: (e) => {
         e.stopPropagation();
-        openDialog("alert", "Are you sure you want to remove this item?", "");
+        openDeleteDialog(
+          "alert",
+          "Are you sure you want to remove this folder?",
+          "All items in this folder will be moved to the Trash.",
+          "Move to trash",
+          id,
+          "folder"
+        );
       },
     },
   ];

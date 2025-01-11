@@ -47,13 +47,14 @@ export const GET = async (req) => {
   const queryType = query.get("type");
   let response;
 
+  const userId = "user123";
   try {
     if (queryType === "withChildren") {
-      response = await fetchFolderWithChildren();
+      response = await fetchFolderWithChildren(userId);
     } else if (queryType === "favorite") {
-      response = await fetchFavoriteFolders();
+      response = await fetchFavoriteFolders(userId);
     } else {
-      response = await fetchParentFolders();
+      response = await fetchParentFolders(userId);
     }
 
     return NextResponse.json(
@@ -74,12 +75,16 @@ export const GET = async (req) => {
 
 export const PUT = async (req) => {
   const body = await req.json();
+  let data;
   try {
     if (!body.folderId) {
       return errorResponse("Folder ID is required");
     }
-
-    const data = await toggleFolderFavoriteStatus(body);
+    if (body.action === "trash") {
+      data = await moveFolderToTrash(body?.folderId);
+    } else {
+      data = await toggleFolderFavoriteStatus(body);
+    }
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
     console.log(error);
@@ -87,10 +92,20 @@ export const PUT = async (req) => {
   }
 };
 
-const fetchFolderWithChildren = async () => {
+const fetchFolderWithChildren = async (userId) => {
   // Fetch all folders (including those with parent-child relationships)
   const folders = await prisma.folder.findMany({
-    where: {},
+    //  filter => don't include delted folders (trash  = true)
+    where: {
+      userId,
+      OR: [
+        {
+          trashed: {
+            isSet: false,
+          },
+        },
+      ],
+    },
     include: {
       children: true, // Includes immediate subfolders (1 level of nesting)
     },
@@ -115,16 +130,19 @@ const fetchFolderWithChildren = async () => {
   return folderHierarchy;
 };
 
-const fetchParentFolders = async () => {
+const fetchParentFolders = async (userId) => {
   // Fetch only the parent folders (those with no parentId)
   const parentFolders = await prisma.folder.findMany({
     where: {
-      OR: [
-        {
-          parentId: null,
-        },
+      userId,
+      AND: [
         {
           parentId: {
+            isSet: false,
+          },
+        },
+        {
+          trashed: {
             isSet: false,
           },
         },
@@ -163,14 +181,16 @@ const toggleFolderFavoriteStatus = async (body) => {
   return toggleFavorite;
 };
 
-const fetchFavoriteFolders = async () => {
+const fetchFavoriteFolders = async (userId) => {
   const favoriteFolders = await prisma.folder.findMany({
     where: {
       favorite: true,
+      userId,
     },
     select: {
       id: true,
       name: true,
+      userId: true,
       favorite: true,
       updatedAt: true,
     },
@@ -180,4 +200,44 @@ const fetchFavoriteFolders = async () => {
   });
 
   return favoriteFolders;
+};
+
+const moveFolderToTrash = async (folderId) => {
+  if (!isIdValid(folderId)) {
+    return errorResponse("Invalid Request ID", 400);
+  }
+  const folderExist = await prisma.folder.findUnique({
+    where: {
+      id: folderId,
+      OR: [
+        {
+          trashed: null,
+        },
+        {
+          trashed: {
+            isSet: false,
+          },
+        },
+      ],
+    },
+  });
+
+  if (!folderExist) {
+    return errorResponse(
+      "The folder you are trying to delete does not exist.",
+      400
+    );
+  }
+  const moveToTrash = await prisma.folder.update({
+    where: { id: folderId },
+    data: {
+      trashed: true,
+    },
+  });
+
+  return moveToTrash;
+};
+
+const isIdValid = (id) => {
+  return typeof id === "string" && id.trim().length > 0;
 };

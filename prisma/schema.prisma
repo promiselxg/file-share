@@ -46,6 +46,7 @@ model Folder {
   favorite    Boolean      @default(false)
   position    Int?
   shareLink   String?
+  trashed     Boolean?
   user        User         @relation("UserToFolder", fields: [userId], references: [id], onDelete: Cascade)
   parentId    String?       
   parent      Folder?      @relation("ParentToFolder", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)

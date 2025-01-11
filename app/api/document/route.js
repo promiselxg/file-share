@@ -98,7 +98,6 @@ const moveItemToTrash = async (documentId) => {
       400
     );
   }
-
   const moveToTrash = await prisma.document.update({
     where: { id: documentId },
     data: {

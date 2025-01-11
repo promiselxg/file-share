@@ -277,6 +277,7 @@ export const FolderCRUDProvider = ({ children }) => {
         loadTopLevelFolder,
         renameFolderStatus,
         addFolder,
+        setFolder,
         resetCheckBox,
         handleCheckboxChange,
         handleAddToFavorite,

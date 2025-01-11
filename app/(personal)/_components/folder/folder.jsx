@@ -28,6 +28,7 @@ const Folder = ({ data }) => {
     openDownloadFolderDialog,
     openRenameDialog,
     openDialog,
+    openDeleteDialog,
     openMoveFolderDialog,
     openShareFolder,
     setClosePopUp,
@@ -106,6 +107,7 @@ const Folder = ({ data }) => {
                           openShareFolder={openShareFolder}
                           openMoveFolderDialog={openMoveFolderDialog}
                           openDownloadFolderDialog={openDownloadFolderDialog}
+                          openDeleteDialog={openDeleteDialog}
                           handleCheckboxChange={handleCheckboxChange}
                           favorite={folder.favorite}
                           selectedActionData={folder}
@@ -144,6 +146,7 @@ const Folder = ({ data }) => {
                   sharableLink={folder.shareLink}
                   openRenameDialog={openRenameDialog}
                   openShareFolder={openShareFolder}
+                  openDeleteDialog={openDeleteDialog}
                   selectedActionData={folder}
                   setClosePopUp={setClosePopUp}
                   openMoveFolderDialog={openMoveFolderDialog}

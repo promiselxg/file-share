@@ -22,6 +22,8 @@ export const DialogProvider = ({ children }) => {
   const [moveFolderId, setMoveFolderId] = useState("");
   const [fullScreenMode, setFullScreenMode] = useState(false);
   const [dataID, setDataID] = useState(null);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+  const [deleteItemType, setDeleteItemType] = useState("");
   const [closePopUp, setClosePopUp] = useState(false);
   const [moveFolderDocumentType, setMoveFolderDocumentType] =
     useState("folder");
@@ -34,12 +36,21 @@ export const DialogProvider = ({ children }) => {
     useState(false);
 
   // Open Dialog
-  const openDialog = (dialogName, desc, title, btnText, id) => {
+  const openDialog = (dialogName, desc, title, btnText) => {
     setDialogs((prev) => ({ ...prev, [dialogName]: true }));
     setAlertDescription(desc);
     setAlertTitle(title);
     setAlertBtnText(btnText);
-    setDataID(id);
+  };
+
+  // Delete Dialog
+  const openDeleteDialog = (dialogName, desc, title, btnText, id, type) => {
+    setDialogs((prev) => ({ ...prev, [dialogName]: true }));
+    setAlertDescription(desc);
+    setAlertTitle(title);
+    setAlertBtnText(btnText);
+    setDeleteItemId(id);
+    setDeleteItemType(type);
   };
 
   // Rename folder/document
@@ -140,12 +151,15 @@ export const DialogProvider = ({ children }) => {
         moveFolderDocumentType,
         shareType,
         selectedActionData,
+        deleteItemId,
+        deleteItemType,
         openDialog,
         openRenameDialog,
         openMoveFolderDialog,
         openDownloadFolderDialog,
         openShareFolder,
         closeDialog,
+        openDeleteDialog,
         handleViewSelectedDocument,
         handleViewDocumentInFullScreen,
         handleToggleComment,

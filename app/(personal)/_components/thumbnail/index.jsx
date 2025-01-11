@@ -34,10 +34,12 @@ const ThumbNail = ({ data }) => {
   const {
     openRenameDialog,
     openDialog,
+    openDeleteDialog,
     setSharedData,
     handleViewSelectedDocument,
     openMoveFolderDialog,
   } = useDialog();
+
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
   const { items, duplicateItem } = useDuplicateItem(documents);
 
@@ -63,7 +65,7 @@ const ThumbNail = ({ data }) => {
                     isChecked
                       ? "border border-[--primary-btn] checkedBoxShadow bg-[--sidebar-link-active-bg]"
                       : "border border-[--folder-border-color]"
-                  } w-full overflow-hidden h-[200px] rounded-[8px]  relative imgThubnail group cursor-pointer folder transition-all delay-200 duration-200 link-transition`
+                  } w-full overflow-hidden h-[180px] rounded-[8px]  relative imgThubnail group cursor-pointer folder transition-all delay-200 duration-200 link-transition`
                 )}
                 onClick={() =>
                   checkedCount < 1 && handleViewSelectedDocument(item)
@@ -79,7 +81,7 @@ const ThumbNail = ({ data }) => {
                       isChecked
                         ? "scale-75 object-cover"
                         : "scale-100 object-cover"
-                    } w-full h-[200px] transition-all delay-200 duration-200 link-transition`
+                    } w-full h-[180px] transition-all delay-200 duration-200 link-transition`
                   )}
                 />
                 {item?.mediaInfo?.mediaDuration && (
@@ -114,6 +116,7 @@ const ThumbNail = ({ data }) => {
                         <ImageVideoMenuItem
                           openDialog={openDialog}
                           openRenameDialog={openRenameDialog}
+                          openDeleteDialog={openDeleteDialog}
                           openMoveFolderDialog={openMoveFolderDialog}
                           handleCheckboxChange={handleCheckboxChange}
                           handleDuplicate={() => handleDuplicate(item?.id)}
@@ -221,12 +224,13 @@ const ThumbNail = ({ data }) => {
                     name="Remove"
                     onClick={(e) => {
                       e.stopPropagation();
-                      openDialog(
+                      openDeleteDialog(
                         "alert",
                         "",
                         "Are you sure you want to remove this item?",
                         "Move to trash",
-                        item?.id
+                        item?.id,
+                        "document"
                       );
                     }}
                   />

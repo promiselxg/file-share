@@ -3,8 +3,8 @@
 import React from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { FiPlus, FiTrash2 } from "react-icons/fi";
-import { FaCheckCircle } from "react-icons/fa";
+import { FiCheck, FiPlus, FiTrash2 } from "react-icons/fi";
+import { HiCheck } from "react-icons/hi";
 
 import { useImageContext } from "@/context/imageUpload.context";
 
@@ -50,15 +50,13 @@ const ImageCard = ({ image, type, onRemoveImage, index }) => {
           </div>
         </div>
       )}
-      {uploadStatus === "completed" && (
+      {uploadStatus === "completed" && !loading && (
         <div className="">
           <div className="absolute w-full top-0 bottom-0 bg-[rgba(0,0,0,0.5)]"></div>
-          <div className="absolute left-[35%] bottom-[35%] text-white cursor-pointer flex items-center gap-3 justify-center z-10">
-            <FaCheckCircle
-              size={30}
-              className="bg-[green] rounded-full"
-              color="white"
-            />
+          <div className="absolute left-[30%] bottom-[30%] text-white cursor-pointer flex items-center gap-3 justify-center z-10">
+            <div className="w-[40px] h-[40px] rounded-full bg-[#52c41a] flex items-center justify-center font-extrabold">
+              <HiCheck size={28} className="font-bold" />
+            </div>
           </div>
         </div>
       )}

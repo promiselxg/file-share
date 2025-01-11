@@ -14,7 +14,7 @@ const CustomAlertModal = () => {
   return (
     <>
       <AlertModal
-        className="md:w-[400px] bg-[--dialog-bg] border-[--dialog-bg] top-[20%]"
+        className="md:w-[400px] bg-[--dialog-bg] border-[--dialog-bg] top-[30%]"
         isOpen={dialogs.alert}
         openDialog={() => openDialog("alert")}
         closeDialog={() => closeDialog("alert")}
