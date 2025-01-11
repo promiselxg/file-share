@@ -34,7 +34,7 @@ model Document {
   shareLink   String?
   mediaInfo   Json?
   createdBy   Json?
-  trashed     Boolean   @default(false)
+  trashed     Boolean?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

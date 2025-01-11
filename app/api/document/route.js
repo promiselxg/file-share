@@ -1,5 +1,5 @@
 import prisma from "@/utils/db";
-import { createErrorResponse } from "@/utils/errorMessage";
+import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
@@ -28,6 +28,31 @@ export const GET = async (req) => {
   }
 };
 
+export const PUT = async (req) => {
+  const body = await req.json();
+  try {
+    if (!body.documentId) {
+      return errorResponse("Folder ID is required");
+    }
+    const response = await moveItemToTrash(body?.documentId);
+    return NextResponse.json(
+      {
+        status: "success",
+        message: "Items move to Trash successfully.",
+        response,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return createErrorResponse(
+      error.message || "Something went wrong!",
+      error,
+      400
+    );
+  }
+};
+
 const fetchDocumentsWithoutFolderId = async () => {
   const documentsWithoutFolderId = await prisma.document.findMany({
     where: {
@@ -35,6 +60,7 @@ const fetchDocumentsWithoutFolderId = async () => {
         { userId: "dyuosuryro" },
         {
           OR: [{ folderId: null }, { folderId: { isSet: false } }],
+          OR: [{ trashed: null }, { trashed: { isSet: false } }],
         },
       ],
     },
@@ -44,4 +70,45 @@ const fetchDocumentsWithoutFolderId = async () => {
   });
 
   return documentsWithoutFolderId;
+};
+
+const moveItemToTrash = async (documentId) => {
+  if (!isIdValid(documentId)) {
+    return errorResponse("Invalid Request ID", 400);
+  }
+  const documentExit = await prisma.document.findUnique({
+    where: {
+      id: documentId,
+      OR: [
+        {
+          trashed: null,
+        },
+        {
+          trashed: {
+            isSet: false,
+          },
+        },
+      ],
+    },
+  });
+
+  if (!documentExit) {
+    return errorResponse(
+      "The document you are trying to delete does not exist.",
+      400
+    );
+  }
+
+  const moveToTrash = await prisma.document.update({
+    where: { id: documentId },
+    data: {
+      trashed: true,
+    },
+  });
+
+  return moveToTrash;
+};
+
+const isIdValid = (id) => {
+  return typeof id === "string" && id.trim().length > 0;
 };
