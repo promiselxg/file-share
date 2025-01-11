@@ -5,8 +5,16 @@ import { NextResponse } from "next/server";
 const userId = "dyuosuryro";
 //const userId = "user123";
 export const GET = async (req) => {
+  const query = req.nextUrl.searchParams;
+  const queryType = query.get("type");
+  let documents;
+
   try {
-    const documents = await fetchDocumentsWithoutFolderId(userId);
+    if (queryType === "trash") {
+      documents = await fetchDocumentsInTrash(userId);
+    } else {
+      documents = await fetchDocumentsWithoutFolderId(userId);
+    }
     if (!documents) {
       return NextResponse.json(
         { message: "No documents found", count: 0, documents: [] },
@@ -120,6 +128,26 @@ const moveItemToTrash = async (documentId) => {
   });
 
   return moveToTrash;
+};
+
+const fetchDocumentsInTrash = async (userId) => {
+  const trashedDocuments = await prisma.document.findMany({
+    where: {
+      userId,
+      trashed: true,
+    },
+    select: {
+      id: true,
+      title: true,
+      updatedAt: true,
+      mediaInfo: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+
+  return trashedDocuments;
 };
 
 const isIdValid = (id) => {

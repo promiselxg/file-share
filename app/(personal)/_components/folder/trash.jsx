@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useFolderCRUD } from "@/context/folder.context";
 import { useDialog } from "@/context/Dialog.context";
+import { truncateText } from "@/utils/trucateText";
 
 const TrashFolder = ({ data }) => {
   const { checkedStates, handleCheckboxChange } = useFolderCRUD();
@@ -62,7 +63,7 @@ const TrashFolderItem = ({
           <Icon className="text-[20px]" />
         )}
         <span className="text-[12px] text-[--sidebar-link-color] font-[600]">
-          {folder.name}
+          {truncateText(folder.name)}
         </span>
       </div>
 
@@ -74,7 +75,7 @@ const TrashFolderItem = ({
             onCheckedChange={onCheckboxChange}
           />
           <span className="text-[12px] text-[--sidebar-link-color] font-[600]">
-            {folder.name}
+            {truncateText(folder.name, 18)}
           </span>
         </div>
 

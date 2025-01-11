@@ -2,8 +2,8 @@ import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
-const userId = "dyuosuryro";
-
+//const userId = "dyuosuryro";
+const userId = "user123";
 export const POST = async (req) => {
   try {
     const body = await req.json();
@@ -16,7 +16,7 @@ export const POST = async (req) => {
       createdFolder = await prisma.folder.create({
         data: {
           name,
-          userId: "user123", // Replace with actual userId
+          userId,
           parentId: parentId,
         },
       });
@@ -25,7 +25,7 @@ export const POST = async (req) => {
       createdFolder = await prisma.folder.create({
         data: {
           name,
-          userId: "user123", // Replace with actual userId
+          userId,
         },
       });
     }
@@ -54,6 +54,8 @@ export const GET = async (req) => {
       response = await fetchFolderWithChildren(userId);
     } else if (queryType === "favorite") {
       response = await fetchFavoriteFolders(userId);
+    } else if (queryType === "trash") {
+      response = await fetchTrashFolders(userId);
     } else {
       response = await fetchParentFolders(userId);
     }
@@ -237,6 +239,20 @@ const moveFolderToTrash = async (folderId) => {
   });
 
   return moveToTrash;
+};
+
+const fetchTrashFolders = async (userId) => {
+  const trashFolders = await prisma.folder.findMany({
+    where: {
+      userId,
+      trashed: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return trashFolders;
 };
 
 const isIdValid = (id) => {

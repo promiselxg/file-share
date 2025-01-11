@@ -13,6 +13,7 @@ import { GoTrash } from "react-icons/go";
 import { cn } from "@/lib/utils";
 import { useDialog } from "@/context/Dialog.context";
 import { FiVideo } from "react-icons/fi";
+import { formatDateWithoutTime } from "@/utils/getDateDifference";
 
 const ImageVideoDelete = ({ data }) => {
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
@@ -38,10 +39,10 @@ const ImageVideoDelete = ({ data }) => {
                 )}
               >
                 <Image
-                  src={item?.img}
+                  src={item?.mediaInfo?.imgUrl}
                   width={500}
                   height={200}
-                  alt="video thumbnail"
+                  alt={item?.title}
                   className={cn(
                     `${
                       isChecked
@@ -50,7 +51,7 @@ const ImageVideoDelete = ({ data }) => {
                     } w-full h-[200px] transition-all delay-200 duration-200 link-transition`
                   )}
                 />
-                {item?.type === "video" && (
+                {item?.mediaInfo?.resource_type === "video" && (
                   <div className="absolute bottom-5 right-2 bg-[rgba(0,0,0,.8)] text-white text-sm py-[2px] px-[8px] rounded-[5px] font-[600]">
                     {item.time}
                   </div>
@@ -118,7 +119,9 @@ const ImageVideoDelete = ({ data }) => {
               </h1>
               <div className="flex items-center gap-2 mt-1">
                 <FiVideo size={14} />
-                <span className="text-[--gray] text-[12px]">{item?.date}</span>
+                <span className="text-[--gray] text-[12px]">
+                  {formatDateWithoutTime(item?.updatedAt)}
+                </span>
               </div>
             </div>
           </div>

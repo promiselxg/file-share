@@ -17,7 +17,6 @@ import { useFolderCRUD } from "@/context/folder.context";
 import NewFolder from "../_components/new-item/new-folder";
 import { SkeletonCard } from "../_components/skeleton/skeleton";
 import { useDocument } from "@/context/document.context";
-import { useImageContext } from "@/context/imageUpload.context";
 
 const MyItems = () => {
   const { checkedCount, folder, loadTopLevelFolder } = useFolderCRUD();
