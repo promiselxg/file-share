@@ -14,10 +14,34 @@ import { cn } from "@/lib/utils";
 import { useDialog } from "@/context/Dialog.context";
 import { FiVideo } from "react-icons/fi";
 import { formatDateWithoutTime } from "@/utils/getDateDifference";
+import { apiCall } from "@/utils/apiCall";
+import { toast } from "@/hooks/use-toast";
 
-const ImageVideoDelete = ({ data }) => {
+const ImageVideoDelete = ({ data, setDocuments }) => {
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
   const { openDialog } = useDialog();
+
+  const handleRestore = async (documentId) => {
+    setDocuments((prevDocument) =>
+      prevDocument.filter((doc) => doc.id !== documentId)
+    );
+    toast({
+      title: "Item restored successfully",
+      className: "bg-[green] border-none text-white",
+    });
+    try {
+      await apiCall("put", `/api/document`, {
+        documentId,
+        action: "restore",
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrongx",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <>
       {data?.map((item) => {
@@ -82,6 +106,7 @@ const ImageVideoDelete = ({ data }) => {
                             <MdOutlineRestorePage
                               className=" cursor-pointer"
                               size={35}
+                              onClick={() => handleRestore(item?.id)}
                             />
                           </TooltipTrigger>
                           <TooltipContent className="bg-[--gray]">

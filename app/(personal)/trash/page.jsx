@@ -51,8 +51,7 @@ const TrashPage = () => {
     };
     fetchTrashDocuments();
   }, []);
-  console.log(documents);
-  console.log(loadingDocuments);
+
   return (
     <>
       <div className="w-full flex relative flex-col">
@@ -126,7 +125,10 @@ const TrashPage = () => {
                   </div>
                 ) : (
                   <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
-                    <ImageVideoDelete data={documents} />
+                    <ImageVideoDelete
+                      data={documents}
+                      setDocuments={setDocuments}
+                    />
                   </div>
                 )}
               </div>

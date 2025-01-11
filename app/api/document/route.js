@@ -40,15 +40,22 @@ export const GET = async (req) => {
 
 export const PUT = async (req) => {
   const body = await req.json();
+  let response;
   try {
     if (!body.documentId) {
-      return errorResponse("Folder ID is required");
+      throw new Error("Folder ID is required", 400);
     }
-    const response = await moveItemToTrash(body?.documentId);
+    if (body.action === "restore") {
+      response = await restoreDeletedDocument(body?.documentId);
+    } else {
+      response = await moveItemToTrash(body?.documentId);
+    }
     return NextResponse.json(
       {
         status: "success",
-        message: "Items move to Trash successfully.",
+        message: body?.action
+          ? "Item restored successfully"
+          : "Items move to Trash successfully.",
         response,
       },
       { status: 200 }
@@ -84,22 +91,9 @@ const fetchDocumentsWithoutFolderId = async (userId) => {
 
 const moveItemToTrash = async (documentId) => {
   if (!isIdValid(documentId)) {
-    return errorResponse("Invalid Request ID", 400);
+    throw new Error("Folder ID is required", 400);
   }
   const documentExit = await prisma.document.findUnique({
-    // where: {
-    //   id: documentId,
-    //   OR: [
-    //     {
-    //       trashed: null,
-    //     },
-    //     {
-    //       trashed: {
-    //         isSet: false,
-    //       },
-    //     },
-    //   ],
-    // },
     where: {
       id: documentId,
       AND: [
@@ -148,6 +142,30 @@ const fetchDocumentsInTrash = async (userId) => {
   });
 
   return trashedDocuments;
+};
+
+const restoreDeletedDocument = async (documentId) => {
+  if (!isIdValid(documentId)) {
+    throw new Error("Folder ID is required", 400);
+  }
+  const documentExit = await prisma.document.findUnique({
+    where: {
+      userId,
+      id: documentId,
+      trashed: true,
+    },
+  });
+  if (!documentExit) {
+    throw new Error("TheItem you are trying to restore does not exist.", 400);
+  }
+
+  const restoreDocument = await prisma.document.update({
+    where: { userId, id: documentId },
+    data: {
+      trashed: null,
+    },
+  });
+  restoreDocument;
 };
 
 const isIdValid = (id) => {
