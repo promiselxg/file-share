@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
@@ -12,44 +12,25 @@ import { useFolderCRUD } from "@/context/folder.context";
 import CustomAlertModal from "../_components/modal/alert-modal";
 import TrashCheckBoxControl from "../_components/trash";
 import TrashFolder from "../_components/folder/trash";
-import { apiCall } from "@/utils/apiCall";
 import { SkeletonCard } from "../_components/skeleton/skeleton";
 
 const TrashPage = () => {
-  const { checkedCount } = useFolderCRUD();
-  const [loadingFolders, setLoadingFolders] = useState(false);
-  const [loadingDocuments, setLoadingDocuments] = useState(false);
-  const [folders, setFolders] = useState([]);
-  const [documents, setDocuments] = useState([]);
+  const {
+    checkedCount,
+    setTrashedDocument,
+    trashedDocument,
+    trashedFolder,
+    loadingFolders,
+    loadingDocuments,
+    fetchTrashDocuments,
+    fetchTrashFolders,
+    fetchStarredFolders,
+  } = useFolderCRUD();
 
   useEffect(() => {
-    const fetchTrashFolders = async () => {
-      try {
-        setLoadingFolders(true);
-        const data = await apiCall("get", `/api/folder?type=trash`);
-        setFolders(data.response);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoadingFolders(false);
-      }
-    };
     fetchTrashFolders();
-  }, []);
-
-  useEffect(() => {
-    const fetchTrashDocuments = async () => {
-      try {
-        setLoadingDocuments(true);
-        const data = await apiCall("get", `/api/document?type=trash`);
-        setDocuments(data.documents);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoadingDocuments(false);
-      }
-    };
     fetchTrashDocuments();
+    fetchStarredFolders();
   }, []);
 
   return (
@@ -104,7 +85,7 @@ const TrashPage = () => {
                       Folders
                     </p>
                     <div className="grid w-full grid-cols-5 gap-5 relative">
-                      <TrashFolder data={folders} />
+                      <TrashFolder data={trashedFolder} />
                     </div>
                   </div>
                 )}
@@ -126,8 +107,8 @@ const TrashPage = () => {
                 ) : (
                   <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
                     <ImageVideoDelete
-                      data={documents}
-                      setDocuments={setDocuments}
+                      data={trashedDocument}
+                      setDocuments={setTrashedDocument}
                     />
                   </div>
                 )}

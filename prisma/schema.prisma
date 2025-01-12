@@ -41,7 +41,7 @@ model Document {
 
 model Folder {
   id          String       @id @default(cuid()) @map("_id")
-  name        String
+  name        String       @unique
   userId      String
   favorite    Boolean      @default(false)
   position    Int?

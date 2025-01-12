@@ -19,6 +19,10 @@ export const FolderCRUDProvider = ({ children }) => {
   const [link, setLink] = useState("");
   const [loading, setLoading] = useState(false);
   const [folder, setFolder] = useState([]);
+  const [trashedFolder, setTrashedFolder] = useState([]);
+  const [trashedDocument, setTrashedDocument] = useState([]);
+  const [loadingDocuments, setLoadingDocuments] = useState(false);
+  const [loadingFolders, setLoadingFolders] = useState(false);
   const { setShareLinkData, closeDialog } = useDialog();
 
   const {
@@ -72,6 +76,30 @@ export const FolderCRUDProvider = ({ children }) => {
       });
     } finally {
       setLoadingStarredFolders(false);
+    }
+  };
+
+  const fetchTrashFolders = async () => {
+    try {
+      setLoadingFolders(true);
+      const data = await apiCall("get", `/api/folder?type=trash`);
+      setTrashedFolder(data.response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingFolders(false);
+    }
+  };
+
+  const fetchTrashDocuments = async () => {
+    try {
+      setLoadingDocuments(true);
+      const data = await apiCall("get", `/api/document?type=trash`);
+      setTrashedDocument(data.documents);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingDocuments(false);
     }
   };
 
@@ -254,6 +282,49 @@ export const FolderCRUDProvider = ({ children }) => {
     }
   };
 
+  const handleRestoreTrashedFolder = async (folderId) => {
+    // Find the folder in trashed folders
+    const restoredFolder = trashedFolder.find(
+      (folder) => folder.id === folderId
+    );
+
+    setTrashedFolder((prevFolders) =>
+      prevFolders.filter((folder) => folder.id !== folderId)
+    );
+
+    if (restoredFolder?.favorite) {
+      setStarredFolders((prevStarredFolders) => [
+        ...prevStarredFolders,
+        restoredFolder,
+      ]);
+    }
+
+    showToast({
+      title: "Item restore successfully.",
+      className: "bg-[green] border-none text-white",
+    });
+    try {
+      await apiCall("put", `/api/folder`, {
+        folderId,
+        action: "restore",
+      });
+    } catch (error) {
+      // Revert changes if the API call fails
+      setTrashedFolder((prevFolders) => [...prevFolders, restoredFolder]);
+
+      if (restoredFolder?.favorite) {
+        setStarredFolders((prevStarredFolders) =>
+          prevStarredFolders.filter((folder) => folder.id !== folderId)
+        );
+      }
+      showToast({
+        title: "Something went wrong",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   /**
    * Add a new folder to the folder structure.
    * @param {Object} newFolder - The new folder object to add.
@@ -270,25 +341,34 @@ export const FolderCRUDProvider = ({ children }) => {
         starredFolders,
         folderStructure,
         folder,
+        trashedFolder,
+        trashedDocument,
         loadingStarredFolders,
         loading,
         loadTopLevelFolder,
+        loadingFolders,
+        loadingDocuments,
         renameFolderStatus,
         addFolder,
         setFolder,
+        setStarredFolders,
+        setTrashedDocument,
+        setTrashedFolder,
+        setLink,
         resetCheckBox,
+        removeItem,
         handleCheckboxChange,
         handleAddToFavorite,
         handleRenameFolder,
         handleGenerateShareLink,
         handleRevokeShareLink,
         handleMoveFolder,
-        setStarredFolders,
-        setLink,
-        removeItem,
+        handleRestoreTrashedFolder,
         fetchStarredFolders,
         fetchTopLevelFolders,
         fetchFolderStructure,
+        fetchTrashFolders,
+        fetchTrashDocuments,
       }}
     >
       {children}

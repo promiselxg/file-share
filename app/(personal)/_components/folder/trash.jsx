@@ -15,34 +15,11 @@ import { cn } from "@/lib/utils";
 import { useFolderCRUD } from "@/context/folder.context";
 import { useDialog } from "@/context/Dialog.context";
 import { truncateText } from "@/utils/trucateText";
-import { apiCall } from "@/utils/apiCall";
-import { toast } from "@/hooks/use-toast";
 
 const TrashFolder = ({ data }) => {
-  const { checkedStates, handleCheckboxChange, setFolder } = useFolderCRUD();
+  const { checkedStates, handleCheckboxChange, handleRestoreTrashedFolder } =
+    useFolderCRUD();
   const { openDialog } = useDialog();
-
-  const handleRestoreFolder = async (folderId) => {
-    setFolder((prevFolders) =>
-      prevFolders.filter((folder) => folder.id !== folderId)
-    );
-    toast({
-      title: "Item restored successfully",
-      className: "bg-[green] border-none text-white",
-    });
-    try {
-      await apiCall("put", `/api/folder`, {
-        documentId,
-        action: "restore",
-      });
-    } catch (error) {
-      toast({
-        title: "Something went wrong",
-        description: error?.response?.data?.message,
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <>
@@ -54,6 +31,7 @@ const TrashFolder = ({ data }) => {
           onCheckboxChange={(checked) =>
             handleCheckboxChange(folder.id, checked)
           }
+          handleRestoreTrashedFolder={handleRestoreTrashedFolder}
           openDialog={openDialog}
         />
       ))}
@@ -66,6 +44,7 @@ const TrashFolderItem = ({
   isChecked,
   onCheckboxChange,
   openDialog,
+  handleRestoreTrashedFolder,
 }) => {
   return (
     <div
@@ -104,14 +83,19 @@ const TrashFolderItem = ({
         </div>
 
         {!isChecked && (
-          <FolderActions folder={folder} openDialog={openDialog} />
+          <FolderActions
+            folder={folder}
+            id={folder.id}
+            openDialog={openDialog}
+            handleRestoreTrashedFolder={handleRestoreTrashedFolder}
+          />
         )}
       </div>
     </div>
   );
 };
 
-const FolderActions = ({ openDialog }) => (
+const FolderActions = ({ openDialog, handleRestoreTrashedFolder, id }) => (
   <div className="flex items-center gap-2 text-[--gray]">
     <TooltipProvider>
       <Tooltip>
@@ -119,7 +103,7 @@ const FolderActions = ({ openDialog }) => (
           <MdOutlineRestorePage
             className="cursor-pointer"
             size={20}
-            onClick={() => handleRestoreFolder()}
+            onClick={() => handleRestoreTrashedFolder(id)}
           />
         </TooltipTrigger>
         <TooltipContent className="bg-[--gray]">Restore</TooltipContent>

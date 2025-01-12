@@ -14,7 +14,7 @@ export const DocumentCRUDProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [deleteActionLoading, setDeleteActionLoading] = useState(false);
   const { closeDialog } = useDialog();
-  const { setFolder } = useFolderCRUD();
+  const { setFolder, setStarredFolders } = useFolderCRUD();
 
   const {
     checkedStates,
@@ -24,7 +24,7 @@ export const DocumentCRUDProvider = ({ children }) => {
     handleCheckboxChange,
   } = useCheckboxStates();
 
-  // Document CRUD
+  // Delete document or Folder
   const handleDeleteDocument = async (id, actionType) => {
     const isDocument = actionType === "document";
     moveToTrash(id, isDocument);
@@ -43,34 +43,29 @@ export const DocumentCRUDProvider = ({ children }) => {
     }
   };
 
+  // called by handleDeleteDocument function
   const moveToTrash = async (id, isDocument) => {
     try {
       setDeleteActionLoading(true);
+      // Determine endpoint and payload
       const endpoint = isDocument ? "/api/document" : "/api/folder";
       const payload = isDocument
         ? { documentId: id }
-        : { documentId: id, action: "trash" };
+        : { folderId: id, action: "trash" };
 
+      // API Call
       const data = await apiCall("put", endpoint, payload);
-
-      // Refresh the appropriate state
-      if (isDocument) {
-        setDocuments((prevDocuments) =>
-          prevDocuments.filter((doc) => doc.id !== id)
-        );
-      } else {
-        setFolder((prevFolders) =>
-          prevFolders.filter((folder) => folder.id !== id)
-        );
-      }
+      // Show success toast
       showToast({
         title: data.message || "Items moved to Trash successfully.",
-        description: "this is the description",
         className: "bg-[green] border-none text-white",
       });
-
+      // Update state based on item type
+      updateStateAfterTrash(id, isDocument);
+      // Close dialog
       closeDialog("alert");
     } catch (error) {
+      // Show error toast
       showToast({
         title: "Something went wrong",
         description: error?.response?.data?.message,
@@ -78,6 +73,24 @@ export const DocumentCRUDProvider = ({ children }) => {
       });
     } finally {
       setDeleteActionLoading(false);
+    }
+  };
+
+  // Helper function to update state
+  const updateStateAfterTrash = (id, isDocument) => {
+    if (isDocument) {
+      // Remove document from state
+      setDocuments((prevDocuments) =>
+        prevDocuments.filter((doc) => doc.id !== id)
+      );
+    } else {
+      // Remove folder and starred folder from state
+      setFolder((prevFolders) =>
+        prevFolders.filter((folder) => folder.id !== id)
+      );
+      setStarredFolders((prev) =>
+        prev.filter((favorite) => favorite.id !== id)
+      );
     }
   };
 

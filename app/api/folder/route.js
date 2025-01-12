@@ -81,10 +81,12 @@ export const PUT = async (req) => {
   let data;
   try {
     if (!body.folderId) {
-      return errorResponse("Folder ID is required");
+      throw new Error("Folder ID is required", 400);
     }
     if (body.action === "trash") {
       data = await moveFolderToTrash(body?.folderId);
+    } else if (body.action === "restore") {
+      data = await restoreFolderFromTrash(body.folderId);
     } else {
       data = await toggleFolderFavoriteStatus(body);
     }
@@ -138,17 +140,10 @@ const fetchParentFolders = async (userId) => {
   const parentFolders = await prisma.folder.findMany({
     where: {
       userId,
-      AND: [
-        {
-          parentId: {
-            isSet: false,
-          },
-        },
-        {
-          trashed: {
-            isSet: false,
-          },
-        },
+      parentId: { isSet: false }, // Parent folder is empty
+      OR: [
+        { trashed: { isSet: false } }, // Trashed is unset
+        { trashed: null }, // Or trashed is null
       ],
     },
     orderBy: {
@@ -189,6 +184,7 @@ const fetchFavoriteFolders = async (userId) => {
     where: {
       favorite: true,
       userId,
+      trashed: null,
     },
     select: {
       id: true,
@@ -207,7 +203,7 @@ const fetchFavoriteFolders = async (userId) => {
 
 const moveFolderToTrash = async (folderId) => {
   if (!isIdValid(folderId)) {
-    return errorResponse("Invalid Request ID", 400);
+    throw new Error("Invalid request", 400);
   }
   const folderExist = await prisma.folder.findUnique({
     where: {
@@ -226,10 +222,7 @@ const moveFolderToTrash = async (folderId) => {
   });
 
   if (!folderExist) {
-    return errorResponse(
-      "The folder you are trying to delete does not exist.",
-      400
-    );
+    throw new Error("The folder you are trying to delete does not exist.", 400);
   }
   const moveToTrash = await prisma.folder.update({
     where: { id: folderId },
@@ -239,6 +232,33 @@ const moveFolderToTrash = async (folderId) => {
   });
 
   return moveToTrash;
+};
+
+const restoreFolderFromTrash = async (folderId) => {
+  if (!isIdValid(folderId)) {
+    throw new Error("Folder ID is required", 400);
+  }
+  const isFound = await prisma.folder.findUnique({
+    where: {
+      userId,
+      id: folderId,
+      trashed: true,
+    },
+  });
+  if (!isFound) {
+    throw new Error(
+      "The folder you are trying to restore does not exist.",
+      400
+    );
+  }
+
+  const restoreFolder = await prisma.folder.update({
+    where: { userId, id: folderId },
+    data: {
+      trashed: null,
+    },
+  });
+  restoreFolder;
 };
 
 const fetchTrashFolders = async (userId) => {

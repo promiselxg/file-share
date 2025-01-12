@@ -158,7 +158,7 @@ const restoreDeletedDocument = async (documentId) => {
     },
   });
   if (!documentExit) {
-    throw new Error("TheItem you are trying to restore does not exist.", 400);
+    throw new Error("The Item you are trying to restore does not exist.", 400);
   }
 
   const restoreDocument = await prisma.document.update({
