@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Modals from "../_components/modal/modal";
 import TrashCheckBoxControl from "../_components/trash";
 import ThumbNail from "../_components/thumbnail";
@@ -19,8 +19,22 @@ import { SkeletonCard } from "../_components/skeleton/skeleton";
 import { useDocument } from "@/context/document.context";
 
 const MyItems = () => {
-  const { checkedCount, folder, loadTopLevelFolder } = useFolderCRUD();
-  const { loading, documents } = useDocument();
+  const {
+    checkedCount,
+    folder,
+    loadTopLevelFolder,
+    fetchStarredFolders,
+    fetchTopLevelFolders,
+    fetchFolderStructure,
+  } = useFolderCRUD();
+  const { loading, documents, fetchTopLevelDocuments } = useDocument();
+
+  useEffect(() => {
+    fetchStarredFolders();
+    fetchTopLevelFolders();
+    fetchFolderStructure();
+    fetchTopLevelDocuments();
+  }, []);
 
   return (
     <>

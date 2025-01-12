@@ -1,12 +1,12 @@
 "use client";
 
 import useCheckboxStates from "@/hooks/use-checkbox";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useDialog } from "./Dialog.context";
-import { toast } from "@/hooks/use-toast";
 import { copyToClipboard } from "@/utils/copyText";
 import host from "@/utils/host";
 import { apiCall } from "@/utils/apiCall";
+import { showToast } from "@/utils/showToast";
 
 const FolderCRUDOperation = createContext();
 
@@ -36,7 +36,7 @@ export const FolderCRUDProvider = ({ children }) => {
       const data = await apiCall("get", `/api/folder?type=favorite`);
       setStarredFolders(data.response);
     } catch (error) {
-      toast({
+      showToast({
         title: "Failed to fetch starred folders",
         variant: "destructive",
       });
@@ -51,7 +51,7 @@ export const FolderCRUDProvider = ({ children }) => {
       const data = await apiCall("get", `/api/folder`);
       setFolder(data.response);
     } catch (error) {
-      toast({
+      showToast({
         title: "Failed to fetch top-level folders",
         variant: "destructive",
       });
@@ -66,7 +66,7 @@ export const FolderCRUDProvider = ({ children }) => {
       const data = await apiCall("get", `/api/folder?type=withChildren`);
       setFolderStructure(data.response);
     } catch (error) {
-      toast({
+      showToast({
         title: "Failed to fetch folder structure",
         variant: "destructive",
       });
@@ -87,7 +87,7 @@ export const FolderCRUDProvider = ({ children }) => {
       });
       updateFolderFavoriteStatus(folderId, data?.data?.favorite);
     } catch (error) {
-      toast({
+      showToast({
         title: "Failed to update favorite status",
         variant: "destructive",
       });
@@ -117,8 +117,12 @@ export const FolderCRUDProvider = ({ children }) => {
         );
         // close dialog
         closeDialog("rename");
+        showToast({
+          title: "Folder rename successfully.",
+          className: "bg-[green] border-none text-white",
+        });
       } else {
-        toast({
+        showToast({
           title:
             data?.message ||
             error?.response?.data?.message ||
@@ -127,7 +131,7 @@ export const FolderCRUDProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      toast({
+      showToast({
         title: error?.response?.data?.message || "Failed to rename folder",
         variant: "destructive",
       });
@@ -144,7 +148,7 @@ export const FolderCRUDProvider = ({ children }) => {
       if (updatedArray.length < 1) closeDialog("editStarredFolders");
       setStarredFolders(updatedArray);
     } catch (error) {
-      toast({ title: "Failed to remove item", variant: "destructive" });
+      showToast({ title: "Failed to remove item", variant: "destructive" });
     }
   };
 
@@ -174,7 +178,7 @@ export const FolderCRUDProvider = ({ children }) => {
             folder.id === id ? { ...folder, shareLink: data?.data } : folder
           )
         );
-        toast({
+        showToast({
           title: "Shareable link copied to clipboard.",
           className: "bg-[green] border-none text-white",
         });
@@ -234,7 +238,7 @@ export const FolderCRUDProvider = ({ children }) => {
     };
     setFolder((prev) => moveAndRemoveFolder(prev));
 
-    toast({
+    showToast({
       title: "Folders moved successfully.",
       className: "bg-[--body-bg] text-[--gray] DialogBoxShadow border-none",
     });
@@ -255,12 +259,6 @@ export const FolderCRUDProvider = ({ children }) => {
    * @param {Object} newFolder - The new folder object to add.
    * @param {string} [parentId] - The ID of the folder to add a subfolder to (optional).
    */
-
-  useEffect(() => {
-    fetchStarredFolders();
-    fetchTopLevelFolders();
-    fetchFolderStructure();
-  }, []);
 
   return (
     <FolderCRUDOperation.Provider
@@ -288,6 +286,9 @@ export const FolderCRUDProvider = ({ children }) => {
         setStarredFolders,
         setLink,
         removeItem,
+        fetchStarredFolders,
+        fetchTopLevelFolders,
+        fetchFolderStructure,
       }}
     >
       {children}

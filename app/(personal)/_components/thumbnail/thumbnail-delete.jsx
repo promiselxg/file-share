@@ -21,7 +21,7 @@ const ImageVideoDelete = ({ data, setDocuments }) => {
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
   const { openDialog } = useDialog();
 
-  const handleRestore = async (documentId) => {
+  const handleRestoreDocument = async (documentId) => {
     setDocuments((prevDocument) =>
       prevDocument.filter((doc) => doc.id !== documentId)
     );
@@ -36,7 +36,7 @@ const ImageVideoDelete = ({ data, setDocuments }) => {
       });
     } catch (error) {
       toast({
-        title: "Something went wrongx",
+        title: "Something went wrong",
         description: error?.response?.data?.message,
         variant: "destructive",
       });
@@ -106,7 +106,7 @@ const ImageVideoDelete = ({ data, setDocuments }) => {
                             <MdOutlineRestorePage
                               className=" cursor-pointer"
                               size={35}
-                              onClick={() => handleRestore(item?.id)}
+                              onClick={() => handleRestoreDocument(item?.id)}
                             />
                           </TooltipTrigger>
                           <TooltipContent className="bg-[--gray]">

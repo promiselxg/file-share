@@ -15,10 +15,34 @@ import { cn } from "@/lib/utils";
 import { useFolderCRUD } from "@/context/folder.context";
 import { useDialog } from "@/context/Dialog.context";
 import { truncateText } from "@/utils/trucateText";
+import { apiCall } from "@/utils/apiCall";
+import { toast } from "@/hooks/use-toast";
 
 const TrashFolder = ({ data }) => {
-  const { checkedStates, handleCheckboxChange } = useFolderCRUD();
+  const { checkedStates, handleCheckboxChange, setFolder } = useFolderCRUD();
   const { openDialog } = useDialog();
+
+  const handleRestoreFolder = async (folderId) => {
+    setFolder((prevFolders) =>
+      prevFolders.filter((folder) => folder.id !== folderId)
+    );
+    toast({
+      title: "Item restored successfully",
+      className: "bg-[green] border-none text-white",
+    });
+    try {
+      await apiCall("put", `/api/folder`, {
+        documentId,
+        action: "restore",
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <>
@@ -92,7 +116,11 @@ const FolderActions = ({ openDialog }) => (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <MdOutlineRestorePage className="cursor-pointer" size={20} />
+          <MdOutlineRestorePage
+            className="cursor-pointer"
+            size={20}
+            onClick={() => handleRestoreFolder()}
+          />
         </TooltipTrigger>
         <TooltipContent className="bg-[--gray]">Restore</TooltipContent>
       </Tooltip>

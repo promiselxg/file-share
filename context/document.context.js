@@ -1,11 +1,11 @@
 "use client";
 
 import useCheckboxStates from "@/hooks/use-checkbox";
-import { toast } from "@/hooks/use-toast";
 import { apiCall } from "@/utils/apiCall";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useDialog } from "./Dialog.context";
 import { useFolderCRUD } from "./folder.context";
+import { showToast } from "@/utils/showToast";
 
 const DocumentCRUDOperation = createContext();
 
@@ -63,16 +63,16 @@ export const DocumentCRUDProvider = ({ children }) => {
           prevFolders.filter((folder) => folder.id !== id)
         );
       }
-
-      toast({
+      showToast({
         title: data.message || "Items moved to Trash successfully.",
+        description: "this is the description",
         className: "bg-[green] border-none text-white",
       });
+
       closeDialog("alert");
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Something went wrongx",
+      showToast({
+        title: "Something went wrong",
         description: error?.response?.data?.message,
         variant: "destructive",
       });
@@ -80,10 +80,6 @@ export const DocumentCRUDProvider = ({ children }) => {
       setDeleteActionLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchTopLevelDocuments();
-  }, []);
 
   return (
     <DocumentCRUDOperation.Provider
@@ -97,6 +93,7 @@ export const DocumentCRUDProvider = ({ children }) => {
         resetCheckBox,
         handleCheckboxChange,
         handleDeleteDocument,
+        fetchTopLevelDocuments,
         setDocuments,
       }}
     >

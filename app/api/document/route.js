@@ -93,22 +93,24 @@ const moveItemToTrash = async (documentId) => {
   if (!isIdValid(documentId)) {
     throw new Error("Folder ID is required", 400);
   }
-  const documentExit = await prisma.document.findUnique({
+  const isFound = await prisma.document.findUnique({
     where: {
       id: documentId,
-      AND: [
+      userId,
+      OR: [
         {
           trashed: {
             isSet: false,
           },
         },
         {
-          userId,
+          trashed: null,
         },
       ],
     },
   });
-  if (!documentExit) {
+
+  if (!isFound) {
     throw new Error(
       "The document you are trying to delete does not exist.",
       400
