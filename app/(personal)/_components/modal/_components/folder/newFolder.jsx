@@ -2,13 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDialog } from "@/context/Dialog.context";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { useFolderCRUD } from "@/context/folder.context";
+import { showToast } from "@/utils/showToast";
 
 const FormSchema = z.object({
   folder_name: z.string().min(2, {
@@ -37,13 +38,20 @@ const NewFolder = () => {
     };
 
     try {
-      const response = await axios.post(`/api/folder`, newFolder);
-      if (response) {
+      const data = await axios.post(`/api/folder`, newFolder);
+      if (data?.data?.status === "success") {
         addFolder(newFolder);
         closeDialog("newFolder");
       }
     } catch (error) {
       console.error(error);
+      showToast({
+        description:
+          error?.response?.data?.message ||
+          error?.message ||
+          "something went wrong",
+        variant: "destructive",
+      });
     }
   };
 

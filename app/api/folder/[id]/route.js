@@ -2,8 +2,11 @@ import prisma from "@/utils/db";
 import {
   createErrorResponse,
   createSuccessResponse,
+  errorResponse,
+  successResponse,
 } from "@/utils/errorMessage";
 import { generateRandomString } from "@/utils/randomStringGenerator";
+import { Children } from "react";
 
 export const PUT = async (req) => {
   try {
@@ -44,6 +47,33 @@ export const GET = async (req, { params }) => {
   } catch (error) {
     console.error("Error processing GET request:", error);
     return createErrorResponse(error.message, error, 400);
+  }
+};
+
+export const DELETE = async (req, { params }) => {
+  if (!isIdValid(params?.id)) {
+    return errorResponse("Invalid Request ID", 400);
+  }
+  try {
+    const folder = await prisma.folder.findUnique({
+      where: { id: params.id },
+    });
+    if (!folder) {
+      throw new Error("Folder ID not found", 400);
+    }
+    // Delete the document
+    if (
+      await prisma.folder.delete({
+        where: { id: params.id },
+      })
+    ) {
+      return successResponse("folder deleted successfully", 200);
+    }
+  } catch (error) {
+    return errorResponse(
+      "An error occurred while trying to delete the item. Please try again later.",
+      500
+    );
   }
 };
 
@@ -108,6 +138,11 @@ const handleGenerateShareableLink = async (id, doctype) => {
 const handleFetchFolderDetails = async (id) => {
   const response = await prisma.folder.findUnique({
     where: { id },
+    include: {
+      documents: true,
+      children: true,
+      parent: true,
+    },
   });
   return response;
 };
@@ -127,4 +162,8 @@ const handleRevokeShareableLink = async (id, doctype) => {
   });
 
   return updatedFolder;
+};
+
+const isIdValid = (id) => {
+  return typeof id === "string" && id.trim().length > 0;
 };

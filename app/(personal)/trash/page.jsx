@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useEffect } from "react";
@@ -12,7 +13,11 @@ import { useFolderCRUD } from "@/context/folder.context";
 import CustomAlertModal from "../_components/modal/alert-modal";
 import TrashCheckBoxControl from "../_components/trash";
 import TrashFolder from "../_components/folder/trash";
-import { SkeletonCard } from "../_components/skeleton/skeleton";
+import {
+  SkeletonCard,
+  SkeletonDocument,
+} from "../_components/skeleton/skeleton";
+import EmptyCard from "../_components/empty/empty";
 
 const TrashPage = () => {
   const {
@@ -81,9 +86,11 @@ const TrashPage = () => {
                   </div>
                 ) : (
                   <div className="flex w-full p-3 flex-col gap-y-2">
-                    <p className="text-[14px] text-[--gray] leading-[14px]">
-                      Folders
-                    </p>
+                    {trashedFolder.length > 0 && (
+                      <p className="text-[14px] text-[--gray] leading-[14px]">
+                        Folders
+                      </p>
+                    )}
                     <div className="grid w-full grid-cols-5 gap-5 relative">
                       <TrashFolder data={trashedFolder} />
                     </div>
@@ -92,27 +99,28 @@ const TrashPage = () => {
               </div>
             </div>
             <div className="flex flex-col mt-8">
-              <div className="flex w-full p-3 flex-col gap-y-2">
-                <p className="text-[14px] text-[--gray] leading-[14px]">
-                  Images &amp; Videos
-                </p>
-
-                {loadingDocuments ? (
-                  <div className="grid w-full grid-cols-4 gap-5 relative">
-                    <SkeletonCard />
-                    <SkeletonCard />
-                    <SkeletonCard />
-                    <SkeletonCard />
-                  </div>
-                ) : (
+              {loadingDocuments ? (
+                <div className="grid w-full grid-cols-4 gap-5 relative">
+                  <SkeletonDocument />
+                  <SkeletonDocument />
+                  <SkeletonDocument />
+                  <SkeletonDocument />
+                </div>
+              ) : (
+                <div className="flex w-full p-3 flex-col">
+                  {trashedDocument.length > 0 && (
+                    <p className="text-[14px] text-[--gray] leading-[14px]">
+                      Images &amp; Videos
+                    </p>
+                  )}
                   <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
                     <ImageVideoDelete
                       data={trashedDocument}
                       setDocuments={setTrashedDocument}
                     />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

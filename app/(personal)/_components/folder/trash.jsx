@@ -19,7 +19,7 @@ import { truncateText } from "@/utils/trucateText";
 const TrashFolder = ({ data }) => {
   const { checkedStates, handleCheckboxChange, handleRestoreTrashedFolder } =
     useFolderCRUD();
-  const { openDialog } = useDialog();
+  const { openDeleteDialog } = useDialog();
 
   return (
     <>
@@ -32,7 +32,7 @@ const TrashFolder = ({ data }) => {
             handleCheckboxChange(folder.id, checked)
           }
           handleRestoreTrashedFolder={handleRestoreTrashedFolder}
-          openDialog={openDialog}
+          openDeleteDialog={openDeleteDialog}
         />
       ))}
     </>
@@ -43,7 +43,7 @@ const TrashFolderItem = ({
   folder,
   isChecked,
   onCheckboxChange,
-  openDialog,
+  openDeleteDialog,
   handleRestoreTrashedFolder,
 }) => {
   return (
@@ -86,7 +86,7 @@ const TrashFolderItem = ({
           <FolderActions
             folder={folder}
             id={folder.id}
-            openDialog={openDialog}
+            openDeleteDialog={openDeleteDialog}
             handleRestoreTrashedFolder={handleRestoreTrashedFolder}
           />
         )}
@@ -95,7 +95,11 @@ const TrashFolderItem = ({
   );
 };
 
-const FolderActions = ({ openDialog, handleRestoreTrashedFolder, id }) => (
+const FolderActions = ({
+  openDeleteDialog,
+  handleRestoreTrashedFolder,
+  id,
+}) => (
   <div className="flex items-center gap-2 text-[--gray]">
     <TooltipProvider>
       <Tooltip>
@@ -117,9 +121,13 @@ const FolderActions = ({ openDialog, handleRestoreTrashedFolder, id }) => (
             className="cursor-pointer"
             size={20}
             onClick={() =>
-              openDialog(
+              openDeleteDialog(
                 "alert",
-                "Are you sure you want to permanently delete the selected item(s)?"
+                "Are you sure you want to permanently delete the selected item(s)?",
+                "",
+                "",
+                id,
+                "deleteFolder"
               )
             }
           />

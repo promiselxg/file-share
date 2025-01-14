@@ -15,17 +15,17 @@ import { useDialog } from "@/context/Dialog.context";
 import { FiVideo } from "react-icons/fi";
 import { formatDateWithoutTime } from "@/utils/getDateDifference";
 import { apiCall } from "@/utils/apiCall";
-import { toast } from "@/hooks/use-toast";
+import { showToast } from "@/utils/showToast";
 
 const ImageVideoDelete = ({ data, setDocuments }) => {
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
-  const { openDialog } = useDialog();
+  const { openDeleteDialog } = useDialog();
 
   const handleRestoreDocument = async (documentId) => {
     setDocuments((prevDocument) =>
       prevDocument.filter((doc) => doc.id !== documentId)
     );
-    toast({
+    showToast({
       title: "Item restored successfully",
       className: "bg-[green] border-none text-white",
     });
@@ -35,13 +35,14 @@ const ImageVideoDelete = ({ data, setDocuments }) => {
         action: "restore",
       });
     } catch (error) {
-      toast({
+      showToast({
         title: "Something went wrong",
         description: error?.response?.data?.message,
         variant: "destructive",
       });
     }
   };
+
   return (
     <>
       {data?.map((item) => {
@@ -121,9 +122,13 @@ const ImageVideoDelete = ({ data, setDocuments }) => {
                               className=" cursor-pointer"
                               size={35}
                               onClick={() =>
-                                openDialog(
+                                openDeleteDialog(
                                   "alert",
-                                  "Are you sure you want to permanently delete the selected item(s)?"
+                                  "Are you sure you want to permanently delete the selected item(s)?",
+                                  "",
+                                  "",
+                                  item?.id,
+                                  "deleteDocument"
                                 )
                               }
                             />

@@ -10,8 +10,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Icon } from "../icon/icon";
 import Link from "next/link";
+import { generateBreadcrumb } from "@/utils/generateBreadcrumbs";
 
-const FolderBreadCrumb = ({ className }) => {
+const FolderBreadCrumb = ({ folder, className, currentPath }) => {
+  const breadcrumbs = generateBreadcrumb(folder, currentPath);
   return (
     <>
       <Breadcrumb>
@@ -28,12 +30,32 @@ const FolderBreadCrumb = ({ className }) => {
             </Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage className="flex items-center gap-3">
-              <Icon className="text-[30px]" />
-              <span className="text-white text-[20px]">Folder 8</span>
-            </BreadcrumbPage>
-          </BreadcrumbItem>
+          {breadcrumbs?.map((link, index) => {
+            return (
+              <React.Fragment key={index}>
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="flex items-center gap-3">
+                    <Link
+                      href={`/folder/${link.id}`}
+                      className={`text-[20px] flex items-center gap-2 ${
+                        index === breadcrumbs.length - 1
+                          ? "text-white"
+                          : "text-[--gray]"
+                      }`}
+                    >
+                      {index === breadcrumbs.length - 1 && (
+                        <>
+                          <Icon className="text-[20px]" />
+                        </>
+                      )}
+                      {link.name}
+                    </Link>
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+                {index !== breadcrumbs.length - 1 && <BreadcrumbSeparator />}
+              </React.Fragment>
+            );
+          })}
         </BreadcrumbList>
       </Breadcrumb>
     </>

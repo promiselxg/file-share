@@ -2,36 +2,33 @@ import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
 
-//const userId = "dyuosuryro";
-const userId = "user123";
+const userId = "dyuosuryro";
+//const userId = "user123";
 export const POST = async (req) => {
   try {
     const body = await req.json();
     const { parentId, name } = body;
 
-    let createdFolder;
+    // Check if the folder name already exists
+    const folderExist = await prisma.folder.findFirst({
+      where: { name },
+    });
 
-    if (parentId) {
-      // Create subfolder if `parentId` is provided
-      createdFolder = await prisma.folder.create({
-        data: {
-          name,
-          userId,
-          parentId: parentId,
-        },
-      });
-    } else {
-      // Create a standalone folder
-      createdFolder = await prisma.folder.create({
-        data: {
-          name,
-          userId,
-        },
-      });
+    if (folderExist) {
+      throw new Error("Creating folder failed. Folder already exists.");
     }
+    // Create the folder if it doesn't exist
+    const createdFolder = await prisma.folder.create({
+      data: {
+        name,
+        userId,
+        parentId: parentId || null,
+      },
+    });
 
     return new NextResponse(
       JSON.stringify({
+        status: "success",
         message: parentId
           ? "Subfolder created successfully"
           : "Folder created successfully",
@@ -40,7 +37,12 @@ export const POST = async (req) => {
       { status: 200 }
     );
   } catch (error) {
-    return errorResponse("Something went wrong!", error);
+    console.log(error);
+    return createErrorResponse(
+      error.message || "Something went wrong!",
+      error,
+      400
+    );
   }
 };
 
@@ -140,7 +142,7 @@ const fetchParentFolders = async (userId) => {
   const parentFolders = await prisma.folder.findMany({
     where: {
       userId,
-      parentId: { isSet: false }, // Parent folder is empty
+      parentId: null, // Parent folder is empty
       OR: [
         { trashed: { isSet: false } }, // Trashed is unset
         { trashed: null }, // Or trashed is null

@@ -75,7 +75,7 @@ export const ImageVideoMenuItem = ({
           "Are you sure you want to remove this item?",
           "Move to trash",
           id,
-          "document"
+          "trashDocument"
         );
       },
     },
@@ -180,7 +180,7 @@ export const FolderMenuItem = ({
           "All items in this folder will be moved to the Trash.",
           "Move to trash",
           id,
-          "folder"
+          "trashFolder"
         );
       },
     },

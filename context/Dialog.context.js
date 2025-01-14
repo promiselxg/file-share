@@ -147,7 +147,7 @@ export const DialogProvider = ({ children }) => {
         dataID,
         closePopUp,
         selectedMoveFolderId,
-        moveFolderId: moveFolderId.toString(),
+        moveFolderId: moveFolderId?.toString(),
         moveFolderDocumentType,
         shareType,
         selectedActionData,

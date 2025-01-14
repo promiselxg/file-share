@@ -11,7 +11,7 @@ export const DELETE = async (req, { params }) => {
       where: { id: params.id },
     });
     if (!document) {
-      return errorResponse("Document not found", 404);
+      throw new Error("Document ID not found", 400);
     }
     // Attempt to remove the uploaded image
     const imageRemoved = await removeUploadedImage(

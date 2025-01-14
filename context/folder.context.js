@@ -1,7 +1,7 @@
 "use client";
 
 import useCheckboxStates from "@/hooks/use-checkbox";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { useDialog } from "./Dialog.context";
 import { copyToClipboard } from "@/utils/copyText";
 import host from "@/utils/host";
@@ -64,7 +64,7 @@ export const FolderCRUDProvider = ({ children }) => {
     }
   };
 
-  const fetchFolderStructure = async () => {
+  const fetchFolderStructure = useCallback(async () => {
     setLoadingStarredFolders(true);
     try {
       const data = await apiCall("get", `/api/folder?type=withChildren`);
@@ -77,21 +77,21 @@ export const FolderCRUDProvider = ({ children }) => {
     } finally {
       setLoadingStarredFolders(false);
     }
-  };
+  }, []);
 
-  const fetchTrashFolders = async () => {
+  const fetchTrashFolders = useCallback(async () => {
     try {
       setLoadingFolders(true);
       const data = await apiCall("get", `/api/folder?type=trash`);
       setTrashedFolder(data.response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoadingFolders(false);
     }
-  };
+  }, []);
 
-  const fetchTrashDocuments = async () => {
+  const fetchTrashDocuments = useCallback(async () => {
     try {
       setLoadingDocuments(true);
       const data = await apiCall("get", `/api/document?type=trash`);
@@ -101,7 +101,7 @@ export const FolderCRUDProvider = ({ children }) => {
     } finally {
       setLoadingDocuments(false);
     }
-  };
+  }, []);
 
   // CRUD Functions
   const handleAddToFavorite = async (folderId) => {

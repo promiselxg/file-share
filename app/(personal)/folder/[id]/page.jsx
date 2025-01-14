@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { useDialog } from "@/context/Dialog.context";
 import Link from "next/link";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   FiCheck,
   FiChevronDown,
@@ -28,21 +28,40 @@ import CustomAlertModal from "@/app/(personal)/_components/modal/alert-modal";
 import { RouteMenuItem } from "@/app/(personal)/_components/menuItem/menu";
 import TrashCheckBoxControl from "@/app/(personal)/_components/trash";
 import { useFolderCRUD } from "@/context/folder.context";
-import { imageVideo } from "../../shared_with_me/data";
-
-const folders = [
-  {
-    id: 1,
-    name: "Folder 1",
-    star: true,
-  },
-  { id: 2, name: "Folder 2" },
-  { id: 3, name: "Folder 3" },
-];
+import { apiCall } from "@/utils/apiCall";
+import {
+  SkeletonCard,
+  SkeletonDocument,
+} from "../../_components/skeleton/skeleton";
+import { Loader2 } from "lucide-react";
 
 const FolderPage = ({ params }) => {
   const { openMoveFolderDialog, openRenameDialog, openDialog } = useDialog();
+  const [folders, setFolders] = useState([]);
+  const [folderBreadCrumb, setFolderBreadCrumb] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [pageLoading, setPageLoading] = useState(false);
+
   const { checkedCount } = useFolderCRUD();
+
+  const fetchFolderInformation = useCallback(async () => {
+    try {
+      setPageLoading(true);
+      const response = await apiCall("get", `/api/folder/${params.id}`);
+      setFolderBreadCrumb(response?.data);
+      setFolders(response?.data?.children);
+      setDocuments(response?.data?.documents);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPageLoading(false);
+    }
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchFolderInformation();
+  }, [fetchFolderInformation]);
+
   return (
     <>
       <div className="w-full flex">
@@ -57,7 +76,15 @@ const FolderPage = ({ params }) => {
                         <FiChevronLeft size={10} />
                       </Button>
                     </Link>
-                    <FolderBreadCrumb className="text-white" />
+                    {pageLoading ? (
+                      <Loader2 className="animate-spin text-[--gray]" />
+                    ) : (
+                      <FolderBreadCrumb
+                        folder={folderBreadCrumb}
+                        currentPath={params.id}
+                        className="text-white"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -129,53 +156,73 @@ const FolderPage = ({ params }) => {
               </div>
             </div>
           </div>
-          {folders.length < 1 || imageVideo.length < 1 ? (
-            <>
-              <div className="w-full flex px-5 py-3">
-                <div className="container mx-auto bg-[--dialog-bg] min-h-[400px] rounded-[8px]">
-                  <div className="flex flex-col items-center justify-center h-full text-[--popover-text-color]">
-                    <TbError404 size={100} />
-                    <h1 className="text-[18px] text-white">No items</h1>
-                    <p>Your awesome visual repository is empty now.</p>
-                    <p className="text-sm">
-                      Let&apos;s &nbsp;
-                      <span
-                        className="text-[--primary-btn] cursor-pointer"
-                        onClick={() => openDialog("recordVideo")}
-                      >
-                        record a video
-                      </span>{" "}
-                      or{" "}
-                      <span className="text-[--primary-btn] cursor-pointer">
-                        capture a screenshot
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </>
+          {pageLoading ? (
+            <div className="grid w-full grid-cols-4 gap-5 relative mt-5">
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonDocument />
+              <SkeletonDocument />
+              <SkeletonDocument />
+              <SkeletonDocument />
+            </div>
           ) : (
             <>
-              <div className="flex flex-col">
-                <div className="container">
-                  <div className="flex w-full p-3 flex-col gap-y-2">
-                    <p className="text-[14px] text-[--gray] leading-[14px]">
-                      Folders
-                    </p>
-                    <div className="grid w-full grid-cols-4 gap-5 relative">
-                      <Folder data={folders} />
+              {folders?.length < 1 && documents?.length < 1 ? (
+                <div className="w-full flex px-5 py-3">
+                  <div className="container mx-auto bg-[--dialog-bg] min-h-[400px] rounded-[8px]">
+                    <div className="flex flex-col items-center justify-center h-full text-[--popover-text-color]">
+                      <TbError404 size={100} />
+                      <h1 className="text-[18px] text-white">No items</h1>
+                      <p>Your awesome visual repository is empty now.</p>
+                      <p className="text-sm">
+                        Let&apos;s&nbsp;
+                        <span
+                          className="text-[--primary-btn] cursor-pointer"
+                          onClick={() => openDialog("recordVideo")}
+                        >
+                          record a video
+                        </span>{" "}
+                        or{" "}
+                        <span className="text-[--primary-btn] cursor-pointer">
+                          capture a screenshot
+                        </span>
+                        .
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div className="flex w-full p-3 flex-col gap-y-2">
-                  <p className="text-[14px] text-[--gray] leading-[14px]">
-                    Images &amp; Videos
-                  </p>
-                  <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
-                    <ThumbNail data={imageVideo} />
+              ) : (
+                <div className="flex flex-col">
+                  <div className="container">
+                    <div className="flex w-full p-3 flex-col gap-y-2">
+                      {folders?.length > 0 && (
+                        <>
+                          <p className="text-[14px] text-[--gray] leading-[14px]">
+                            Folders
+                          </p>
+                          <div className="grid w-full grid-cols-4 gap-5 relative">
+                            <Folder data={folders} />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex w-full p-3 flex-col gap-y-2">
+                    {documents?.length > 0 && (
+                      <>
+                        <p className="text-[14px] text-[--gray] leading-[14px]">
+                          Images &amp; Videos
+                        </p>
+                        <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
+                          <ThumbNail data={documents} />
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
             </>
           )}
         </div>
