@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import FolderBreadCrumb from "@/app/(personal)/_components/breadcrumb/folder.breadcrumb";
 import Folder from "@/app/(personal)/_components/folder/folder";

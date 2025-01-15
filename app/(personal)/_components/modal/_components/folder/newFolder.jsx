@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { useFolderCRUD } from "@/context/folder.context";
 import { showToast } from "@/utils/showToast";
+import { usePathname } from "next/navigation";
 
 const FormSchema = z.object({
   folder_name: z.string().min(2, {
@@ -20,7 +21,15 @@ const FormSchema = z.object({
 const NewFolder = () => {
   const { closeDialog } = useDialog();
   const { addFolder } = useFolderCRUD();
+  const currentRoute = usePathname();
+  let parentId;
 
+  if (currentRoute.startsWith("/my_item")) {
+    parentId = null;
+  }
+  if (currentRoute.startsWith("/folder")) {
+    parentId = currentRoute.split("/folder/")[1];
+  }
   const {
     register,
     handleSubmit,
@@ -33,13 +42,12 @@ const NewFolder = () => {
     // Create Parent Folder
     const newFolder = {
       name: data.folder_name,
-      parentId: null,
+      parentId: parentId,
       children: [],
     };
 
     try {
       const response = await axios.post(`/api/folder`, newFolder);
-
       if (response?.data?.status === "success") {
         addFolder(response?.data?.folder);
         closeDialog("newFolder");
