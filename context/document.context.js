@@ -13,6 +13,7 @@ export const DocumentCRUDProvider = ({ children }) => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deleteActionLoading, setDeleteActionLoading] = useState(false);
+  const [moveActionLoading, setMoveActionLoading] = useState(false);
   const { closeDialog } = useDialog();
   const { setFolder, setStarredFolders, setTrashedFolder, setTrashedDocument } =
     useFolderCRUD();
@@ -45,6 +46,7 @@ export const DocumentCRUDProvider = ({ children }) => {
       deleteDocument: `/api/document/${id}`,
       trashFolder: "/api/folder",
       trashDocument: "/api/document",
+      emptyTrash: "/api/trash",
     };
 
     const payloads = {
@@ -52,6 +54,7 @@ export const DocumentCRUDProvider = ({ children }) => {
       deleteDocument: null,
       trashFolder: { folderId: id, action: "trash" },
       trashDocument: { documentId: id },
+      emptyTrash: null,
     };
 
     const methods = {
@@ -59,6 +62,7 @@ export const DocumentCRUDProvider = ({ children }) => {
       deleteDocument: "delete",
       trashFolder: "put",
       trashDocument: "put",
+      emptyTrash: "delete",
     };
 
     if (!apiEndpoints[actionType]) return;
@@ -72,6 +76,8 @@ export const DocumentCRUDProvider = ({ children }) => {
 
       if (actionType.startsWith("trash")) {
         await moveToTrash(id, endpoint, payload, method, actionType);
+      } else if (actionType.startsWith("empty")) {
+        await emptyTrash(endpoint, method);
       } else {
         await deleteItem(id, endpoint, method, actionType);
       }
@@ -112,6 +118,39 @@ export const DocumentCRUDProvider = ({ children }) => {
     }
   };
 
+  const handleMoveDocument = async (
+    documentToBeMoved,
+    documentToBeMovedId,
+    moveDocumentToFolderWithThisId
+  ) => {
+    try {
+      setMoveActionLoading(true);
+      const data = await apiCall("put", "/api/document", {
+        documentId: documentToBeMovedId,
+        newFolderId: moveDocumentToFolderWithThisId,
+        action: "moveDocument",
+      });
+      if (data.status === "success") {
+        showToast({
+          title: data.message,
+          className: "bg-[green] border-none text-white",
+        });
+        setDocuments((prevDocuments) =>
+          prevDocuments.filter((doc) => doc.id !== documentToBeMovedId)
+        );
+        closeDialog("moveFolder");
+      }
+    } catch (error) {
+      showToast({
+        title: "Something went wrong",
+        description: error?.response?.data?.message || "something went wrong",
+        variant: "destructive",
+      });
+    } finally {
+      setMoveActionLoading(false);
+    }
+  };
+
   // Utility: Delete Item
   const deleteItem = async (id, endpoint, method, actionType) => {
     try {
@@ -123,6 +162,31 @@ export const DocumentCRUDProvider = ({ children }) => {
       });
       updateStateAfterDelete(id, actionType);
       closeDialog("alert");
+    } catch (error) {
+      console.error("Error in deleteItem:", error);
+      // Show error toast
+      showToast({
+        title: "Something went wrong",
+        description: error?.response?.data?.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Utility: Empty Trash
+  const emptyTrash = async (endpoint, method) => {
+    try {
+      const response = await apiCall(method, endpoint);
+      // Show success toast
+      if (response.status === "success") {
+        showToast({
+          title: response.data,
+          className: "bg-[green] border-none text-white",
+        });
+        setFolder([]);
+        setDocuments([]);
+        closeDialog("alert");
+      }
     } catch (error) {
       console.error("Error in deleteItem:", error);
       // Show error toast
@@ -173,12 +237,14 @@ export const DocumentCRUDProvider = ({ children }) => {
         checkedCount,
         loading,
         deleteActionLoading,
+        moveActionLoading,
         documents,
         resetCheckBox,
         handleCheckboxChange,
         handleDeleteDocument,
         fetchTopLevelDocuments,
         setDocuments,
+        handleMoveDocument,
       }}
     >
       {children}

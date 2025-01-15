@@ -20,6 +20,7 @@ export const ImageVideoMenuItem = ({
   handleCheckboxChange,
   handleDuplicate,
   mediaType,
+  documentToMove,
 }) => {
   const menuItem = [
     {
@@ -42,7 +43,7 @@ export const ImageVideoMenuItem = ({
       icon: <MdDriveFileMoveOutline size={20} />,
       action: (e) => {
         e.stopPropagation();
-        openMoveFolderDialog("moveFolder", id, "image");
+        openMoveFolderDialog("moveFolder", id, "image", documentToMove);
       },
     },
     {

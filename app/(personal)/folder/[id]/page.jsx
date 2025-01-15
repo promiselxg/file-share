@@ -7,7 +7,7 @@ import NewItem from "@/app/(personal)/_components/new-item/newItem";
 import ThumbNail from "@/app/(personal)/_components/thumbnail";
 
 import { Button } from "@/components/ui/button";
-import { TbError404 } from "react-icons/tb";
+import { ImFilesEmpty } from "react-icons/im";
 
 import {
   Popover,
@@ -42,7 +42,7 @@ const FolderPage = ({ params }) => {
   const [documents, setDocuments] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
 
-  const { checkedCount } = useFolderCRUD();
+  const { checkedCount, fetchStarredFolders } = useFolderCRUD();
 
   const fetchFolderInformation = useCallback(async () => {
     try {
@@ -61,6 +61,10 @@ const FolderPage = ({ params }) => {
   useEffect(() => {
     fetchFolderInformation();
   }, [fetchFolderInformation]);
+
+  useEffect(() => {
+    fetchStarredFolders();
+  }, []);
 
   return (
     <>
@@ -173,7 +177,7 @@ const FolderPage = ({ params }) => {
                 <div className="w-full flex px-5 py-3">
                   <div className="container mx-auto bg-[--dialog-bg] min-h-[400px] rounded-[8px]">
                     <div className="flex flex-col items-center justify-center h-full text-[--popover-text-color]">
-                      <TbError404 size={100} />
+                      <ImFilesEmpty size={80} className="mb-5" />
                       <h1 className="text-[18px] text-white">No items</h1>
                       <p>Your awesome visual repository is empty now.</p>
                       <p className="text-sm">

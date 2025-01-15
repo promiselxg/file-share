@@ -38,9 +38,10 @@ const NewFolder = () => {
     };
 
     try {
-      const data = await axios.post(`/api/folder`, newFolder);
-      if (data?.data?.status === "success") {
-        addFolder(newFolder);
+      const response = await axios.post(`/api/folder`, newFolder);
+
+      if (response?.data?.status === "success") {
+        addFolder(response?.data?.folder);
         closeDialog("newFolder");
       }
     } catch (error) {

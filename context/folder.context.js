@@ -267,8 +267,8 @@ export const FolderCRUDProvider = ({ children }) => {
     setFolder((prev) => moveAndRemoveFolder(prev));
 
     showToast({
-      title: "Folders moved successfully.",
-      className: "bg-[--body-bg] text-[--gray] DialogBoxShadow border-none",
+      title: "Folder moved successfully.",
+      className: "bg-[green] text-[--gray] DialogBoxShadow border-none",
     });
     closeDialog("moveFolder");
 

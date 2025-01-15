@@ -7,7 +7,7 @@ export const POST = async (req) => {
   const { folderToMoveId: folderId, newFolderParentId } = body;
 
   if (!folderId || !newFolderParentId) {
-    return errorResponse("Both folderId and newFolderParentId are required");
+    throw new Error("Invalid request", 400);
   }
 
   try {
@@ -23,12 +23,12 @@ export const POST = async (req) => {
     });
 
     if (!folderToMove || !newParentFolder) {
-      return errorResponse("Folder to move or new parent folder not found");
+      throw new Error("Folder to move or new parent folder not found", 400);
     }
 
     // If the folder is already under the new parent, no need to update
     if (folderToMove.parentId === newFolderParentId) {
-      return errorResponse("Folder is already under the specified parent");
+      throw new Error("Folder is already under the specified parent", 400);
     }
 
     // Ensure folderToMove is removed from its current parent's children

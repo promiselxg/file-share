@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useDialog } from "@/context/Dialog.context";
 
@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/select";
 import { Icon } from "@/app/(personal)/_components/icon/icon";
 import { useFolderCRUD } from "@/context/folder.context";
+import { useDocument } from "@/context/document.context";
+import { SkeletonCard } from "@/app/(personal)/_components/skeleton/skeleton";
 
-function FolderSelector({ selectedActionData }) {
+function FolderSelector() {
   const {
     moveFolderDocumentType,
     selectedMoveFolderId,
@@ -27,8 +29,17 @@ function FolderSelector({ selectedActionData }) {
     setSelectedMoveFolderId,
     openDialog,
     closeDialog,
+    selectedActionData,
   } = useDialog();
-  const { folder, handleMoveFolder, folderStructure } = useFolderCRUD();
+
+  const {
+    folder,
+    handleMoveFolder,
+    folderStructure,
+    fetchFolderStructure,
+    loadingStarredFolders,
+  } = useFolderCRUD();
+  const { handleMoveDocument, moveActionLoading } = useDocument();
 
   // selectedMoveFolderId is the folder ID that is currently clicked on
   // moveFolderID is the ID of the folder that was clicked which called the Move folder modal
@@ -41,7 +52,9 @@ function FolderSelector({ selectedActionData }) {
     folderStructure
   );
 
-  console.log(folderStructure);
+  useEffect(() => {
+    fetchFolderStructure();
+  }, []);
   return (
     <>
       <div className="w-full flex">
@@ -78,9 +91,13 @@ function FolderSelector({ selectedActionData }) {
             Folders
           </p>
           <ScrollArea className="w-full flex border border-[--divider-border-color] h-fit max-h-[300px] bg-[--body-bg] p-5 text-[--gray] rounded-t-lg ">
-            {folderStructure?.map((folder, index) => (
-              <MoveFolder key={index} folder={folder} />
-            ))}
+            {loadingStarredFolders ? (
+              <SkeletonCard />
+            ) : (
+              folderStructure?.map((folder, index) => (
+                <MoveFolder key={index} folder={folder} />
+              ))
+            )}
           </ScrollArea>
           <div className="w-full flex border p-1 border-[--divider-border-color] rounded-b-lg border-t-0 text-center justify-center text-[--primary-btn] cursor-pointer">
             {movedFolder ? (
@@ -111,13 +128,19 @@ function FolderSelector({ selectedActionData }) {
             </Button>
             <Button
               className="w-fit rounded-[8px] bg-[--primary-btn] border-[--primary-btn] border text-white hover:bg-[--primary-btn-hover] hover:border-[--primary-btn-hover] hover:text-white link-transition h-[40px] px-5 disabled:bg-[--gray] disabled:border-[--gray] disabled:cursor-not-allowed"
-              disabled={isDisabled}
+              disabled={isDisabled || moveActionLoading}
               onClick={() =>
-                handleMoveFolder(
-                  selectedActionData,
-                  moveFolderId,
-                  selectedMoveFolderId
-                )
+                moveFolderDocumentType === "image"
+                  ? handleMoveDocument(
+                      selectedActionData,
+                      moveFolderId,
+                      selectedMoveFolderId
+                    )
+                  : handleMoveFolder(
+                      selectedActionData,
+                      moveFolderId,
+                      selectedMoveFolderId
+                    )
               }
             >
               Move to{" "}

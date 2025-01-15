@@ -30,22 +30,20 @@ import { formatDateWithoutTime } from "@/utils/getDateDifference";
 import { useDocument } from "@/context/document.context";
 
 const ThumbNail = ({ data }) => {
-  const { documents } = useDocument();
   const {
     openRenameDialog,
     openDialog,
     openDeleteDialog,
-    setSharedData,
     handleViewSelectedDocument,
     openMoveFolderDialog,
   } = useDialog();
 
   const { checkedCount, checkedStates, handleCheckboxChange } = useFolderCRUD();
-  const { items, duplicateItem } = useDuplicateItem(documents);
+  const { items, duplicateItem } = useDuplicateItem(data);
 
-  useEffect(() => {
-    setSharedData(data);
-  }, [data, setSharedData]);
+  // useEffect(() => {
+  //   setSharedData(data);
+  // }, [data, setSharedData]);
 
   const handleDuplicate = (id) => {
     duplicateItem(id);
@@ -118,6 +116,7 @@ const ThumbNail = ({ data }) => {
                           openRenameDialog={openRenameDialog}
                           openDeleteDialog={openDeleteDialog}
                           openMoveFolderDialog={openMoveFolderDialog}
+                          documentToMove={item}
                           handleCheckboxChange={handleCheckboxChange}
                           handleDuplicate={() => handleDuplicate(item?.id)}
                           mediaType={item?.mediaInfo?.mediaType}
@@ -188,7 +187,12 @@ const ThumbNail = ({ data }) => {
                     name="Move"
                     color="text-[--popover-text-color]"
                     onClick={() =>
-                      openMoveFolderDialog("moveFolder", item?.id, "image")
+                      openMoveFolderDialog(
+                        "moveFolder",
+                        item?.id,
+                        "image",
+                        item
+                      )
                     }
                   />
                 </ContextMenuItem>

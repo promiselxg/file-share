@@ -6,7 +6,6 @@ import {
   successResponse,
 } from "@/utils/errorMessage";
 import { generateRandomString } from "@/utils/randomStringGenerator";
-import { Children } from "react";
 
 export const PUT = async (req) => {
   try {

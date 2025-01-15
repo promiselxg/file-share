@@ -17,6 +17,7 @@ import {
   SkeletonCard,
   SkeletonDocument,
 } from "../_components/skeleton/skeleton";
+import { useDialog } from "@/context/Dialog.context";
 import EmptyCard from "../_components/empty/empty";
 
 const TrashPage = () => {
@@ -31,6 +32,8 @@ const TrashPage = () => {
     fetchTrashFolders,
     fetchStarredFolders,
   } = useFolderCRUD();
+
+  const { openDeleteDialog } = useDialog();
 
   useEffect(() => {
     fetchTrashFolders();
@@ -65,16 +68,33 @@ const TrashPage = () => {
                 </div>
               </Alert>
             </div>
-            <div className="w-full flex">
-              <div className="container">
-                <div className="flex justify-between w-full items-center container  p-3">
-                  <h1 className="flex items-center gap-[4px] text-[--sidebar-link-color] text-[28px]">
-                    Trash
-                  </h1>
-                  <Button variant="destructive">Empty Trash</Button>
+            {trashedFolder.length > 0 ||
+              (trashedDocument.length > 0 && (
+                <div className="w-full flex">
+                  <div className="container">
+                    <div className="flex justify-between w-full items-center container  p-3">
+                      <h1 className="flex items-center gap-[4px] text-[--sidebar-link-color] text-[28px]">
+                        Trash
+                      </h1>
+                      <Button
+                        variant="destructive"
+                        onClick={() =>
+                          openDeleteDialog(
+                            "alert",
+                            "Are you sure you want to permanently delete all items in the Trash?",
+                            "",
+                            "Delete",
+                            "trash",
+                            "emptyTrash"
+                          )
+                        }
+                      >
+                        Empty Trash
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              ))}
             <div className="flex flex-col">
               <div className="container">
                 {loadingFolders ? (
@@ -122,6 +142,21 @@ const TrashPage = () => {
                 </div>
               )}
             </div>
+            {!loadingFolders &&
+              !loadingDocuments &&
+              trashedDocument.length < 1 &&
+              trashedFolder.length < 1 && (
+                <>
+                  <div className="flex flex-col w-full -mt-[50px]">
+                    <div className="grid w-full grid-cols-1 gap-5 relative">
+                      <div className="flex">
+                        <h1 className="text-white text-[30px]">Trash</h1>
+                      </div>
+                      <EmptyCard />
+                    </div>
+                  </div>
+                </>
+              )}
           </div>
         </div>
         {checkedCount > 0 && <TrashCheckBoxControl />}

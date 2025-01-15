@@ -15,15 +15,12 @@ const Header = () => {
       <div className="h-[50px] flex w-full  bg-[--header-bg] items-center z-50 py-3">
         <div className="container mx-[10px]">
           <div className="flex w-full justify-left items-center">
-            <div className="w-[265px] flex items-center justify-between">
-              <Image
-                src="https://resource.awesomescreenshot.com/static/images/69947c5abfeb688e7ca3.png"
-                width={108}
-                height={29}
-                alt="awesomescreenshot logo"
-              />
-              <div className="float-left h-[25px] w-[1px] bg-[hsla(0,0%,100%,.19)]"></div>
-            </div>
+            <Link href="/my_item">
+              <div className="w-[227px] flex items-center justify-between h-[30px] overflow-hidden">
+                <h1 className="text-[rgba(255,255,255,0.7)] ">My Screenshot</h1>
+                <div className="float-left h-[25px] w-[1px] bg-[hsla(0,0%,100%,.19)]"></div>
+              </div>
+            </Link>
             <div className="flex items-center justify-between w-full">
               <SearchBox />
               <div className="flex gap-[5px] items-center text-[--popover-text-color]">

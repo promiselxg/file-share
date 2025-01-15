@@ -39,29 +39,41 @@ export const GET = async (req) => {
 };
 
 export const PUT = async (req) => {
-  const body = await req.json();
-  let response;
   try {
+    const body = await req.json();
     if (!body.documentId) {
-      throw new Error("Folder ID is required", 400);
+      throw new Error("Folder ID is required");
     }
-    if (body.action === "restore") {
-      response = await restoreDeletedDocument(body?.documentId);
-    } else {
-      response = await moveItemToTrash(body?.documentId);
-    }
+
+    const actions = {
+      restore: {
+        handler: () => restoreDeletedDocument(body.documentId),
+        message: "Item restored successfully",
+      },
+      moveDocument: {
+        handler: () =>
+          moveDocumentToNewFolder(body.documentId, body.newFolderId),
+        message: "Items moved successfully.",
+      },
+      default: {
+        handler: () => moveItemToTrash(body.documentId),
+        message: "Items moved to Trash successfully.",
+      },
+    };
+
+    const action = actions[body.action] || actions.default;
+    const response = await action.handler();
+
     return NextResponse.json(
       {
         status: "success",
-        message: body?.action
-          ? "Item restored successfully"
-          : "Items move to Trash successfully.",
+        message: action.message,
         response,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return createErrorResponse(
       error.message || "Something went wrong!",
       error,
@@ -73,10 +85,12 @@ export const PUT = async (req) => {
 const fetchDocumentsWithoutFolderId = async (userId) => {
   const documentsWithoutFolderId = await prisma.document.findMany({
     where: {
+      userId,
       AND: [
-        { userId },
         {
           OR: [{ folderId: null }, { folderId: { isSet: false } }],
+        },
+        {
           OR: [{ trashed: null }, { trashed: { isSet: false } }],
         },
       ],
@@ -144,6 +158,38 @@ const fetchDocumentsInTrash = async (userId) => {
   });
 
   return trashedDocuments;
+};
+
+const moveDocumentToNewFolder = async (documentId, folderId) => {
+  try {
+    const isDocument = await prisma.document.findUnique({
+      where: { id: documentId },
+    });
+
+    if (!isDocument) {
+      throw new Error("Invalid document ID", 501);
+    }
+
+    const isMovedAlready = await prisma.document.findUnique({
+      where: { id: documentId, folderId },
+    });
+
+    if (isMovedAlready) {
+      throw new Error("This document already exist in this folder.", 501);
+    }
+
+    const moveDocument = await prisma.document.update({
+      where: {
+        id: documentId,
+      },
+      data: {
+        folderId,
+      },
+    });
+    return moveDocument;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const restoreDeletedDocument = async (documentId) => {

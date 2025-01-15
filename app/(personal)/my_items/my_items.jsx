@@ -21,7 +21,6 @@ import {
   SkeletonDocument,
 } from "../_components/skeleton/skeleton";
 import { useDocument } from "@/context/document.context";
-import EmptyCard from "../_components/empty/empty";
 
 const MyItems = () => {
   const {

@@ -23,7 +23,6 @@ const Modals = () => {
     alertDescription,
     alertTitle,
     shareLinkData,
-    selectedActionData,
   } = useDialog();
 
   return (
@@ -118,7 +117,7 @@ const Modals = () => {
         openDialog={() => openDialog("moveFolder")}
         closeDialog={() => closeDialog("moveFolder")}
       >
-        <FolderSelector selectedActionData={selectedActionData} />
+        <FolderSelector />
       </CustomModal>
 
       <CustomModal
