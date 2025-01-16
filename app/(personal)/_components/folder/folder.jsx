@@ -40,6 +40,7 @@ const Folder = ({ data }) => {
     handleCheckboxChange,
     handleAddToFavorite,
   } = useFolderCRUD();
+
   return (
     <>
       {data?.map((folder) => {

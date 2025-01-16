@@ -24,6 +24,7 @@ export const FolderCRUDProvider = ({ children }) => {
   const [loadingDocuments, setLoadingDocuments] = useState(false);
   const [loadingFolders, setLoadingFolders] = useState(false);
   const { setShareLinkData, closeDialog } = useDialog();
+  const [folderBreadCrumb, setFolderBreadCrumb] = useState([]);
 
   const {
     checkedStates,
@@ -180,10 +181,8 @@ export const FolderCRUDProvider = ({ children }) => {
     }
   };
 
-  const addFolder = (newFolder, parentId = "") => {
-    if (parentId === "") {
-      setFolder((prev) => [newFolder, ...prev]);
-    }
+  const addFolder = (newFolder) => {
+    setFolder((prev) => [newFolder, ...prev]);
   };
 
   const updateFolderFavoriteStatus = (id, isFavorite) => {
@@ -342,6 +341,7 @@ export const FolderCRUDProvider = ({ children }) => {
         folderStructure,
         folder,
         trashedFolder,
+        folderBreadCrumb,
         trashedDocument,
         loadingStarredFolders,
         loading,
@@ -354,6 +354,7 @@ export const FolderCRUDProvider = ({ children }) => {
         setStarredFolders,
         setTrashedDocument,
         setTrashedFolder,
+        setFolderBreadCrumb,
         setLink,
         resetCheckBox,
         removeItem,

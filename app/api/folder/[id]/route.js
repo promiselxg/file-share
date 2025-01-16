@@ -139,7 +139,11 @@ const handleFetchFolderDetails = async (id) => {
     where: { id },
     include: {
       documents: true,
-      children: true,
+      children: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
       parent: true,
     },
   });

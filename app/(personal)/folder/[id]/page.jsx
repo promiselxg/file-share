@@ -35,22 +35,28 @@ import {
   SkeletonDocument,
 } from "../../_components/skeleton/skeleton";
 import { Loader2 } from "lucide-react";
+import { useDocument } from "@/context/document.context";
 
 const FolderPage = ({ params }) => {
   const { openMoveFolderDialog, openRenameDialog, openDialog } = useDialog();
-  const [folders, setFolders] = useState([]);
-  const [folderBreadCrumb, setFolderBreadCrumb] = useState([]);
-  const [documents, setDocuments] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
+  const { documents, setDocuments } = useDocument();
 
-  const { checkedCount, fetchStarredFolders } = useFolderCRUD();
+  const {
+    folderBreadCrumb,
+    folder: folders,
+    checkedCount,
+    fetchStarredFolders,
+    setFolderBreadCrumb,
+    setFolder,
+  } = useFolderCRUD();
 
   const fetchFolderInformation = useCallback(async () => {
     try {
       setPageLoading(true);
       const response = await apiCall("get", `/api/folder/${params.id}`);
       setFolderBreadCrumb(response?.data);
-      setFolders(response?.data?.children);
+      setFolder(response?.data?.children);
       setDocuments(response?.data?.documents);
     } catch (error) {
       console.log(error);

@@ -50,10 +50,13 @@ const NewFolder = () => {
       const response = await axios.post(`/api/folder`, newFolder);
       if (response?.data?.status === "success") {
         addFolder(response?.data?.folder);
+        showToast({
+          title: response?.data?.message,
+          className: "bg-[green] border-none text-white",
+        });
         closeDialog("newFolder");
       }
     } catch (error) {
-      console.error(error);
       showToast({
         description:
           error?.response?.data?.message ||
