@@ -1,24 +1,16 @@
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
+import "../(personal)/globals.css";
+
+export const metadata = {
+  title: "Auhentication | My screen shots",
+  description: "A 2-in-1 Application",
+};
 
 export default function AuthLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>
-          <header>
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
+        <body className="w-full flex items-center justify-center h-screen">
           <main>{children}</main>
         </body>
       </html>

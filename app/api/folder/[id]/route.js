@@ -138,8 +138,22 @@ const handleFetchFolderDetails = async (id) => {
   const response = await prisma.folder.findUnique({
     where: { id },
     include: {
-      documents: true,
+      documents: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
       children: {
+        where: {
+          OR: [
+            {
+              trashed: {
+                isSet: false,
+              },
+            },
+            { trashed: null },
+          ],
+        },
         orderBy: {
           createdAt: "desc",
         },
