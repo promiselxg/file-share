@@ -1,9 +1,9 @@
 import prisma from "@/utils/db";
 import { createSuccessResponse, errorResponse } from "@/utils/errorMessage";
+import { auth } from "@clerk/nextjs/server";
 
 export const DELETE = async () => {
-  const userId = "dyuosuryro";
-
+  const { userId } = await auth();
   try {
     if (!userId) {
       throw new Error("something went wrong", 400);

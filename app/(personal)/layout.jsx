@@ -18,8 +18,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <ClerkProvider>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
         <ScreenRecordProvider>
           <DialogProvider>
             <FolderCRUDProvider>
@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
             </FolderCRUDProvider>
           </DialogProvider>
         </ScreenRecordProvider>
-      </ClerkProvider>
-    </html>
+      </html>
+    </ClerkProvider>
   );
 }

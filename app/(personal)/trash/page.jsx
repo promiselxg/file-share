@@ -47,26 +47,29 @@ const TrashPage = () => {
         <div className="flex flex-col w-full mb-20 relative">
           <div className="flex container flex-col">
             <div className="p-3 w-full mt-2 h-full flex">
-              <Alert className="flex items-center border-[--sidebar-link-active-bg] text-[--primary-btn] bg-transparent p-2">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2">
-                    <AlertCircle size={15} />
-                    <AlertDescription className="text-[--sidebar-link-color] text-sm">
-                      Items will be automatically deleted after they’ve been in
-                      your Trash for 3 days. To let the Trash folder keep
-                      removed items for 30 days, please{" "}
-                      <Link
-                        href="/"
-                        className="text-[--primary-btn] font-[600]"
-                      >
-                        upgrade
-                      </Link>
-                      .
-                    </AlertDescription>
-                  </div>
-                  <FiX />
-                </div>
-              </Alert>
+              {trashedDocument.length > 0 ||
+                (trashedFolder.length > 0 && (
+                  <Alert className="flex items-center border-[--sidebar-link-active-bg] text-[--primary-btn] bg-transparent p-2">
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle size={15} />
+                        <AlertDescription className="text-[--sidebar-link-color] text-sm">
+                          Items will be automatically deleted after they’ve been
+                          in your Trash for 3 days. To let the Trash folder keep
+                          removed items for 30 days, please{" "}
+                          <Link
+                            href="/"
+                            className="text-[--primary-btn] font-[600]"
+                          >
+                            upgrade
+                          </Link>
+                          .
+                        </AlertDescription>
+                      </div>
+                      <FiX />
+                    </div>
+                  </Alert>
+                ))}
             </div>
             {trashedFolder.length > 0 ||
               (trashedDocument.length > 0 && (

@@ -21,6 +21,8 @@ import {
   SkeletonDocument,
 } from "../_components/skeleton/skeleton";
 import { useDocument } from "@/context/document.context";
+import { ImFilesEmpty } from "react-icons/im";
+import EmptyCard from "../_components/empty/empty";
 
 const MyItems = () => {
   const {
@@ -144,28 +146,39 @@ const MyItems = () => {
               )
             )}
 
-            <div className="flex flex-col mt-8">
-              {loading ? (
-                <div className="grid w-full grid-cols-4 gap-5 relative">
-                  <SkeletonDocument />
-                  <SkeletonDocument />
-                  <SkeletonDocument />
-                  <SkeletonDocument />
-                </div>
-              ) : (
-                <div className="flex w-full p-3 flex-col gap-y-2">
-                  {documents.length > 0 && (
-                    <p className="text-[14px] text-[--gray] leading-[14px]">
-                      Images &amp; Videos
-                    </p>
-                  )}
+            {folder.length < 1 &&
+            documents.length < 1 &&
+            !loadTopLevelFolder &&
+            !loading ? (
+              <>
+                <EmptyCard />
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col mt-8">
+                  {loading ? (
+                    <div className="grid w-full grid-cols-4 gap-5 relative">
+                      <SkeletonDocument />
+                      <SkeletonDocument />
+                      <SkeletonDocument />
+                      <SkeletonDocument />
+                    </div>
+                  ) : (
+                    <div className="flex w-full p-3 flex-col gap-y-2">
+                      {documents.length > 0 && (
+                        <p className="text-[14px] text-[--gray] leading-[14px]">
+                          Images &amp; Videos
+                        </p>
+                      )}
 
-                  <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
-                    <ThumbNail data={documents} />
-                  </div>
+                      <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
+                        <ThumbNail data={documents} />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
         </div>
         {checkedCount > 0 && <TrashCheckBoxControl />}

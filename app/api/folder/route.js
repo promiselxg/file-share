@@ -1,10 +1,12 @@
 import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
+import { currentUser, auth } from "@clerk/nextjs/server";
 
-const userId = "dyuosuryro";
 //const userId = "user123";
 export const POST = async (req) => {
+  const { userId } = await auth();
+
   try {
     const body = await req.json();
     const { parentId, name } = body;
@@ -50,6 +52,8 @@ export const GET = async (req) => {
   const query = req.nextUrl.searchParams;
   const queryType = query.get("type");
   let response;
+
+  const { userId } = await auth();
 
   try {
     if (queryType === "withChildren") {

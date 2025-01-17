@@ -1,10 +1,11 @@
 import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 
-const userId = "dyuosuryro";
 //const userId = "user123";
 export const GET = async (req) => {
+  const { userId } = await auth();
   const query = req.nextUrl.searchParams;
   const queryType = query.get("type");
   let documents;
