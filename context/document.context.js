@@ -118,6 +118,7 @@ export const DocumentCRUDProvider = ({ children }) => {
     }
   };
 
+  // Utility : Move document
   const handleMoveDocument = async (
     documentToBeMoved,
     documentToBeMovedId,

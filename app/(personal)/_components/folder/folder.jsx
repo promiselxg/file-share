@@ -76,7 +76,7 @@ const Folder = ({ data }) => {
                   ) : (
                     <div className="relative">
                       <Icon className="text-[30px]" />
-                      {folder?.shareLink && (
+                      {folder?.links[0]?.token && (
                         <div className="absolute bottom-0 right-0 bg-[--body-bg] rounded-full text-sm flex items-center justify-center p-[2px] text-[--gray]">
                           <IoIosLink size={8} />
                         </div>
@@ -103,7 +103,7 @@ const Folder = ({ data }) => {
                           openDialog={openDialog}
                           id={folder?.id}
                           title={folder.name}
-                          sharableLink={folder.shareLink}
+                          sharableLink={folder?.links[0]?.token}
                           openRenameDialog={openRenameDialog}
                           openShareFolder={openShareFolder}
                           openMoveFolderDialog={openMoveFolderDialog}
@@ -144,7 +144,7 @@ const Folder = ({ data }) => {
                   openDialog={openDialog}
                   id={folder?.id}
                   title={folder.name}
-                  sharableLink={folder.shareLink}
+                  sharableLink={folder?.links[0]?.token}
                   openRenameDialog={openRenameDialog}
                   openShareFolder={openShareFolder}
                   openDeleteDialog={openDeleteDialog}

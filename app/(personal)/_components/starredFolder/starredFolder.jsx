@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 const StarredFolder = ({ data, loading }) => {
   const router = useRouter();
   const pathname = usePathname();
+
   return (
     <>
       <ScrollArea className="h-fit max-h-[200px] w-full">

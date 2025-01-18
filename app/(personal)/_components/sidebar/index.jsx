@@ -14,6 +14,7 @@ const SideBar = () => {
   const currentRoute = usePathname();
   const { openDialog } = useDialog();
   const { starredFolders, loadingStarredFolders } = useFolderCRUD();
+
   return (
     <>
       <div className="text-white relative h-[calc(100vh-70px)] md:flex md:w-[280px] w-full flex-col hidden">

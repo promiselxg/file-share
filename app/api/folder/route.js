@@ -34,6 +34,7 @@ export const POST = async (req) => {
         name,
         userId: user?.id,
         parentId: parentId || null,
+        trashed: null,
       },
     });
 
@@ -169,6 +170,9 @@ const fetchParentFolders = async (userId) => {
         { trashed: null }, // Or trashed is null
       ],
     },
+    include: {
+      links: true,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -203,25 +207,38 @@ const toggleFolderFavoriteStatus = async (body) => {
 };
 
 const fetchFavoriteFolders = async (userId) => {
-  const favoriteFolders = await prisma.folder.findMany({
-    where: {
-      favorite: true,
-      userId,
-      trashed: null,
-    },
-    select: {
-      id: true,
-      name: true,
-      userId: true,
-      favorite: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
+  if (!userId) {
+    throw new Error("Invalid userId provided.");
+  }
 
-  return favoriteFolders;
+  try {
+    const favoriteFolders = await prisma.folder.findMany({
+      where: {
+        userId: userId,
+        AND: [
+          { favorite: true },
+          {
+            OR: [{ trashed: null }, { trashed: { isSet: false } }],
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        favorite: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    return favoriteFolders;
+  } catch (error) {
+    console.error("Error fetching favorite folders:", error);
+    throw new Error("Could not fetch favorite folders.");
+  }
 };
 
 const moveFolderToTrash = async (folderId) => {

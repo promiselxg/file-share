@@ -108,30 +108,47 @@ const handleRenameFolder = async (body) => {
 };
 
 const handleGenerateShareableLink = async (id, doctype) => {
+  // Validate the document type
   if (doctype !== "folder" && doctype !== "document") {
     throw new Error("Invalid document type");
   }
 
-  const link = generateRandomString(25);
+  // Generate a random token for the shareable link
+  const linkToken = generateRandomString(25);
 
-  const linkExist = await prisma.folder.findUnique({
-    where: { id },
-    select: { shareLink: true },
+  // Check if a shareable link already exists for the given document/folder
+  const existingLink = await prisma.shareableLink.findFirst({
+    where: {
+      [`${doctype}Id`]: id,
+    },
   });
 
-  if (!linkExist) {
-    throw new Error("Document or Folder ID not found");
+  if (existingLink) {
+    // Return the existing link token if it exists
+    return existingLink.token;
   }
 
-  if (!linkExist.shareLink) {
-    const updatedFolder = await prisma[doctype].update({
-      where: { id },
-      data: { shareLink: link },
-    });
-    return updatedFolder.shareLink;
+  // Check if the document or folder exists
+  const itemExists = await prisma[doctype].findUnique({
+    where: { id },
+  });
+
+  if (!itemExists) {
+    throw new Error(
+      `${doctype.charAt(0).toUpperCase() + doctype.slice(1)} ID not found`
+    );
   }
 
-  return linkExist.shareLink;
+  // Create a new shareable link
+  const newLink = await prisma.shareableLink.create({
+    data: {
+      token: linkToken,
+      [`${doctype}Id`]: id,
+      createdBy: itemExists.userId,
+    },
+  });
+
+  return newLink.token;
 };
 
 const handleFetchFolderDetails = async (id) => {
@@ -165,20 +182,36 @@ const handleFetchFolderDetails = async (id) => {
 };
 
 const handleRevokeShareableLink = async (id, doctype) => {
-  const linkExist = await prisma.folder.findUnique({
-    where: { id },
-    select: { shareLink: true },
+  // Validate the document type
+  if (doctype !== "folder" && doctype !== "document") {
+    throw new Error(
+      "Invalid document type. Must be either 'folder' or 'document'."
+    );
+  }
+
+  // Check if a shareable link exists for the given document/folder
+  const linkExist = await prisma.shareableLink.findFirst({
+    where: {
+      [`${doctype}Id`]: id,
+    },
   });
 
   if (!linkExist) {
-    throw new Error("Document or Folder ID not found");
+    throw new Error(
+      `${
+        doctype.charAt(0).toUpperCase() + doctype.slice(1)
+      } shareable link not found.`
+    );
   }
-  const updatedFolder = await prisma[doctype].update({
-    where: { id },
-    data: { shareLink: null },
+
+  // Delete the shareable link entry
+  await prisma.shareableLink.delete({
+    where: {
+      id: linkExist.id,
+    },
   });
 
-  return updatedFolder;
+  return { message: "Shareable link revoked successfully." };
 };
 
 const isIdValid = (id) => {
