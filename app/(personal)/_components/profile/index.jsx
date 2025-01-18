@@ -34,7 +34,7 @@ const ProfileAvatar = () => {
           </Avatar>
         </PopoverTrigger>
         {user && (
-          <PopoverContent className="bg-[--dialog-bg] shadow-md border-none DialogBoxShadow text-[--sidebar-link-color]">
+          <PopoverContent className="mr-[20px] md:mr-0 bg-[--dialog-bg] shadow-md border-none DialogBoxShadow text-[--sidebar-link-color]">
             <div className="w-full flex p-2 flex-col">
               <div className="flex gap-3 items-center w-full py-2">
                 <Avatar className="w-[40px] h-[40px] overflow-hidden cursor-pointer">

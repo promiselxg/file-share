@@ -7,6 +7,15 @@ import { currentUser, auth } from "@clerk/nextjs/server";
 export const POST = async (req) => {
   const { userId } = await auth();
 
+  // GET Logged In User Info
+  const user = await prisma.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User record not found.");
+  }
+
   try {
     const body = await req.json();
     const { parentId, name } = body;
@@ -23,7 +32,7 @@ export const POST = async (req) => {
     const createdFolder = await prisma.folder.create({
       data: {
         name,
-        userId,
+        userId: user?.id,
         parentId: parentId || null,
       },
     });
@@ -54,16 +63,24 @@ export const GET = async (req) => {
   let response;
 
   const { userId } = await auth();
+  // GET Logged In User Info
+  const user = await prisma.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User record not found.");
+  }
 
   try {
     if (queryType === "withChildren") {
-      response = await fetchFolderWithChildren(userId);
+      response = await fetchFolderWithChildren(user?.id);
     } else if (queryType === "favorite") {
-      response = await fetchFavoriteFolders(userId);
+      response = await fetchFavoriteFolders(user?.id);
     } else if (queryType === "trash") {
-      response = await fetchTrashFolders(userId);
+      response = await fetchTrashFolders(user?.id);
     } else {
-      response = await fetchParentFolders(userId);
+      response = await fetchParentFolders(user?.id);
     }
 
     return NextResponse.json(

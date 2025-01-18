@@ -8,8 +8,8 @@ const EmptyCard = () => {
   const { openDialog } = useDialog();
   return (
     <>
-      <div className="w-full flex pr-5 py-3">
-        <div className="container mx-auto bg-[--dialog-bg] min-h-[400px] rounded-[8px]">
+      <div className="w-full flex md:pr-5 py-3">
+        <div className="w-[95%] md:w-full container mx-auto bg-[--dialog-bg] min-h-[400px] rounded-[8px]">
           <div className="flex flex-col items-center justify-center h-full text-[--popover-text-color]">
             <ImFilesEmpty size={80} className="mb-5" />
             <h1 className="text-[18px] text-white">No items</h1>

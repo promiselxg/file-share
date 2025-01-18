@@ -5,17 +5,38 @@ import {
   errorResponse,
 } from "@/utils/errorMessage";
 
+import { currentUser } from "@clerk/nextjs/server";
+
 export const POST = async (req) => {
+  const user = await currentUser();
+
   const body = await req.json();
+  console.log(user?.id);
   try {
     const { photos, doc } = body;
+
+    const existingUser = await prisma.user.findUnique({
+      where: { clerkUserId: user?.id },
+    });
+
+    if (!existingUser) {
+      throw new Error("User record not found.");
+    }
+
     if (!photos || photos.length === 0) {
       return errorResponse("Invalid file parameters", 401);
     }
+
     const responses = [];
     for (const photo of photos) {
-      const fileData = getIndividualDocumentDataFromPhoto(photo, doc);
-      const createdDocument = await prisma.document.create({ data: fileData });
+      const fileData = getIndividualDocumentDataFromPhoto(
+        photo,
+        doc,
+        existingUser
+      );
+      const createdDocument = await prisma.document.create({
+        data: fileData,
+      });
       responses.push(createdDocument);
     }
     return createSuccessResponse(responses);
@@ -29,7 +50,7 @@ export const POST = async (req) => {
   }
 };
 
-const getIndividualDocumentDataFromPhoto = (photo, body) => {
+const getIndividualDocumentDataFromPhoto = (photo, body, user) => {
   return {
     title: photo?.original_filename,
     imgUrl: [photo?.secure_url],
@@ -43,12 +64,12 @@ const getIndividualDocumentDataFromPhoto = (photo, body) => {
       file_format: photo?.format,
     },
     createdBy: {
-      username: "promiselxg",
-      photoUrl: photo?.secure_url,
+      username: user?.username || user.firstName,
+      photoUrl: user?.imageUrl,
     },
     user: {
       connect: {
-        id: "dyuosuryro",
+        id: user?.id,
       },
     },
   };

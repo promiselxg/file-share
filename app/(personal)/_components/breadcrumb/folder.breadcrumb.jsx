@@ -21,7 +21,7 @@ const FolderBreadCrumb = ({ folder, className, currentPath }) => {
           <BreadcrumbItem>
             <Link
               href="/my_items"
-              className="text-[--gray] font-[400] text-[20px] hover:text-[--primary-btn] link-transition"
+              className="text-[--gray] font-[400] text-[14px] md:text-[20px] hover:text-[--primary-btn] link-transition"
               onClick={() => {
                 return false;
               }}
@@ -37,7 +37,7 @@ const FolderBreadCrumb = ({ folder, className, currentPath }) => {
                   <BreadcrumbPage className="flex items-center gap-3">
                     <Link
                       href={`/folder/${link.id}`}
-                      className={`text-[20px] flex items-center gap-2 ${
+                      className={`text-[14px] md:text-[20px] flex items-center gap-2 ${
                         index === breadcrumbs.length - 1
                           ? "text-white"
                           : "text-[--gray]"
@@ -45,7 +45,7 @@ const FolderBreadCrumb = ({ folder, className, currentPath }) => {
                     >
                       {index === breadcrumbs.length - 1 && (
                         <>
-                          <Icon className="text-[20px]" />
+                          <Icon className="text-[14px] md:text-[20px]" />
                         </>
                       )}
                       {link.name}

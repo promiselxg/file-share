@@ -10,11 +10,20 @@ export const GET = async (req) => {
   const queryType = query.get("type");
   let documents;
 
+  // GET Logged In User Info
+  const user = await prisma.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User record not found.");
+  }
+
   try {
     if (queryType === "trash") {
-      documents = await fetchDocumentsInTrash(userId);
+      documents = await fetchDocumentsInTrash(user?.id);
     } else {
-      documents = await fetchDocumentsWithoutFolderId(userId);
+      documents = await fetchDocumentsWithoutFolderId(user?.id);
     }
     if (!documents) {
       return NextResponse.json(

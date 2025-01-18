@@ -16,7 +16,7 @@ const SideBar = () => {
   const { starredFolders, loadingStarredFolders } = useFolderCRUD();
   return (
     <>
-      <div className="text-white relative h-[calc(100vh-70px)] md:flex md:w-[280px] w-full flex-col">
+      <div className="text-white relative h-[calc(100vh-70px)] md:flex md:w-[280px] w-full flex-col hidden">
         <div className="p-2 w-full mt-2 border-r-[1px] border-[hsla(0,0%,100%,.19)] h-full">
           <span className="text-[12px] text-[--gray] leading-[14px]">
             Personal

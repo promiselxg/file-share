@@ -21,7 +21,6 @@ import {
   SkeletonDocument,
 } from "../_components/skeleton/skeleton";
 import { useDocument } from "@/context/document.context";
-import { ImFilesEmpty } from "react-icons/im";
 import EmptyCard from "../_components/empty/empty";
 
 const MyItems = () => {
@@ -46,9 +45,9 @@ const MyItems = () => {
     <>
       <div className="w-full flex">
         <div className="flex flex-col w-full mb-20">
-          <div className="flex container">
+          <div className="flex container px-10 md:px-0">
             <div className="p-3 w-full mt-2 h-full flex items-center justify-between">
-              <div className="flex items-center gap-3 w-1/2">
+              <div className="flex items-center gap-3 w-full  md:w-1/2">
                 <Popover className="w-full">
                   <PopoverTrigger className="flex items-center gap-[4px] text-[--sidebar-link-color] text-[18px]">
                     My items <FiChevronDown />
@@ -85,7 +84,7 @@ const MyItems = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="mr-5 flex items-center gap-3">
+              <div className="hidden mr-5 md:flex items-center gap-3">
                 <Popover className="w-full">
                   <PopoverTrigger className="flex items-center gap-[4px] text-[--sidebar-link-color] text-[14px]">
                     Date created <FiChevronDown />
@@ -116,20 +115,20 @@ const MyItems = () => {
                     </ul>
                   </PopoverContent>
                 </Popover>
-                <div className="flex gap-3">
+                <div className="hidden md:flex gap-3">
                   <NewFolder />
                   <NewItem />
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col px-10 md:px-0">
             {loadTopLevelFolder ? (
-              <div className="grid w-full grid-cols-4 gap-5 relative">
+              <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-5 relative">
                 <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
+                <SkeletonCard className="hidden md:flex" />
+                <SkeletonCard className="hidden md:flex" />
+                <SkeletonCard className="hidden md:flex" />
               </div>
             ) : (
               folder?.length > 0 && (
@@ -138,7 +137,7 @@ const MyItems = () => {
                     <p className="text-[14px] text-[--gray] leading-[14px]">
                       Folders
                     </p>
-                    <div className="grid w-full grid-cols-4 gap-5 relative">
+                    <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-5 relative">
                       <Folder data={folder} />
                     </div>
                   </div>
@@ -157,7 +156,7 @@ const MyItems = () => {
               <>
                 <div className="flex flex-col mt-8">
                   {loading ? (
-                    <div className="grid w-full grid-cols-4 gap-5 relative">
+                    <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-5 relative">
                       <SkeletonDocument />
                       <SkeletonDocument />
                       <SkeletonDocument />

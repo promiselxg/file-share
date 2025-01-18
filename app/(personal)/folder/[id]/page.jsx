@@ -36,6 +36,7 @@ import {
 } from "../../_components/skeleton/skeleton";
 import { Loader2 } from "lucide-react";
 import { useDocument } from "@/context/document.context";
+import EmptyCard from "../../_components/empty/empty";
 
 const FolderPage = ({ params }) => {
   const { openMoveFolderDialog, openRenameDialog, openDialog } = useDialog();
@@ -79,7 +80,7 @@ const FolderPage = ({ params }) => {
         <div className="flex flex-col w-full mb-20">
           <div className="flex container">
             <div className="p-3 w-full mt-2 h-full flex items-center justify-between">
-              <div className="flex items-center gap-3 w-1/2">
+              <div className="flex items-center gap-3 md:w-1/2 w-full">
                 <div className="w-full flex items-center gap-2">
                   <div className="flex items-center gap-2">
                     <Link href="/my_items">
@@ -99,7 +100,7 @@ const FolderPage = ({ params }) => {
                   </div>
                 </div>
               </div>
-              <div className="mr-5 flex items-center gap-3 w-1/2 justify-end">
+              <div className="mr-5 hidden md:flex items-center gap-3 w-1/2 justify-end">
                 <div className="w-[100px] flex items-center">
                   <Popover>
                     <PopoverTrigger className="w-full flex items-center gap-[4px] text-[--sidebar-link-color] text-[14px]">
@@ -168,11 +169,11 @@ const FolderPage = ({ params }) => {
             </div>
           </div>
           {pageLoading ? (
-            <div className="grid w-full grid-cols-4 gap-5 relative mt-5">
+            <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-5 relative mt-5 mx-5 md:mx-0">
               <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
+              <SkeletonCard className="hidden md:flex" />
+              <SkeletonCard className="hidden md:flex" />
+              <SkeletonCard className="hidden md:flex" />
               <SkeletonDocument />
               <SkeletonDocument />
               <SkeletonDocument />
@@ -181,29 +182,7 @@ const FolderPage = ({ params }) => {
           ) : (
             <>
               {folders?.length < 1 && documents?.length < 1 ? (
-                <div className="w-full flex px-5 py-3">
-                  <div className="container mx-auto bg-[--dialog-bg] min-h-[400px] rounded-[8px]">
-                    <div className="flex flex-col items-center justify-center h-full text-[--popover-text-color]">
-                      <ImFilesEmpty size={80} className="mb-5" />
-                      <h1 className="text-[18px] text-white">No items</h1>
-                      <p>Your awesome visual repository is empty now.</p>
-                      <p className="text-sm">
-                        Let&apos;s&nbsp;
-                        <span
-                          className="text-[--primary-btn] cursor-pointer"
-                          onClick={() => openDialog("recordVideo")}
-                        >
-                          record a video
-                        </span>{" "}
-                        or{" "}
-                        <span className="text-[--primary-btn] cursor-pointer">
-                          capture a screenshot
-                        </span>
-                        .
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <EmptyCard />
               ) : (
                 <div className="flex flex-col">
                   <div className="container">
@@ -213,7 +192,7 @@ const FolderPage = ({ params }) => {
                           <p className="text-[14px] text-[--gray] leading-[14px]">
                             Folders
                           </p>
-                          <div className="grid w-full grid-cols-4 gap-5 relative">
+                          <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-5 relative">
                             <Folder data={folders} />
                           </div>
                         </>
@@ -226,7 +205,7 @@ const FolderPage = ({ params }) => {
                         <p className="text-[14px] text-[--gray] leading-[14px]">
                           Images &amp; Videos
                         </p>
-                        <div className="grid w-full grid-cols-4 gap-5 relative mt-3">
+                        <div className="grid w-full grid-cols-1 md:grid-cols-4 gap-5 relative mt-3">
                           <ThumbNail data={documents} />
                         </div>
                       </>

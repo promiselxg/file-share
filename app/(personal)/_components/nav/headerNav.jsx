@@ -5,7 +5,7 @@ import Link from "next/link";
 const NavigationBar = ({ Icon, url, label, color }) => {
   return (
     <>
-      <ul className="flex items-center">
+      <ul className="hidden md:flex items-center">
         <li>
           <Link
             href={url}

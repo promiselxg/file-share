@@ -2,7 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "../(personal)/globals.css";
 
 export const metadata = {
-  title: "Auhentication | My screen shots",
+  title: "Authentication | My screen shots",
   description: "A 2-in-1 Application",
 };
 

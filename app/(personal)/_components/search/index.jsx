@@ -4,7 +4,7 @@ import React from "react";
 const SearchBox = () => {
   return (
     <>
-      <div className="w-[45%] mx-[20px]">
+      <div className="hidden md:flex w-[45%] mx-[20px]">
         <div className="flex items-center gap-2">
           <BiSearchAlt2 className="text-[rgba(255,255,255,0.3)]" />
           <input
