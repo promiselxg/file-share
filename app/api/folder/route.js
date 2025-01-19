@@ -1,7 +1,7 @@
 import prisma from "@/utils/db";
 import { createErrorResponse, errorResponse } from "@/utils/errorMessage";
 import { NextResponse } from "next/server";
-import { currentUser, auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 //const userId = "user123";
 export const POST = async (req) => {

@@ -67,7 +67,7 @@ const Folder = ({ data }) => {
                   {folder?.favorite ? (
                     <div className="relative">
                       <StarIcon className="text-[30px]" />
-                      {folder?.shareLink && (
+                      {folder?.links[0]?.token && (
                         <div className="absolute bottom-0 right-0 bg-[--body-bg] rounded-full text-sm flex items-center justify-center p-[2px] text-[--gray]">
                           <IoIosLink size={8} />
                         </div>

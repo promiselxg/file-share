@@ -148,7 +148,7 @@ const handleGenerateShareableLink = async (id, doctype) => {
     },
   });
 
-  return newLink.token;
+  return newLink;
 };
 
 const handleFetchFolderDetails = async (id) => {

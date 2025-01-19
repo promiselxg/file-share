@@ -197,13 +197,17 @@ export const FolderCRUDProvider = ({ children }) => {
     try {
       setLoading(true);
       const data = await apiCall("get", `/api/folder/${id}?type=${type}`);
-
       if (data.status === "success") {
         setShareLinkData(`${host.host_url}/${id}/${data?.data}`);
         copyToClipboard(link);
         setFolder((prevFolders) =>
           prevFolders.map((folder) =>
-            folder.id === id ? { ...folder, links: data?.data } : folder
+            folder.id === id
+              ? {
+                  ...folder,
+                  links: [data?.data],
+                }
+              : folder
           )
         );
         showToast({
@@ -228,7 +232,7 @@ export const FolderCRUDProvider = ({ children }) => {
       if (data.status === "success") {
         setFolder((prevFolders) =>
           prevFolders.map((folder) =>
-            folder.id === id ? { ...folder, links: null } : folder
+            folder.id === id ? { ...folder, links: [] } : folder
           )
         );
       }

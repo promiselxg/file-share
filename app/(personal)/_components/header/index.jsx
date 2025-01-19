@@ -16,7 +16,7 @@ const Header = () => {
         <div className="md:container mx-[20px] md:mx-[10px] w-full">
           <div className="flex w-full md:justify-start items-center justify-between">
             <div className="flex items-center gap-4">
-              <FiMenu className="text-white" size={30} />
+              <FiMenu className="text-white md:hidden" size={30} />
               <Link href="/my_item">
                 <div className="md:w-[227px] flex items-center justify-start md:justify-between h-[30px] overflow-hidden">
                   <h1 className="text-[rgba(255,255,255,0.7)] ">

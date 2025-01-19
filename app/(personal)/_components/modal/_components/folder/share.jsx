@@ -1,7 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useFolderCRUD } from "@/context/folder.context";
+import { copyToClipboard } from "@/utils/copyText";
 import host from "@/utils/host";
+import { showToast } from "@/utils/showToast";
 import { truncateText } from "@/utils/trucateText";
 
 import { Loader2 } from "lucide-react";
@@ -16,6 +18,7 @@ const ShareLink = ({ id, docType, sharedLink }) => {
     loading,
     link,
     setLink,
+    folder,
   } = useFolderCRUD();
 
   useEffect(() => {
@@ -24,6 +27,19 @@ const ShareLink = ({ id, docType, sharedLink }) => {
     }
   }, [id, sharedLink, setLink]);
 
+  const handleCopyToClipBoard = (link) => {
+    try {
+      copyToClipboard(link);
+      showToast({
+        title: "link copied to clipboard!",
+        className: "bg-[green] border-none outline-none text-white",
+      });
+    } catch (error) {
+      console.log("error copying text", error);
+    }
+  };
+
+  console.log("folder before revoke", folder);
   return (
     <>
       <div className="w-full flex">
@@ -51,7 +67,10 @@ const ShareLink = ({ id, docType, sharedLink }) => {
                   </div>
                 </div>
                 <div className="w-[80px]">
-                  <Button className="w-full flex items-center gap-2 bg-white hover:bg-white text-[--primary-btn] rounded-[8px] px-[25px] text-[12px] h-[35px]">
+                  <Button
+                    className="w-full flex items-center gap-2 bg-white hover:bg-white text-[--primary-btn] rounded-[8px] px-[25px] text-[12px] h-[35px]"
+                    onClick={() => handleCopyToClipBoard(link)}
+                  >
                     <IoCopyOutline /> Copy
                   </Button>
                 </div>
