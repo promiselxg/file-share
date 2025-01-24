@@ -60,7 +60,7 @@ export const ImageVideoMenuItem = ({
       icon: <LuCopyCheck size={20} />,
       action: (e) => {
         e.stopPropagation();
-        handleCheckboxChange(id, true);
+        handleCheckboxChange(id, true, "document");
       },
     },
     { name: "Open in new tab", icon: <RiExternalLinkLine size={20} /> },
@@ -166,7 +166,7 @@ export const FolderMenuItem = ({
       icon: <LuCopyCheck size={20} />,
       action: (e) => {
         e.stopPropagation();
-        handleCheckboxChange(id, true);
+        handleCheckboxChange(id, true, "folder");
       },
     },
     {

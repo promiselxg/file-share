@@ -69,7 +69,7 @@ export const ImageProvider = ({ children }) => {
     fileURLs.forEach(URL.revokeObjectURL);
   };
 
-  const handleImageUpload = async (files) => {
+  const handleImageUpload = async (files, parentId) => {
     const cloudinaryUrl =
       "https://api.cloudinary.com/v1_1/promiselxg/image/upload";
     const upload_preset = "file-share";
@@ -84,7 +84,10 @@ export const ImageProvider = ({ children }) => {
         apiKey
       );
       setUploadStatus("completed");
-      const response = await apiCall("post", `/api/image`, { photos });
+      const response = await apiCall("post", `/api/image`, {
+        photos,
+        parentId,
+      });
       const uploadedDocuments = response?.data || [];
       setDocuments((prevDocuments) => [...uploadedDocuments, ...prevDocuments]);
     } catch (error) {

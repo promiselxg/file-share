@@ -76,7 +76,7 @@ const Folder = ({ data }) => {
                   ) : (
                     <div className="relative">
                       <Icon className="text-[30px]" />
-                      {folder?.links[0]?.token && (
+                      {folder?.links && folder?.links[0]?.token && (
                         <div className="absolute bottom-0 right-0 bg-[--body-bg] rounded-full text-sm flex items-center justify-center p-[2px] text-[--gray]">
                           <IoIosLink size={8} />
                         </div>
@@ -103,7 +103,9 @@ const Folder = ({ data }) => {
                           openDialog={openDialog}
                           id={folder?.id}
                           title={folder.name}
-                          sharableLink={folder?.links[0]?.token}
+                          sharableLink={
+                            folder?.links && folder?.links[0]?.token
+                          }
                           openRenameDialog={openRenameDialog}
                           openShareFolder={openShareFolder}
                           openMoveFolderDialog={openMoveFolderDialog}
@@ -131,7 +133,7 @@ const Folder = ({ data }) => {
                       className="text-[25px] w-[25px] h-[25px] bg-[#000] transition-all delay-75 duration-100 z-10 data-[state=checked]:bg-[--primary-btn] data-[state=checked]:text-white border border-[--gray] hover:border-[whitesmoke] link-transition"
                       checked={isChecked}
                       onCheckedChange={(checked) =>
-                        handleCheckboxChange(folder.id, checked)
+                        handleCheckboxChange(folder.id, checked, "folder")
                       }
                     />
                   </div>
@@ -144,7 +146,7 @@ const Folder = ({ data }) => {
                   openDialog={openDialog}
                   id={folder?.id}
                   title={folder.name}
-                  sharableLink={folder?.links[0]?.token}
+                  sharableLink={folder?.links && folder?.links[0]?.token}
                   openRenameDialog={openRenameDialog}
                   openShareFolder={openShareFolder}
                   openDeleteDialog={openDeleteDialog}

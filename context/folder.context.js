@@ -329,6 +329,9 @@ export const FolderCRUDProvider = ({ children }) => {
     }
   };
 
+  const handleDeleteMultipleItem = async (itemArray) => {
+    console.log(itemArray);
+  };
   /**
    * Add a new folder to the folder structure.
    * @param {Object} newFolder - The new folder object to add.
@@ -370,6 +373,7 @@ export const FolderCRUDProvider = ({ children }) => {
         handleRevokeShareLink,
         handleMoveFolder,
         handleRestoreTrashedFolder,
+        handleDeleteMultipleItem,
         fetchStarredFolders,
         fetchTopLevelFolders,
         fetchFolderStructure,

@@ -9,7 +9,6 @@ export const useSidebarVisibility = () => {
     /^\/shared_with_me$/,
     /^\/trash$/,
     /^\/folder\/[A-Za-z0-9]+$/, // Matches "/folder/{id}" format
-    // Add more patterns as needed
   ];
 
   // Check if the current route matches any of the patterns

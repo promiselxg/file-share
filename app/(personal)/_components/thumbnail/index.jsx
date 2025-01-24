@@ -27,7 +27,6 @@ import { cn } from "@/lib/utils";
 import useDuplicateItem from "@/hooks/use-duplicate";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { formatDateWithoutTime } from "@/utils/getDateDifference";
-import { useDocument } from "@/context/document.context";
 
 const ThumbNail = ({ data }) => {
   const {
@@ -139,7 +138,7 @@ const ThumbNail = ({ data }) => {
                           e.stopPropagation();
                         }}
                         onCheckedChange={(checked) =>
-                          handleCheckboxChange(item.id, checked)
+                          handleCheckboxChange(item.id, checked, "document")
                         }
                       />
                     </div>
@@ -211,7 +210,9 @@ const ThumbNail = ({ data }) => {
                     Icon={<LuCopyCheck size={20} />}
                     name="Select multiple items"
                     color="text-[--popover-text-color]"
-                    onClick={() => handleCheckboxChange(item?.id, true)}
+                    onClick={() =>
+                      handleCheckboxChange(item?.id, true, "document")
+                    }
                   />
                 </ContextMenuItem>
                 <ContextMenuItem className="flex w-full hover:bg-[--folder-bg] rounded-[5px] link-transition p-0">

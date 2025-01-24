@@ -18,6 +18,7 @@ export const DialogProvider = ({ children }) => {
   const [alertBtnText, setAlertBtnText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sharedData, setSharedData] = useState([]);
+
   const [selectedMoveFolderId, setSelectedMoveFolderId] = useState(null);
   const [moveFolderId, setMoveFolderId] = useState("");
   const [fullScreenMode, setFullScreenMode] = useState(false);
@@ -92,7 +93,7 @@ export const DialogProvider = ({ children }) => {
   const handleViewSelectedDocument = (data) => {
     setOpenSelectedDocumentWrapper(!openSelectedDocumentWrapper);
     setSelectedDocumentId(data);
-    setCurrentIndex(sharedData.indexOf(data)); // reset current data index
+    setCurrentIndex(sharedData.indexOf(data));
   };
 
   // view selected document in Full Screen
@@ -113,8 +114,8 @@ export const DialogProvider = ({ children }) => {
   const prevItem = () => {
     if (currentIndex > 0) {
       const newIndex = currentIndex - 1;
-      setCurrentIndex(newIndex); // Update the current index
-      setSelectedDocumentId(sharedData[newIndex]); // Update the selected document
+      setCurrentIndex(newIndex);
+      setSelectedDocumentId(sharedData[newIndex]);
     }
   };
   //  next item

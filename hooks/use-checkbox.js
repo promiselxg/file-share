@@ -6,8 +6,13 @@ const useCheckboxStates = (initialState = {}) => {
   const [checkedIds, setCheckedIds] = useState([]);
   const pathname = usePathname();
 
-  //  handle checkbox change
-  const handleCheckboxChange = (id, checked) => {
+  /**
+   * Handle the checkbox state
+   * @param {string} id - the ID of the folder or document.
+   * @param {boolean} checked - the state of the checkbox.
+   * @param {string} docType - either folder or document
+   */
+  const handleCheckboxChange = (id, checked, docType) => {
     setCheckedStates((prev) => ({
       ...prev,
       [id]: checked,
@@ -16,14 +21,13 @@ const useCheckboxStates = (initialState = {}) => {
     // update the checkedIds array
     setCheckedIds((prevIds) => {
       if (checked) {
-        return [...prevIds, id];
+        return [...prevIds, { id, docType }];
       } else {
         return prevIds.filter((itemId) => itemId !== id);
       }
     });
   };
 
-  //  reset the checkbox
   const resetCheckBox = () => {
     setCheckedStates({});
     setCheckedIds([]);
@@ -32,7 +36,6 @@ const useCheckboxStates = (initialState = {}) => {
   //  count the number of checked items
   const checkedCount = useMemo(() => checkedIds.length, [checkedIds]);
 
-  // reset the checkbox when the pathname changes
   useEffect(() => {
     resetCheckBox();
   }, [pathname]);

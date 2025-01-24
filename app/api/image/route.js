@@ -11,10 +11,9 @@ export const POST = async (req) => {
   const user = await currentUser();
 
   const body = await req.json();
-  console.log(user?.id);
-  try {
-    const { photos, doc } = body;
 
+  try {
+    const { photos, parentId } = body;
     const existingUser = await prisma.user.findUnique({
       where: { clerkUserId: user?.id },
     });
@@ -31,8 +30,8 @@ export const POST = async (req) => {
     for (const photo of photos) {
       const fileData = getIndividualDocumentDataFromPhoto(
         photo,
-        doc,
-        existingUser
+        existingUser,
+        parentId
       );
       const createdDocument = await prisma.document.create({
         data: fileData,
@@ -50,12 +49,19 @@ export const POST = async (req) => {
   }
 };
 
-const getIndividualDocumentDataFromPhoto = (photo, body, user) => {
+const getIndividualDocumentDataFromPhoto = (photo, user, parentId) => {
+  const folderData = parentId
+    ? {
+        connect: {
+          id: parentId,
+        },
+      }
+    : undefined;
+
   return {
     title: photo?.original_filename,
     imgUrl: [photo?.secure_url],
     imageId: [photo?.public_id?.split("/")[1]],
-    folderId: body?.folderId,
     mediaInfo: {
       file_name: photo?.original_filename,
       imageId: photo?.public_id?.split("/")[1],
@@ -64,9 +70,10 @@ const getIndividualDocumentDataFromPhoto = (photo, body, user) => {
       file_format: photo?.format,
     },
     createdBy: {
-      username: user?.username || user.firstName,
+      username: user?.username || user?.firstName,
       photoUrl: user?.imageUrl,
     },
+    ...(folderData && { folder: folderData }),
     user: {
       connect: {
         id: user?.id,

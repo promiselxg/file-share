@@ -5,8 +5,19 @@ import { RenderImages } from "../../../image-upload/selectedImageDisplay";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useDialog } from "@/context/Dialog.context";
+import { usePathname } from "next/navigation";
 
 const ImageUpload = () => {
+  const currentRoute = usePathname();
+  let parentId;
+
+  if (currentRoute.startsWith("/my_item")) {
+    parentId = null;
+  }
+  if (currentRoute.startsWith("/folder")) {
+    parentId = currentRoute?.split("/folder/")[1];
+  }
+
   const {
     files,
     selectedImages,
@@ -89,7 +100,7 @@ const ImageUpload = () => {
               onClick={() =>
                 uploadStatus === "completed"
                   ? handleClose()
-                  : handleImageUpload(files)
+                  : handleImageUpload(files, parentId)
               }
               disabled={loading}
             >

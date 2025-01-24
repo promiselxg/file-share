@@ -28,7 +28,7 @@ const NewFolder = () => {
     parentId = null;
   }
   if (currentRoute.startsWith("/folder")) {
-    parentId = currentRoute.split("/folder/")[1];
+    parentId = currentRoute?.split("/folder/")[1];
   }
   const {
     register,
@@ -42,7 +42,7 @@ const NewFolder = () => {
     // Create Parent Folder
     const newFolder = {
       name: data.folder_name,
-      parentId: parentId,
+      parentId,
       children: [],
     };
 
